@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ECOMM.DATA\ECOMM.Data.csproj" />
+    <ProjectReference Include="..\ECOMM.Models\ECOMM.Core.csproj" />
+  </ItemGroup>
+
 </Project>
