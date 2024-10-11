@@ -11,10 +11,10 @@ namespace ECOMM.Data.Shared.Concrete
 {
     public class Repository<T> : IRepository<T> where T : BaseModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDBContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public Repository(ApplicationDbContext context)
+        public Repository(ApplicationDBContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
