@@ -1,8 +1,9 @@
-﻿using ECOMM.Core.Models;
+﻿using ECOMM.Business.Abstract;
+using ECOMM.Business.Concrete;
+using ECOMM.Core.Models;
 using ECOMM.Data.Shared.Abstract;
 using ECOMM.Data.Shared.Concrete;
-using ECOMM.Services.Abstract;
-using ECOMM.Services.Concrete;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ECOMM.Business.Configuration

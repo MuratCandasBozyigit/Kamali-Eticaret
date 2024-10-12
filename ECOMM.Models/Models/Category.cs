@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ECOMM.Core.Models
 {
     //Listelenen kategorilerden birisi secildiğinde o kategoriye ait olan ürünlerin getirilmesi için sadece
-    public class Category
+    public class Category: BaseModel
     {
 
         //Bİre çokluk ve coka coklugu düznele oturup düşünüp ?
