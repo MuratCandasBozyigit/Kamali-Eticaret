@@ -14,10 +14,10 @@ namespace ECOMM.Business.Configuration
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IService<>), typeof(Service<>));
-            //services.AddScoped<ICategoryService, CategoryService>();
-            //services.AddScoped<ICommentService, CommentService>();
-            //services.AddScoped<IPostService, PostService>();
-            //services.AddScoped<ITagService, TagService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentService, CommentService>();
+            //services.AddScoped<IProductService, ProductService>();
+            ////services.AddScoped<ITagService, TagService>();
             //services.AddScoped<IRoleService, RoleService>();
             //services.AddScoped<IUserService, UserService>();
         }
