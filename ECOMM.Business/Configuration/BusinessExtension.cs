@@ -1,8 +1,9 @@
-﻿using ECOMM.Core.Models;
+﻿using ECOMM.Business.Abstract;
+using ECOMM.Business.Concrete;
+using ECOMM.Core.Models;
 using ECOMM.Data.Shared.Abstract;
 using ECOMM.Data.Shared.Concrete;
-using ECOMM.Services.Abstract;
-using ECOMM.Services.Concrete;
+
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ECOMM.Business.Configuration
@@ -13,10 +14,10 @@ namespace ECOMM.Business.Configuration
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IService<>), typeof(Service<>));
-            //services.AddScoped<ICategoryService, CategoryService>();
-            //services.AddScoped<ICommentService, CommentService>();
-            //services.AddScoped<IPostService, PostService>();
-            //services.AddScoped<ITagService, TagService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<ICommentService, CommentService>();
+            //services.AddScoped<IProductService, ProductService>();
+            ////services.AddScoped<ITagService, TagService>();
             //services.AddScoped<IRoleService, RoleService>();
             //services.AddScoped<IUserService, UserService>();
         }

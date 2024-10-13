@@ -1,12 +1,12 @@
-﻿using ECOMM.Data.Shared.Abstract;
-using ECOMM.Services.Abstract;
-using ECOMM.Core.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using ECOMM.Business.Abstract;
+using ECOMM.Core.Models;
+using ECOMM.Data.Shared.Abstract;
 
-namespace ECOMM.Services.Concrete
+namespace ECOMM.Business.Concrete
 {
     public class Service<T> : IService<T> where T : BaseModel
     {
@@ -22,9 +22,24 @@ namespace ECOMM.Services.Concrete
             return await _repository.GetAllAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _repository.GetAllAsync(predicate);
+        }
+
         public async Task<T> GetByIdAsync(int id)
         {
             return await _repository.GetByIdAsync(id);
+        }
+
+        public async Task<T> GetByIdAsync(Guid guid)
+        {
+            return await _repository.GetByIdAsync(guid);
+        }
+
+        public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _repository.GetFirstOrDefaultAsync(predicate);
         }
 
         public async Task<T> AddAsync(T entity)
@@ -47,9 +62,9 @@ namespace ECOMM.Services.Concrete
             return await _repository.DeleteAsync(id);
         }
 
-        public async Task<T> GetFirstOrDefaultAsync(Expression<Func<T, bool>> predicate)
+        public async Task<bool> DeleteAsync(Guid guid)
         {
-            return await _repository.GetFirstOrDefaultAsync(predicate);
+            return await _repository.DeleteAsync(guid);
         }
     }
 }
