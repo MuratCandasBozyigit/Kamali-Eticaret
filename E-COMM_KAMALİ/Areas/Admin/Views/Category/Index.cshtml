@@ -62,7 +62,6 @@
     </div>
 </div>
 
-
 <div class="card bg-light text-dark">
     <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><box-icon name="category" color="dark" size="sm" animation="tada"></box-icon> Kategorilerim</h5>
@@ -117,8 +116,8 @@
                         title: 'İşlemler',
                         render: function (data, type, row) {
                             return `
-                                                        <a href="#" class="btn btn-sm btn-warning editCategory" data-id="${row.id}">Düzenle</a>
-                                                        <a href="#" class="btn btn-sm btn-danger deleteCategory" data-id="${row.id}">Sil</a>`;
+                                        <a href="#" class="btn btn-sm btn-warning editCategory" data-id="${row.id}">Düzenle</a>
+                                        <a href="#" class="btn btn-sm btn-danger deleteCategory" data-id="${row.id}">Sil</a>`;
                         }
                     }
                 ]
@@ -213,17 +212,17 @@
                     return;
                 }
 
+                var method = category.id === 0 ? "POST" : "PUT";
                 var url = category.id === 0 ? "/Admin/Category/Add" : "/Admin/Category/Update";
 
                 $.ajax({
-                    type: "POST",
+                    type: method,
                     url: url,
                     contentType: "application/json",
                     data: JSON.stringify(category),
                     success: function () {
-                        table.ajax.reload();
-                        resetForm();
                         $('#modal').modal('hide');
+                        table.ajax.reload();
                         Swal.fire('Başarılı!', 'Kategori başarıyla kaydedildi.', 'success');
                     },
                     error: function () {
