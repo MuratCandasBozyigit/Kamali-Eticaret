@@ -29,8 +29,8 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         }
 
       
-        [HttpGet("GetAllCategories")]
-        public IActionResult GetAll()
+        [HttpGet("GetAllAsync")]
+        public IActionResult GetAllAsync()
         {
             try
             {
@@ -39,7 +39,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Server Hatası Kategoriler Listelenemedi: {ex.Message}");
             }
         }
 
@@ -48,13 +48,13 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         {
             if (id == null)
             {
-                return BadRequest("Invalid ID format.");
+                return BadRequest("Geçersiz Kategori Id'si.");
             }
 
             var iD = _categoryService.GetFirstOrDefaultAsync(i => i.Id == id);
             if (iD == null)
             {
-                return NotFound("Color not found.");
+                return NotFound("Kategori bulunamadı.");
             }
 
             _categoryService.DeleteAsync(iD.Id);
@@ -66,7 +66,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         {
             if (category == null || category.Id != id)
             {
-                return BadRequest("Invalid category data.");
+                return BadRequest("Geçersiz Kategori Verisi.");
             }
 
             try
@@ -76,7 +76,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Server Hatası Kategoriler Listelenemedi:  {ex.Message}");
             }
         }
 
@@ -86,7 +86,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         {
             if (id == 0)
             {
-                return BadRequest("Invalid Id Format");
+                return BadRequest("Geçersiz Kategori Veri Tipi.");
             }
             try
             {
@@ -99,14 +99,14 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Server Hatası Kategoriler Listelenemedi:   {ex.Message}");
             }
         }
 
 
 
-        [HttpPost("Add")]
-        public IActionResult Add([FromBody]Category category)
+        [HttpPost("AddAsync")]
+        public IActionResult AddAsync([FromBody]Category category)
         {
             
                 try
@@ -117,7 +117,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return StatusCode(500, $"Internal category server error: {ex.Message}");
+                    return StatusCode(500, $"Server Hatası Kategoriler Listelenemedi: {ex.Message}");
                 }
 
         }
