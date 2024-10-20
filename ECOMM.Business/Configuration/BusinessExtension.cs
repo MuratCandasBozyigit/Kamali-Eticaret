@@ -14,7 +14,7 @@ namespace ECOMM.Business.Configuration
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped(typeof(IService<>), typeof(Service<>));
-            services.AddScoped<ICategoryService, CategoryService>()
+            services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISubCategoryService, SubCategoryService>();
             services.AddScoped<ICommentService, CommentService>();
             //services.AddScoped<IProductService, ProductService>();
