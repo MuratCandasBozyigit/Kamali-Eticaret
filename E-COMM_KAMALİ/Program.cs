@@ -6,6 +6,8 @@ using ECOMM.Data.Shared.Abstract;
 using ECOMM.Data.Shared.Concrete;
 using ECOMM.Data;
 using Microsoft.EntityFrameworkCore;
+using ECOMM.Business.Abstract;
+using ECOMM.Business.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,7 +48,7 @@ builder.Services.AddIdentity<User, ApplicationRole>(options =>
 
 // RoleManager ve RoleService için hizmet kaydı
 builder.Services.AddScoped<RoleManager<ApplicationRole>>();
-//builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
 
 // Business ve Repository DI işlemleri
 builder.Services.BusinessDI();

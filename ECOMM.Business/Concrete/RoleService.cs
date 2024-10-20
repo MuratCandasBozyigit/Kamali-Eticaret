@@ -1,4 +1,5 @@
-﻿using ECOMM.Core.Models;
+﻿using ECOMM.Business.Abstract;
+using ECOMM.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -8,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace ECOMM.Business.Concrete
 {
-    public class RoleSerice
+    public class RoleService : IRoleService
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
 
-        public RoleSerice(RoleManager<ApplicationRole> roleManager)
+        public RoleService(RoleManager<ApplicationRole> roleManager)
         {
             this._roleManager = roleManager;
         }
