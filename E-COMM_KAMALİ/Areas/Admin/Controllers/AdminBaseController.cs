@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace ECOMM.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     [Route("Admin/[controller]")]
     //[Authorize(Roles = "Admin")]
     public class AdminBaseController : Controller
