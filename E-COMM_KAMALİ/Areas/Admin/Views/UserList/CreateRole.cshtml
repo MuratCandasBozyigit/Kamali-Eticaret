@@ -1,0 +1,273 @@
+﻿@{
+    ViewData["Title"] = "Admin Rol Ekleme";
+}
+
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <h4 class="mb-0">Roller</h4>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card bg-light text-dark">
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-11">
+                                    <box-icon name="tag" color="dark" size="sm" animation="tada"></box-icon> Roller
+                                </div>
+                                <div class="col-1 text-end">
+                                    <a id="btnAdd" href="#" class="btn btn-outline-primary"> Yeni Rol Ekle</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="tblAspNetRoles" class="table table-editable table-nowrap align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Rol Adı</th>
+                                            <th>Rol Açıklaması</th>
+                                            <th>İşlemler</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" id="roleId" />
+
+            <div class="modal-body">
+                <div class="mb-3 row">
+                    <label class="form-label">Rol Adı: </label>
+                    <input type="text" id="roleName" placeholder="Lütfen Rol Adı giriniz" class="form-control" required />
+                    <span id="roleName-error" style="color:red; display:none;">Rol Adı alanı boş bırakılamaz.</span>
+                </div>
+                <div class="mb-3 row">
+                    <label class="form-label">Rol Açıklaması: </label>
+                    <input type="text" id="description" placeholder="Lütfen Rol Açıklamasını giriniz" class="form-control" required />
+                    <span id="description-error" style="color:red; display:none;">Alan boş bırakılamaz.</span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+          
+            var table = $('#tblAspNetRoles').DataTable({
+                ajax: {
+                    url: '/Admin/UserList/GetAllRolesAsync', 
+                    dataSrc: '',
+                    error: function (xhr, error, thrown) {
+                        console.error('Ajax Error', error, thrown);
+                        Swal.fire('Error', 'Error loading roles', 'error');
+                    }
+                },
+                columns: [
+                    { data: 'roleName', title: 'Rol Adı' },
+                    { data: 'description', title: 'Rol Açıklaması' },
+                    {
+                        data: null,
+                        title: 'İşlemler',
+                        render: function (data, type, row) {
+                            return `
+                                                        <a href="#" class="btn btn-sm btn-warning editRole" data-id="${row.id}">Düzenle</a>
+                                                        <a href="#" class="btn btn-sm btn-danger deleteRole" data-id="${row.id}">Sil</a>
+                                                    `;
+                        }
+                    }
+                ]
+            });
+
+        
+            $('#btnAdd').on('click', function () {
+                $('#modalTitle').text("Yeni Rol Ekle");
+                $('#roleId').val("");
+                $('#roleName').val("");
+                $('#description').val("");
+                $('#modal').modal('show');
+            });
+
+            
+            $(document).on('click', '#btnSave', function () {
+                var roleId = $('#roleId').val();
+                var roleName = $('#roleName').val();
+                var description = $('#description').val();
+
+              
+                if (roleName.trim() === "") {
+                    $('#roleName-error').show();
+                    return;
+                } else {
+                    $('#roleName-error').hide();
+                }
+                if (description.trim() === "") {
+                    $('#description-error').show();
+                    return;
+                } else {
+                    $('#description-error').hide();
+                }
+               
+                var ajaxUrl = roleId === "" ? "/Admin/UserList/CreateRole" : "/Admin/UserList/UpdateRoleAsync?roleId="+roleId;
+                var requestData = JSON.stringify({
+                    
+                   roleName: roleName,
+                    description: description
+                });
+
+            
+                $.ajax({
+                    type: "POST",
+                    url: ajaxUrl,
+                    contentType: 'application/json',
+                     data: requestData,
+                    success: function (response) {
+                        $('#modal').modal('hide');
+                        $('#tblAspNetRoles').DataTable().ajax.reload(); 
+                        Swal.fire('Başarılı', roleId === "" ? 'Rol başarıyla eklendi' : 'Rol başarıyla güncellendi', 'success');
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'İstek işlenirken hata oluştu', 'error');
+                    }
+                });
+            });
+
+        
+            $(document).on('click', '.editRole', function () {
+                var roleId = $(this).data('id');
+              
+              
+                $.ajax({
+                    type: "GET",
+                    url: "/Admin/UserList/GetRoleById?roleId="+roleId,
+                   
+                    success: function (role) {
+                        $('#modalTitle').text("Düzenle Rol");
+                        $('#roleId').val(role.id);
+                        $('#roleName').val(role.roleName);
+                        $('#description').val(role.description);
+                        $('#modal').modal('show');
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'Rol verilerini getirirken hata oluştu', 'error');
+                    }
+                });
+            });
+          
+            
+            $(document).on('click', '.deleteRole', function () {
+                var roleId = $(this).data('id');
+               
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu işlem geri alınamaz!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Evet, sil!',
+                    cancelButtonText: 'Hayır, iptal et'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // AJAX ile silme işlemi
+                        $.ajax({
+                            type: "POST",
+                            url: "/Admin/UserList/DeleteAsyncRoles", // Doğru URL
+                            contentType: 'application/json',
+                            data: JSON.stringify(roleId),
+                            success: function (response) {
+                                $('#tblAspNetRoles').DataTable().ajax.reload(); // Güncellenmiş tablo ID'si
+                                Swal.fire('Silindi!', 'Rol başarıyla silindi.', 'success');
+                            },
+                            error: function () {
+                                Swal.fire('Hata', 'Rol silinirken hata oluştu', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+    </script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@* @model Blog.Core.Models.ApplicationRole
+
+<h2>Create Role</h2>
+
+<form asp-action="CreateRole" method="post">
+    <div class="form-group">
+        <label asp-for="RoleName">Role Name</label>
+        <input asp-for="RoleName" class="form-control" />
+        <span asp-validation-for="RoleName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create Role</button>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+ *@

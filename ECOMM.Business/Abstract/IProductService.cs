@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace ECOMM.Business.Abstract
 {
-    public interface IProductService //Product servis basemodelden kalıtmıyorsun
+    public interface IProductService :IService<Product>
     {
+     
     }
 }

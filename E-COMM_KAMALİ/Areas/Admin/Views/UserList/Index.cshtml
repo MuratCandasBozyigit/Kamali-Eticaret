@@ -1,0 +1,121 @@
+﻿@using ECOMM.Core.Models;
+@model List<User>
+
+@{
+    ViewData["Title"] = "Kullanıcı Listesi";
+    var allRoles = ViewBag.AllRoles as List<ApplicationRole>; 
+}
+
+<h2>Kullanıcı Listesi</h2>
+
+<table class="table" style="width: 100%;">
+    <thead>
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <th>Email</th>
+            <th>Telefon Numarası</th>
+            <th>Mevcut Roller</th>
+            <th>Yeni Rol Atama</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserName</td>
+                <td>@user.Email</td>
+                <td>@user.PhoneNumber</td>
+                <td>@string.Join(", ", user.UserRoles.Select(ur => ur.Role?.RoleName))</td> 
+                <td>
+                    <select class="form-control" id="roleSelect_@user.Id" onchange="assignRole('@user.Id', this.value)">
+                        <option value="">Rol Seç</option>
+                        @foreach (var role in allRoles)
+                        {
+                            <option value="@role.Id">@role.RoleName</option>
+                        }
+                    </select>
+                </td>
+                <td>
+                  @*   <a href="@Url.Action("Details", new { id = user.Id })" class="btn btn-info">Detaylar</a> *@
+                    <a href="@Url.Action("Edit", new { id = user.Id })" class="btn btn-warning">Düzenle</a>
+                    <a href="@Url.Action("Delete", new { id = user.Id })" class="btn btn-danger">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Css{
+    <style>
+        .table {
+            width: 100%; /* Tablonun tüm genişliği kaplaması için */
+            max-width: 100%; /* Maksimum genişlik */
+            border-collapse: collapse; /* Kenar çakışmalarını önlemek için */
+        }
+
+            .table th, .table td {
+                padding: 15px; /* Hücre içi boşluk */
+                text-align: left; /* Metin hizalaması */
+                border: 1px solid #ddd; /* Kenarlık */
+            }
+
+            .table th {
+                background-color: #f2f2f2; /* Başlık hücreleri için arka plan rengi */
+            }
+    </style>
+
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        function assignRole(userId, roleId) {
+            $.ajax({
+                url: '@Url.Action("AssignRole", "UserList")',
+                type: 'POST',
+                data: {
+                    userId: userId,
+                    roleId: roleId
+                },
+                success: function (response) {
+                
+                    const currentRoles = @Html.Raw(Json.Serialize(Model.Select(u => u.UserRoles.Select(ur => ur.Role.Name).ToList()).ToList()));
+
+                 
+                    if (response === "Rol başarıyla atandı.") {
+                      
+                        if (currentRoles.includes('Admin')) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Uyarı',
+                                text: 'Kullanıcı zaten admin rolüne sahip!',
+                            });
+                        } else {
+                          
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Başarılı',
+                                text: 'Rol başarıyla atandı.',
+                            });
+                        }
+                    } else {
+                       
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Hata',
+                            text: response,
+                        });
+                    }
+                },
+                error: function (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Başarısız',
+                        text: 'Rol atama başarısız.',
+                    });
+                }
+            });
+        }
+    </script>
+}
+

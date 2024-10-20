@@ -1,0 +1,230 @@
+﻿@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Admin Kategori Yönetimi";
+}
+
+<h2>Kategoriler</h2>
+
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <input type="hidden" id="categoryId" />
+            <div class="modal-body">
+               
+                <div class="mb-3">
+                    <label for="name" class="form-label">Kategori Adı:</label>
+                    <input type="text" id="name" placeholder="Lütfen Kategori Adı giriniz" class="form-control" required />
+                    <span id="name-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
+                </div>
+
+               
+                <div class="mb-3">
+                    <label for="description" class="form-label">Açıklama:</label>
+                    <textarea id="description" placeholder="Lütfen Açıklama giriniz" class="form-control" required></textarea>
+                    <span id="description-error" class="text-danger" style="display:none;">Alan boş bırakılamaz.</span>
+                </div>
+
+              
+
+          
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                <button type="button" id="btnSave" class="btn btn-primary">Kaydet</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card bg-light text-dark">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><box-icon name="category" color="dark" size="sm" animation="tada"></box-icon> Kategorilerim</h5>
+        <button id="btnAdd" class="btn btn-outline-primary">+ Yeni Kategori Ekle</button>
+    </div>
+    <div class="card-body">
+        <table id="tblCategories" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Kategori Adı</th>
+                    <th>Açıklama</th>
+@*                    // <th>Slug</th> *@
+                    <th>Etiket</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tbody>
+               
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+          
+            function resetForm() {
+                $("#categoryId").val("");
+              //  $("#name, #description, #tagSave").val("");
+                $(".text-danger").hide();
+            }
+
+         
+            var table = $('#tblCategories').DataTable({
+                ajax: {
+                    url: '/Admin/Category/GetAllCategories',
+                    dataSrc: '',
+                    error: function (xhr, error, thrown) {
+                        console.error('Ajax Error:', error, thrown);
+                        Swal.fire('Hata', 'Kategoriler yüklenirken bir sorun oluştu.', 'error');
+                    }
+                },
+                columns: [
+                    { data: 'name', title: 'Kategori Adı' },
+                    { data: 'description', title: 'Açıklama' },
+                    // { data: 'slug', title: 'Slug' },
+                     //{ data: 'tagId', title: 'Etiket' },
+                    {
+                        data: null,
+                        title: 'İşlemler',
+                        render: function (data, type, row) {
+                            return `
+                                        <a href="#" class="btn btn-sm btn-warning editCategory" data-id="${row.id}">Düzenle</a>
+                                        <a href="#" class="btn btn-sm btn-danger deleteCategory" data-id="${row.id}">Sil</a>`;
+                        }
+                    }
+                ]
+            });
+
+            $('#btnAdd').click(function () {
+                $('#modalTitle').text('Yeni Kategori Ekle');
+                $('#btnSave').text('Ekle');
+                resetForm();
+                $('#modal').modal('show');
+            });
+
+          
+            $('#tblCategories').on('click', '.editCategory', function () {
+                var id = $(this).data('id');
+                $.ajax({
+                    url: "/Admin/Category/GetById/" + id,
+                    success: function (res) {
+                        $('#name').val(res.name);
+                        $('#description').val(res.description);
+                        // $('#slug').val(res.slug);
+                        $('#categoryId').val(res.id);
+                       // $('#tagSave').val(res.tagSave);
+                    },
+                    error: function () {
+                        Swal.fire('Hata', 'Kategori verisi yüklenirken bir sorun oluştu.', 'error');
+                    }
+                });
+                $('#modalTitle').text('Kategori Düzenle');
+                $('#btnSave').text('Güncelle');
+                $('#modal').modal('show');
+            });
+
+           
+            $('#tblCategories').on('click', '.deleteCategory', function () {
+                var id = $(this).data('id');
+                Swal.fire({
+                    title: 'Emin misiniz?',
+                    text: "Bu kategori kalıcı olarak silinecek!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Evet, sil!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "DELETE",
+                            url: "/Admin/Category/Delete/" + id,
+                            success: function () {
+                                table.ajax.reload();
+                                Swal.fire('Silindi!', 'Kategori başarıyla silindi.', 'success');
+                            },
+                            error: function () {
+                                Swal.fire('Hata', 'Kategori silinirken bir sorun oluştu.', 'error');
+                            }
+                        });
+                    }
+                });
+            });
+
+          
+            $('#btnSave').click(function () {
+                var category = {
+                    id: $('#categoryId').val() === '' ? 0 : $('#categoryId').val(),
+                    name: $('#name').val(),
+                    description: $('#description').val(),
+                    // slug: $('#slug').val(),
+                   // tagId: $("#tagSave option:selected").val()
+                    // tagSave: $('#tagSave').val()
+                };
+
+                let isValid = true;
+
+
+                // if (!category.tagId) {
+                //     $('#tagSave-error').show();
+                //     isValid = false;
+                // } else {
+                //     $('#tagSave-error').hide();
+                // }
+
+                if (!category.name) {
+                    $('#name-error').show();
+                    isValid = false;
+                } else {
+                    $('#name-error').hide();
+                }
+
+                if (!category.description) {
+                    $('#description-error').show();
+                    isValid = false;
+                } else {
+                    $('#description-error').hide();
+                }
+
+                // if (!category.slug) {
+                //     $('#slug-error').show();
+                //     isValid = false;
+                // } else {
+                //     $('#slug-error').hide();
+                // }
+
+                if (!isValid) {
+                    return;
+                }
+
+             
+                var url = $('#btnSave').text().toLocaleLowerCase() === 'ekle' ? '/Admin/Category/Add' : '/Admin/Category/Update/' + category.id;
+                var method = $('#btnSave').text().toLocaleLowerCase() === 'ekle' ? 'POST' : 'PUT';
+
+            
+                $.ajax({
+                    type: method,
+                    url: url,
+                    data: JSON.stringify(category),
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (response) {
+                        $('#modal').modal('hide');
+                        table.ajax.reload();
+                        Swal.fire('Başarılı!', 'Kategori başarıyla kaydedildi.', 'success');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        Swal.fire('Hata', 'Kategori kaydedilirken bir sorun oluştu. Detaylar: ' + errorThrown, 'error');
+                    }
+                });
+            });
+        });
+    </script>
+}
