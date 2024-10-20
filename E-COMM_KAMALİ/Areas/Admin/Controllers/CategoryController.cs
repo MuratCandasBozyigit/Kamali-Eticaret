@@ -11,12 +11,12 @@ namespace ECOMM.Web.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-        private readonly ISubCategoryService _subCategoryService; // Düzenlendi
+        private readonly ISubCategoryService _subCategoryService; 
 
-        public CategoryController(ICategoryService categoryService, ISubCategoryService subCategoryService) // Constructor güncellendi
+        public CategoryController(ICategoryService categoryService, ISubCategoryService subCategoryService)
         {
             _categoryService = categoryService;
-            _subCategoryService = subCategoryService; // Constructor'a eklendi
+            _subCategoryService = subCategoryService; 
         }
 
         #region Kategori İşlemleri
