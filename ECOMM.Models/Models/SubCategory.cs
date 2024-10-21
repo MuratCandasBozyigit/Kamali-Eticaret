@@ -2,12 +2,13 @@
 
 namespace ECOMM.Core.Models
 {
+
     public class SubCategory : BaseModel
     {
-        public int Id { get; set; } // Anahtar alan
-        public string SubCatName { get; set; }
-        public string ParentCategoryDescription { get; set; }
+        public string SubCategoryName { get; set; }
 
-        public ICollection<Category> Categories { get; set; }
+        // Category ile olan ilişkiyi belirtmek için
+        public int CategoryId { get; set; }
+        public virtual Category Category { get; set; }
     }
 }
