@@ -189,7 +189,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return Ok("Rol başarıyla silindi.");
             }
 
-            return BadRequest("Rol silme işlemi başarısız oldu.");
+            return BadRequest("Rol silme işlemi başarısız oldu."); 
         }
         #endregion
     }
