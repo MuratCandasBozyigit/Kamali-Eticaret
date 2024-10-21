@@ -83,13 +83,14 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-        [HttpPut("Update/{id}")]
-        public async Task<IActionResult> Update(int id, [FromBody] Category category)
+
+        [HttpPut("UpdateAsync")]///{id}
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] Category category)
         {
-            if (category == null || category.Id != id || !ModelState.IsValid)
-            {
-                return BadRequest("Geçersiz Kategori Verisi.");
-            }
+            //if (category == null || category.Id != id || !ModelState.IsValid)
+            //{
+            //    return BadRequest("Geçersiz Kategori Verisi.");
+            //}
 
             try
             {
@@ -102,8 +103,8 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-        [HttpDelete("Delete/{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("DeleteAsync/{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
             if (id <= 0)
             {

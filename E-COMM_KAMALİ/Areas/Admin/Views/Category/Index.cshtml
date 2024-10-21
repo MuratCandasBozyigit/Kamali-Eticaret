@@ -1,58 +1,33 @@
 ﻿@using System.Security.Claims
 
 @{
-    ViewData["Title"] = "Admin Kategori Yönetimi";
+    ViewData["Title"] = "Admin Ana Kategori Yönetimi";
 }
 
-<h2>Kategoriler</h2>
+<h2>Ana Kategoriler</h2>
 
-<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+<div class="modal fade" id="modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modAnaitleId" aria-hidden="true">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalTitle"></h5>
+                <h5 class="modal-title" id="modAnaitle"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <input type="hidden" id="categoryId" />
             <div class="modal-body">
-
-                <div class="mb-3">
-                    <label for="categoryName" class="form-label">Kategori Adı:</label>
-                    <input type="text" id="categoryName" placeholder="Lütfen Kategori Adı giriniz" class="form-control" required />
-                    <span id="categoryName-error" class="text-danger" style="display:none;">Kategori adı boş bırakılamaz.</span>
-                </div>
-
-                <div class="mb-3">
-                    <label for="parentCategoryId" class="form-label">Ana Kategori ID:</label>
-                    <input type="number" id="parentCategoryId" placeholder="Lütfen Ana Kategori ID giriniz" class="form-control" />
-                </div>
-
                 <div class="mb-3">
                     <label for="parentCategoryName" class="form-label">Ana Kategori Adı:</label>
-                    <input type="text" id="parentCategoryName" placeholder="Lütfen Ana Kategori Adı giriniz" class="form-control" />
+                    <input type="text" id="parentCategoryName" placeholder="Lütfen Ana Kategori Adı giriniz" class="form-control" required />
                 </div>
-
                 <div class="mb-3">
                     <label for="parentCategoryTag" class="form-label">Ana Kategori Etiketi:</label>
-                    <input type="text" id="parentCategoryTag" placeholder="Lütfen Ana Kategori Etiketi giriniz" class="form-control" />
+                    <input type="text" id="parentCategoryTag" placeholder="Lütfen Ana Kategori Etiketi giriniz" class="form-control" required />
                 </div>
-
                 <div class="mb-3">
                     <label for="parentCategoryDescription" class="form-label">Ana Kategori Açıklaması:</label>
-                    <textarea id="parentCategoryDescription" placeholder="Lütfen Ana Kategori Açıklaması giriniz" class="form-control"></textarea>
+                    <textarea id="parentCategoryDescription" placeholder="Lütfen Ana Kategori Açıklaması giriniz" class="form-control" required></textarea>
+                    <span id="parentCategoryDescription-error" class="text-danger" style="display:none;">Açıklama boş bırakılamaz.</span>
                 </div>
-
-                <div class="mb-3">
-                    <label for="categoryTag" class="form-label">Kategori Etiketi:</label>
-                    <input type="text" id="categoryTag" placeholder="Lütfen Kategori Etiketi giriniz" class="form-control" />
-                </div>
-
-                <div class="mb-3">
-                    <label for="description" class="form-label">Açıklama:</label>
-                    <textarea id="description" placeholder="Lütfen Açıklama giriniz" class="form-control" required></textarea>
-                    <span id="description-error" class="text-danger" style="display:none;">Açıklama boş bırakılamaz.</span>
-                </div>
-
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
@@ -64,18 +39,16 @@
 
 <div class="card bg-light text-dark">
     <div class="card-header d-flex justify-content-between align-items-center">
-        <h5 class="mb-0"><box-icon name="category" color="dark" size="sm" animation="tada"></box-icon> Kategorilerim</h5>
-        <button id="btnAdd" class="btn btn-outline-primary">+ Yeni Kategori Ekle</button>
+        <h5 class="mb-0"><box-icon name="category" color="dark" size="sm" animation="tada"></box-icon> Ana Kategorilerim</h5>
+        <button id="btnAdd" class="btn btn-outline-primary">+ Yeni Ana Kategori Ekle</button>
     </div>
     <div class="card-body">
         <table id="tblCategories" class="table table-striped table-hover">
             <thead>
                 <tr>
-                    <th>Kategori Adı</th>
-                    <th>Açıklama</th>
                     <th>Ana Kategori Adı</th>
                     <th>Ana Kategori Etiketi</th>
-                    <th>Etiket</th>
+                    <th>Açıklama</th>
                     <th>İşlemler</th>
                 </tr>
             </thead>
@@ -89,28 +62,27 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-
+            // Formu sıfırla
             function resetForm() {
                 $("#categoryId").val("");
-                $("#categoryName, #parentCategoryId, #parentCategoryName, #parentCategoryTag, #parentCategoryDescription, #categoryTag, #description").val("");
+                $("#parentCategoryName, #parentCategoryTag, #parentCategoryDescription").val("");
                 $(".text-danger").hide();
             }
 
+            // DataTable
             var table = $('#tblCategories').DataTable({
                 ajax: {
                     url: '/Admin/Category/GetAllAsync',
                     dataSrc: '',
                     error: function (xhr, error, thrown) {
-                        console.error('Ajax Error:', error, thrown);
+                        console.error('Ajax Hatası:', error, thrown);
                         Swal.fire('Hata', 'Kategoriler yüklenirken bir sorun oluştu.', 'error');
                     }
                 },
                 columns: [
-                    { data: 'categoryName', title: 'Kategori Adı' },
-                    { data: 'description', title: 'Açıklama' },
                     { data: 'parentCategoryName', title: 'Ana Kategori Adı' },
                     { data: 'parentCategoryTag', title: 'Ana Kategori Etiketi' },
-                    { data: 'categoryTag', title: 'Etiket' },
+                    { data: 'parentCategoryDescription', title: 'Açıklama' },
                     {
                         data: null,
                         title: 'İşlemler',
@@ -123,36 +95,35 @@
                 ]
             });
 
+            // Yeni kategori ekleme
             $('#btnAdd').click(function () {
-                $('#modalTitle').text('Yeni Kategori Ekle');
+                $('#modAnaitle').text('Yeni Ana Kategori Ekle');
                 $('#btnSave').text('Ekle');
                 resetForm();
                 $('#modal').modal('show');
             });
 
+            // Kategori düzenleme
             $('#tblCategories').on('click', '.editCategory', function () {
                 var id = $(this).data('id');
                 $.ajax({
                     url: "/Admin/Category/GetById/" + id,
                     success: function (res) {
-                        $('#categoryName').val(res.categoryName);
-                        $('#parentCategoryId').val(res.parentCategoryId);
                         $('#parentCategoryName').val(res.parentCategoryName);
                         $('#parentCategoryTag').val(res.parentCategoryTag);
                         $('#parentCategoryDescription').val(res.parentCategoryDescription);
-                        $('#categoryTag').val(res.categoryTag);
-                        $('#description').val(res.description);
                         $('#categoryId').val(res.id);
                     },
                     error: function () {
                         Swal.fire('Hata', 'Kategori verisi yüklenirken bir sorun oluştu.', 'error');
                     }
                 });
-                $('#modalTitle').text('Kategori Düzenle');
+                $('#modAnaitle').text('Ana Kategori Düzenle');
                 $('#btnSave').text('Güncelle');
                 $('#modal').modal('show');
             });
 
+            // Kategori silme
             $('#tblCategories').on('click', '.deleteCategory', function () {
                 var id = $(this).data('id');
                 Swal.fire({
@@ -167,45 +138,42 @@
                     if (result.isConfirmed) {
                         $.ajax({
                             type: "DELETE",
-                            url: "/Admin/Category/Delete/" + id,
+                            url: "/Admin/Category/DeleteAsync/" + id,
                             success: function () {
                                 table.ajax.reload();
-                                Swal.fire('Silindi!', 'Kategori başarıyla silindi.', 'success');
+                                Swal.fire('Silindi!', 'Ana kategori başarıyla silindi.', 'success');
                             },
                             error: function () {
-                                Swal.fire('Hata', 'Kategori silinirken bir sorun oluştu.', 'error');
+                                Swal.fire('Hata', 'Ana kategori silinirken bir sorun oluştu.', 'error');
                             }
                         });
                     }
                 });
             });
 
+            // Kayıt işlemi
             $('#btnSave').click(function () {
                 var category = {
-                    id: $('#categoryId').val() === '' ? 0 : $('#categoryId').val(),
-                    categoryName: $('#categoryName').val(),
-                    parentCategoryId: $('#parentCategoryId').val(),
+                    id: $('#categoryId').val() === '' ? 0 : parseInt($('#categoryId').val()),
                     parentCategoryName: $('#parentCategoryName').val(),
                     parentCategoryTag: $('#parentCategoryTag').val(),
-                    parentCategoryDescription: $('#parentCategoryDescription').val(),
-                    categoryTag: $('#categoryTag').val(),
-                    description: $('#description').val()
+                    parentCategoryDescription: $('#parentCategoryDescription').val()
                 };
 
                 let isValid = true;
 
-                if (!category.categoryName) {
-                    $('#categoryName-error').show();
+                if (!category.parentCategoryName) {
+                    $('#parentCategoryName-error').show();
                     isValid = false;
                 } else {
-                    $('#categoryName-error').hide();
+                    $('#parentCategoryName-error').hide();
                 }
 
-                if (!category.description) {
-                    $('#description-error').show();
+                if (!category.parentCategoryDescription) {
+                    $('#parentCategoryDescription-error').show();
                     isValid = false;
                 } else {
-                    $('#description-error').hide();
+                    $('#parentCategoryDescription-error').hide();
                 }
 
                 if (!isValid) {
@@ -213,7 +181,7 @@
                 }
 
                 var method = category.id === 0 ? "POST" : "PUT";
-                var url = category.id === 0 ? "/Admin/Category/Add" : "/Admin/Category/Update";
+                var url = category.id === 0 ? "/Admin/Category/AddAsync" : "/Admin/Category/UpdateAsync";
 
                 $.ajax({
                     type: method,
@@ -223,10 +191,10 @@
                     success: function () {
                         $('#modal').modal('hide');
                         table.ajax.reload();
-                        Swal.fire('Başarılı!', 'Kategori başarıyla kaydedildi.', 'success');
+                        Swal.fire('Başarılı!', 'Ana kategori başarıyla kaydedildi.', 'success');
                     },
                     error: function () {
-                        Swal.fire('Hata', 'Kategori kaydedilirken bir sorun oluştu.', 'error');
+                        Swal.fire('Hata', 'Ana kategori kaydedilirken bir sorun oluştu.', 'error');
                     }
                 });
             });
