@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ECOMM.Business.Abstract;
 using ECOMM.Core.Models;
 using ECOMM.Business.Concrete;
+using ECOMM.Core.ViewModels;
 
 namespace ECOMM.Web.Areas.Admin.Controllers
 {
@@ -130,46 +131,108 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
         #region Alt Kategori İşlemleri
 
+        //// Alt Kategorilerin listelenmesi
+        //[HttpGet("SubCategoryIndex")]
+        //public async Task<IActionResult> SubCategoryIndex()
+        //{
+        //    var subCategories = await _subCategoryService.GetAllAsync();
+        //    return View(subCategories);
+        //}
+
         [HttpGet("SubCategoryIndex")]
         public async Task<IActionResult> SubCategoryIndex()
         {
+            // Alt kategorileri al
             var subCategories = await _subCategoryService.GetAllAsync();
-            return View(subCategories);
+
+            // SubCategory modelinden SubCategoryViewModel'e dönüşüm yapıyoruz
+            var subCategoryViewModels = subCategories.Select(sc => new SubCategoryViewModel
+            {
+                Id = sc.Id,
+                SubCategoryName = sc.SubCategoryName,
+                CategoryId = sc.CategoryId,
+                CategoryName = sc.Category.ParentCategoryName // Ana kategorinin adını ekledik
+            }).ToList();
+
+            return View(subCategoryViewModels);
         }
 
+        // Alt kategori ekleme
         [HttpPost("AddSubCategory")]
-        public async Task<IActionResult> AddSubCategory(SubCategory subCategory)
+        public async Task<IActionResult> AddSubCategory([FromBody] SubCategory subCategory)
         {
-            if (!ModelState.IsValid)
+            if (subCategory == null || !ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Geçersiz Alt Kategori Verisi.");
             }
 
-            await _subCategoryService.AddAsync(subCategory);
-            return Ok();
+            // Alt kategorinin bağlı olduğu ana kategoriyi kontrol et
+            var category = await _categoryService.GetByIdAsync(subCategory.CategoryId);
+            if (category == null)
+            {
+                return BadRequest("Bağlı olduğu ana kategori bulunamadı.");
+            }
+
+            try
+            {
+                await _subCategoryService.AddAsync(subCategory);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Alt kategori eklenirken hata oluştu: {ex.Message}");
+            }
         }
 
+        // Alt kategori güncelleme
         [HttpPost("UpdateSubCategory")]
-        public async Task<IActionResult> UpdateSubCategory(SubCategory subCategory)
+        public async Task<IActionResult> UpdateSubCategory([FromBody] SubCategory subCategory)
         {
-            if (!ModelState.IsValid)
+            if (subCategory == null || !ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest("Geçersiz Alt Kategori Verisi.");
             }
 
-            await _subCategoryService.UpdateAsync(subCategory);
-            return Ok();
+            // Güncellenen alt kategorinin bağlı olduğu ana kategoriyi kontrol et
+            var category = await _categoryService.GetByIdAsync(subCategory.CategoryId);
+            if (category == null)
+            {
+                return BadRequest("Bağlı olduğu ana kategori bulunamadı.");
+            }
+
+            try
+            {
+                await _subCategoryService.UpdateAsync(subCategory);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Alt kategori güncellenirken hata oluştu: {ex.Message}");
+            }
         }
 
+        // Alt kategori silme
         [HttpPost("DeleteSubCategory/{id}")]
         public async Task<IActionResult> DeleteSubCategory(int id)
         {
-            var result = await _subCategoryService.DeleteAsync(id);
-            if (result)
+            if (id <= 0)
             {
+                return BadRequest("Geçersiz Alt Kategori Id'si.");
+            }
+
+            try
+            {
+                var result = await _subCategoryService.DeleteAsync(id);
+                if (!result)
+                {
+                    return NotFound("Alt kategori bulunamadı.");
+                }
                 return Ok();
             }
-            return NotFound();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Alt kategori silinirken hata oluştu: {ex.Message}");
+            }
         }
 
         #endregion

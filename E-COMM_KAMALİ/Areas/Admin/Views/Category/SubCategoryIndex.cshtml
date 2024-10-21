@@ -1,1 +1,56 @@
-﻿
+﻿@model ECOMM.Core.ViewModels.SubCategoryViewModel
+@{
+    ViewData["Title"] = "Alt Kategori Ekle";
+}
+
+<div class="container mt-4">
+    <h2>Alt Kategori Ekle</h2>
+
+    <!-- Alt Kategori Ekleme Formu -->
+    <form id="subCategoryForm">
+        <div class="form-group">
+            <label for="subCategoryName">Alt Kategori Adı</label>
+            <input type="text" class="form-control" id="subCategoryName" placeholder="Alt Kategori Adı" required />
+        </div>
+        <div class="form-group">
+            <label for="parentCategoryId">Ana Kategori Seç</label>
+            <select class="form-control" id="parentCategoryId" required>
+                <option value="">Bir kategori seçin</option>
+                @foreach (var category in Model.Categories)
+                {
+                    <option value="@category.Id">@category.ParentCategoryName</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Formun gönderim işlemi
+        $('#subCategoryForm').submit(function (e) {
+            e.preventDefault();
+
+            const subCategory = {
+                SubCategoryName: $('#subCategoryName').val(),
+                CategoryId: $('#parentCategoryId').val(),
+            };
+
+            $.ajax({
+                type: 'POST',
+                url: '/SubCategory/AddSubCategory',
+                contentType: 'application/json',
+                data: JSON.stringify(subCategory),
+                success: function () {
+                    Swal.fire('Başarılı!', 'Alt kategori başarıyla kaydedildi.', 'success');
+                    location.reload(); // Sayfayı yenile
+                },
+                error: function (xhr) {
+                    Swal.fire('Hata!', 'Bir hata oluştu: ' + xhr.responseText, 'error');
+                }
+            });
+        });
+    });
+</script>

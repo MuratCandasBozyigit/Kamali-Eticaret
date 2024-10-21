@@ -1,6 +1,8 @@
 ﻿using ECOMM.Business.Abstract;
 using ECOMM.Core.Models;
+using ECOMM.Core.ViewModels;
 using ECOMM.Data.Shared.Abstract;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -39,6 +41,11 @@ namespace ECOMM.Business.Concrete
         {
             // Implement the delete logic for Guid
             return await _subCategoryRepository.DeleteAsync(guid);
+        }
+        public async Task<IEnumerable<SubCategory>> GetAllIncludingCategoryAsync()
+        {
+            // Alt kategorileri ve ilişkili kategorileri getir
+            return await _subCategoryRepository.GetAllIncluding(c => c.Category);
         }
 
         public async Task<IEnumerable<SubCategory>> GetAllAsync()

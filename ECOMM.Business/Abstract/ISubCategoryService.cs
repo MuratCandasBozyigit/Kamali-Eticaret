@@ -9,5 +9,8 @@ namespace ECOMM.Business.Abstract
 {
     public interface ISubCategoryService:IService<SubCategory>
     {
+
+        Task<IEnumerable<SubCategory>> GetAllIncludingCategoryAsync();
+
     }
 }
