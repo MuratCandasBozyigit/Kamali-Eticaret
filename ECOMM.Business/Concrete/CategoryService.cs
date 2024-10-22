@@ -8,12 +8,11 @@ namespace ECOMM.Business.Concrete
     {
         private readonly IRepository<Category> _categoryRepository;
 
+        // base(repository) eklenerek Service<Category> base sınıfına repository gönderiliyor
         public CategoryService(IRepository<Category> categoryRepository) : base(categoryRepository)
         {
             _categoryRepository = categoryRepository;
         }
-
-        #region Kategori İşlemleri
 
         public async Task<Category> GetByIdAsync(int id)
         {
@@ -39,7 +38,5 @@ namespace ECOMM.Business.Concrete
         {
             return await _categoryRepository.DeleteAsync(id);
         }
-
-        #endregion
     }
 }
