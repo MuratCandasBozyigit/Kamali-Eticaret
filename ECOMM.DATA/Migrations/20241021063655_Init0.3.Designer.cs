@@ -4,6 +4,7 @@ using ECOMM.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOMM.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20241021063655_Init0.3")]
+    partial class Init03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -52,6 +55,9 @@ namespace ECOMM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ParentCategoryId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ParentCategoryName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -63,6 +69,21 @@ namespace ECOMM.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("CategorySubCategory", b =>
+                {
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SubCategoriesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CategoriesId", "SubCategoriesId");
+
+                    b.HasIndex("SubCategoriesId");
+
+                    b.ToTable("CategorySubCategory");
                 });
 
             modelBuilder.Entity("Comment", b =>
@@ -247,9 +268,6 @@ namespace ECOMM.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
 
@@ -268,13 +286,15 @@ namespace ECOMM.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<string>("SubCategoryName")
+                    b.Property<string>("ParentCategoryDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SubCatName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("SubCategories");
                 });
@@ -465,6 +485,21 @@ namespace ECOMM.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("CategorySubCategory", b =>
+                {
+                    b.HasOne("Category", null)
+                        .WithMany()
+                        .HasForeignKey("CategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ECOMM.Core.Models.SubCategory", null)
+                        .WithMany()
+                        .HasForeignKey("SubCategoriesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Comment", b =>
                 {
                     b.HasOne("ECOMM.Core.Models.User", "Author")
@@ -518,17 +553,6 @@ namespace ECOMM.Data.Migrations
                 {
                     b.HasOne("Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("ECOMM.Core.Models.SubCategory", b =>
-                {
-                    b.HasOne("Category", "Category")
-                        .WithMany("SubCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -600,11 +624,6 @@ namespace ECOMM.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Category", b =>
-                {
-                    b.Navigation("SubCategories");
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.ApplicationRole", b =>

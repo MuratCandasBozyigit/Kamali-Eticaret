@@ -1,15 +1,13 @@
-﻿using ECOMM.Data.Shared.Abstract;
-using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ECOMM.Business.Abstract;
 using ECOMM.Core.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
 namespace ECOMM.Business.Concrete
 {
-    public class UserService
+    public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
 
@@ -17,6 +15,7 @@ namespace ECOMM.Business.Concrete
         {
             _userManager = userManager;
         }
+
         public async Task<User> DeleteUserAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);

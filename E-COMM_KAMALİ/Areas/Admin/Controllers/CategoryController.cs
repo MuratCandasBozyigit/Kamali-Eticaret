@@ -1,96 +1,58 @@
-﻿
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ECOMM.Business.Abstract;
 using ECOMM.Core.Models;
+using ECOMM.Business.Concrete;
+using ECOMM.Core.ViewModels;
 
 namespace ECOMM.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
     [Route("Admin/[controller]")]
-   
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-     
-        public CategoryController(ICategoryService categoryService)
+        private readonly ISubCategoryService _subCategoryService; 
+
+        public CategoryController(ICategoryService categoryService, ISubCategoryService subCategoryService)
         {
             _categoryService = categoryService;
-         
+            _subCategoryService = subCategoryService; 
         }
 
-        #region Tamamlandı 
+        #region Kategori İşlemleri
 
         [HttpGet]
         public IActionResult Index()
         {
-        
             return View();
         }
 
-      
-        [HttpGet("GetAllCategories")]
-        public IActionResult GetAll()
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync()
         {
             try
             {
-                var categories = _categoryService.GetAllAsync();
+                var categories = await _categoryService.GetAllAsync();
                 return Json(categories);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Server Hatası Kategoriler Listelenemedi: {ex.Message}");
             }
         }
-
-        [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(int id)
-        {
-            if (id == null)
-            {
-                return BadRequest("Invalid ID format.");
-            }
-
-            var iD = _categoryService.GetFirstOrDefaultAsync(i => i.Id == id);
-            if (iD == null)
-            {
-                return NotFound("Color not found.");
-            }
-
-            _categoryService.DeleteAsync(iD.Id);
-            return Ok(iD);
-        }
-
-        [HttpPut("Update/{id}")]
-        public IActionResult Update(int id, [FromBody] Category category)
-        {
-            if (category == null || category.Id != id)
-            {
-                return BadRequest("Invalid category data.");
-            }
-
-            try
-            {
-                _categoryService.UpdateAsync(category);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
-
 
         [HttpGet("GetById/{id}")]
-        public IActionResult GetById(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            if (id == 0)
+            if (id <= 0)
             {
-                return BadRequest("Invalid Id Format");
+                return BadRequest("Geçersiz Kategori Id'si.");
             }
+
             try
             {
-                var category = _categoryService.GetByIdAsync(id);
+                var category = await _categoryService.GetByIdAsync(id);
                 if (category == null)
                 {
                     return NotFound();
@@ -99,33 +61,191 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Server Hatası Kategori Getirilemedi: {ex.Message}");
+            }
+        }
+
+        [HttpPost("AddAsync")]
+        public async Task<IActionResult> AddAsync([FromBody] Category category)
+        {
+            if (category == null || !ModelState.IsValid)
+            {
+                return BadRequest("Geçersiz Kategori Verisi.");
+            }
+
+            try
+            {
+                var createdCategory = await _categoryService.AddAsync(category);
+                return CreatedAtAction(nameof(GetById), new { id = createdCategory.Id }, createdCategory);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Hatası Kategori Eklenemedi: {ex.Message}");
             }
         }
 
 
-
-        [HttpPost("Add")]
-        public IActionResult Add([FromBody]Category category)
+        [HttpPut("UpdateAsync")]///{id}
+        public async Task<IActionResult> UpdateAsync(int id, [FromBody] Category category)
         {
-            
-                try
-                {
-             
-                   var categories = _categoryService.AddAsync(category);
-                    return Ok(categories);
-                }
-                catch (Exception ex)
-                {
-                    return StatusCode(500, $"Internal category server error: {ex.Message}");
-                }
+            //if (category == null || category.Id != id || !ModelState.IsValid)
+            //{
+            //    return BadRequest("Geçersiz Kategori Verisi.");
+            //}
 
+            try
+            {
+                await _categoryService.UpdateAsync(category);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Hatası Kategori Güncellenemedi: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("DeleteAsync/{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Geçersiz Kategori Id'si.");
+            }
+
+            try
+            {
+                var result = await _categoryService.DeleteAsync(id);
+                if (!result)
+                {
+                    return NotFound("Kategori bulunamadı.");
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Hatası Kategori Silinemedi: {ex.Message}");
+            }
+        }
+
+        #endregion
+
+        #region Alt Kategori İşlemleri
+
+        //// Alt Kategorilerin listelenmesi
+        //[HttpGet("SubCategoryIndex")]
+        //public async Task<IActionResult> SubCategoryIndex()
+        //{
+        //    var subCategories = await _subCategoryService.GetAllAsync();
+        //    return View(subCategories);
+        //}
+        [HttpGet("SubCategoryIndex")]
+        public async Task<IActionResult> SubCategoryIndex()
+        {
+            // Alt kategorileri alıyoruz ve ilgili kategorileri dahil ediyoruz
+            var subCategories = await _subCategoryService.GetAllIncludingCategoryAsync();
+
+            // SubCategory modelinden SubCategoryViewModel'e dönüşüm yapıyoruz
+            var subCategoryViewModels = subCategories.Select(sc => new SubCategoryViewModel
+            {
+                Id = sc.Id,
+                SubCategoryName = sc.SubCategoryName,
+                CategoryId = sc.CategoryId,
+                CategoryName = sc.Category.ParentCategoryName,  // Ana kategori adı
+                CategoryTag = sc.Category.ParentCategoryTag,    // Ana kategori etiketi
+                CategoryDescription = sc.Category.ParentCategoryDescription // Ana kategori açıklaması
+            }).ToList();
+
+            // Kategorileri alıyoruz
+            var categories = await _categoryService.GetAllAsync();
+
+            // Kategorileri ViewBag'e ekliyoruz, formda kullanmak için
+            ViewBag.Categories = categories;
+
+            // Alt kategori view modellerini view'a gönderiyoruz
+            return View(subCategoryViewModels);
         }
 
 
 
 
-        #endregion
+        // Alt kategori ekleme
+        [HttpPost("AddSubCategory")]
+        public async Task<IActionResult> AddSubCategory([FromBody] SubCategory subCategory)
+        {
+            if (subCategory == null || !ModelState.IsValid)
+            {
+                return BadRequest("Geçersiz Alt Kategori Verisi.");
+            }
 
+            // Alt kategorinin bağlı olduğu ana kategoriyi kontrol et
+            var category = await _categoryService.GetByIdAsync(subCategory.CategoryId);
+            if (category == null)
+            {
+                return BadRequest("Bağlı olduğu ana kategori bulunamadı.");
+            }
+
+            try
+            {
+                await _subCategoryService.AddAsync(subCategory);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Alt kategori eklenirken hata oluştu: {ex.Message}");
+            }
+        }
+
+        // Alt kategori güncelleme
+        [HttpPost("UpdateSubCategory")]
+        public async Task<IActionResult> UpdateSubCategory([FromBody] SubCategory subCategory)
+        {
+            if (subCategory == null || !ModelState.IsValid)
+            {
+                return BadRequest("Geçersiz Alt Kategori Verisi.");
+            }
+
+            // Güncellenen alt kategorinin bağlı olduğu ana kategoriyi kontrol et
+            var category = await _categoryService.GetByIdAsync(subCategory.CategoryId);
+            if (category == null)
+            {
+                return BadRequest("Bağlı olduğu ana kategori bulunamadı.");
+            }
+
+            try
+            {
+                await _subCategoryService.UpdateAsync(subCategory);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Alt kategori güncellenirken hata oluştu: {ex.Message}");
+            }
+        }
+
+        // Alt kategori silme
+        [HttpPost("DeleteSubCategory/{id}")]
+        public async Task<IActionResult> DeleteSubCategory(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Geçersiz Alt Kategori Id'si.");
+            }
+
+            try
+            {
+                var result = await _subCategoryService.DeleteAsync(id);
+                if (!result)
+                {
+                    return NotFound("Alt kategori bulunamadı.");
+                }
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Alt kategori silinirken hata oluştu: {ex.Message}");
+            }
+        }
+
+        #endregion
     }
 }
