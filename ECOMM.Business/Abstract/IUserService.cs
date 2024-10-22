@@ -6,9 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ECOMM.Core.Models;
-using ECOMM.Business.Abstract;   // IUserService'in bulunduğu namespace
-using ECOMM.Business.Concrete;   // UserService'in bulunduğu namespace
-
 namespace ECOMM.Business.Abstract
 {
     public interface IUserService 

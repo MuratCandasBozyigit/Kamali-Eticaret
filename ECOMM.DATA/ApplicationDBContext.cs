@@ -15,7 +15,7 @@ namespace ECOMM.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Comment> Comments { get; set; }      
         public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
-        public DbSet<SubCategory> SubCategories { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
