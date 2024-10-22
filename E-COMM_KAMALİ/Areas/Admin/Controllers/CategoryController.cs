@@ -143,7 +143,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         public async Task<IActionResult> SubCategoryIndex()
         {
             // Alt kategorileri al
-            var subCategories = await _subCategoryService.GetAllAsync();
+            var subCategories = await _subCategoryService.GetAllIncludingCategoryAsync();
 
             // SubCategory modelinden SubCategoryViewModel'e dönüşüm yapıyoruz
             var subCategoryViewModels = subCategories.Select(sc => new SubCategoryViewModel
@@ -151,11 +151,18 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 Id = sc.Id,
                 SubCategoryName = sc.SubCategoryName,
                 CategoryId = sc.CategoryId,
-                CategoryName = sc.Category.ParentCategoryName // Ana kategorinin adını ekledik
+                CategoryName = sc.Category.ParentCategoryName // Ana kategorinin adını alıyoruz
             }).ToList();
+
+            // Kategorileri de al ve View'a geç
+            var categories = await _categoryService.GetAllAsync(); // Kategorileri getir
+
+            ViewBag.Categories = categories; // Kategorileri ViewBag'e ekliyoruz
 
             return View(subCategoryViewModels);
         }
+
+
 
         // Alt kategori ekleme
         [HttpPost("AddSubCategory")]

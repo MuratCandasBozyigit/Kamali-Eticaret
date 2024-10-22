@@ -20,5 +20,6 @@ namespace ECOMM.Data.Shared.Abstract
         Task<bool> DeleteAsync(int id); // ID ile veri siler
         Task<bool> DeleteAsync(Guid guid); // Guid ile veri siler
         Task SaveAsync(); // Değişiklikleri kaydeder
+        Task<IEnumerable<T>> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties);
     }
 }
