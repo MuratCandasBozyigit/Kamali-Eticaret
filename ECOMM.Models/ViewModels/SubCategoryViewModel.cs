@@ -5,7 +5,7 @@ namespace ECOMM.Core.ViewModels
 {
     public class SubCategoryViewModel
     {
-        public int Id { get; set; }
+        public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
 
         // Category ile ilgili alanlar:

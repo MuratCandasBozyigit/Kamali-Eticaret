@@ -12,12 +12,12 @@ namespace ECOMM.Web.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-        private readonly ISubCategoryService _subCategoryService; 
+        private readonly ISubCategoryService _subCategoryService;
 
         public CategoryController(ICategoryService categoryService, ISubCategoryService subCategoryService)
         {
             _categoryService = categoryService;
-            _subCategoryService = subCategoryService; 
+            _subCategoryService = subCategoryService;
         }
 
         #region Kategori İşlemleri
@@ -84,15 +84,9 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-
-        [HttpPut("UpdateAsync")]///{id}
+        [HttpPut("UpdateAsync")] // {id}
         public async Task<IActionResult> UpdateAsync(int id, [FromBody] Category category)
         {
-            //if (category == null || category.Id != id || !ModelState.IsValid)
-            //{
-            //    return BadRequest("Geçersiz Kategori Verisi.");
-            //}
-
             try
             {
                 await _categoryService.UpdateAsync(category);
@@ -131,53 +125,68 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
         #region Alt Kategori İşlemleri
 
-        //// Alt Kategorilerin listelenmesi
-        //[HttpGet("SubCategoryIndex")]
-        //public async Task<IActionResult> SubCategoryIndex()
-        //{
-        //    var subCategories = await _subCategoryService.GetAllAsync();
-        //    return View(subCategories);
-        //}
         [HttpGet("SubCategoryIndex")]
         public async Task<IActionResult> SubCategoryIndex()
         {
-            // Alt kategorileri alıyoruz ve ilgili kategorileri dahil ediyoruz
             var subCategories = await _subCategoryService.GetAllIncludingCategoryAsync();
-
-            // SubCategory modelinden SubCategoryViewModel'e dönüşüm yapıyoruz
             var subCategoryViewModels = subCategories.Select(sc => new SubCategoryViewModel
             {
-                Id = sc.Id,
+                SubCategoryId = sc.Id,
                 SubCategoryName = sc.SubCategoryName,
                 CategoryId = sc.CategoryId,
-                CategoryName = sc.Category.ParentCategoryName,  // Ana kategori adı
-                CategoryTag = sc.Category.ParentCategoryTag,    // Ana kategori etiketi
-                CategoryDescription = sc.Category.ParentCategoryDescription // Ana kategori açıklaması
+                CategoryName = sc.Category.ParentCategoryName,
+                CategoryTag = sc.Category.ParentCategoryTag,
+                CategoryDescription = sc.Category.ParentCategoryDescription
             }).ToList();
 
-            // Kategorileri alıyoruz
             var categories = await _categoryService.GetAllAsync();
-
-            // Kategorileri ViewBag'e ekliyoruz, formda kullanmak için
             ViewBag.Categories = categories;
-
-            // Alt kategori view modellerini view'a gönderiyoruz
             return View(subCategoryViewModels);
         }
 
+        [HttpGet("GetAllSubCategoriesAsync")]
+        public async Task<IActionResult> GetAllSubCategoriesAsync()
+        {
+            try
+            {
+                var categories = await _categoryService.GetAllAsync();
+                return Json(categories);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Hatası Kategoriler Listelenemedi: {ex.Message}");
+            }
+        }
 
 
+        // Get By ID
+        [HttpGet("SubCategoryGetById/{id}")]
+        public async Task<IActionResult> GetByIdAsync(int id)
+        {
+            if (id <= 0)
+            {
+                return BadRequest("Geçersiz Alt Kategori Id'si.");
+            }
+
+            try
+            {
+                var category = await _subCategoryService.GetByIdAsync(id);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+                return Ok(category);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Hatası Kategori Getirilemedi: {ex.Message}");
+            }
+        }
 
         // Alt kategori ekleme
         [HttpPost("AddSubCategory")]
         public async Task<IActionResult> AddSubCategory([FromBody] SubCategory subCategory)
         {
-            if (subCategory == null || !ModelState.IsValid)
-            {
-                return BadRequest("Geçersiz Alt Kategori Verisi.");
-            }
-
-            // Alt kategorinin bağlı olduğu ana kategoriyi kontrol et
             var category = await _categoryService.GetByIdAsync(subCategory.CategoryId);
             if (category == null)
             {
@@ -204,7 +213,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return BadRequest("Geçersiz Alt Kategori Verisi.");
             }
 
-            // Güncellenen alt kategorinin bağlı olduğu ana kategoriyi kontrol et
             var category = await _categoryService.GetByIdAsync(subCategory.CategoryId);
             if (category == null)
             {
@@ -245,7 +253,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return StatusCode(500, $"Alt kategori silinirken hata oluştu: {ex.Message}");
             }
         }
-
         #endregion
     }
 }

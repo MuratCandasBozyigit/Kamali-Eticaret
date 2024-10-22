@@ -13,7 +13,8 @@
                 <h5 class="modal-title" id="modAnaitle"></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <input type="hidden" id="modalSubCategoryId" />
+            <!-- Gizli SubCategoryId input -->
+            <input type="hidden" id="subCategoryId" />
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="subCategoryName" class="form-label">Alt Kategori Adı:</label>
@@ -66,8 +67,8 @@
                     <td>@subCategory.CategoryTag</td>
                     <td>@subCategory.CategoryDescription</td>
                     <td>
-                        <button class="btn btn-warning btn-sm editSubCategory" data-id="@subCategory.Id">Düzenle</button>
-                        <button class="btn btn-danger btn-sm deleteSubCategory" data-id="@subCategory.Id">Sil</button>
+                        <button class="btn btn-warning btn-sm editCategory" data-id="@subCategory.SubCategoryId">Düzenle</button>
+                        <button class="btn btn-danger btn-sm deleteCategory" data-id="@subCategory.SubCategoryId">Sil</button>
                     </td>
                 </tr>
             }
@@ -81,21 +82,41 @@
         </tbody>
     </table>
 </div>
-
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $("#openModal").click(function () {
-                $("#modAnaitle").text("Yeni Alt Kategori Ekle");
-                $("#modalSubCategoryId").val('');
-                $("#subCategoryName").val('');
-                $("#modalCategoryId").val('');
-                $("#modal").modal('show');
-            });
+            function resetForm() {
+                $('#subCategoryId').val("");
+                $('#subCategoryName,#categoryName,#categoryTag,#categoryDescription').val("");
+                $('#.text-danger').hide();
+            }
 
-            $("#btnSave").click(function () {
-                // Kaydetme işlemleri burada olacak
-            });
+            var table = $('#tblSubCategories').DataTable({
+                ajax: {
+                    url: 'Admin/Category/GetAllSubCategoriesAsync',
+                    dataSrc: '',
+                    error: function (xhr, error, thrown) {
+                        console.error('Ajax Hatası:', error, thrown);
+                        Swal.fire('Hata', 'Kategoriler yüklenirken bir sorun oluştu.', 'error');
+                    }
+                },
+                columns: [
+                    { data: 'subCategoryName', title: 'Alt Kategori Adı' },
+                    { data: 'categoryName', title: 'Ana Kategori Adı' },
+                    { data: 'categoryTag', title: 'Ana Kategori Etiketi' },
+                    { data: 'categoryDescription', title: 'Ana Kategori Açıklaması' },
+                    {
+                        data: null,
+                        title: 'İşlemler',
+                        render: function (data, type, row) {
+                            return `
+                    <a href="#" class="btn btn-sm btn-warning editCategory" data-id="${row.id}">Düzenle</a>
+                    <a href="#" class="btn btn-sm btn-danger deleteCategory" data-id="${row.id}">Sil</a>
+                `;
+                        }
+                    }
+                ]
+            })
         });
     </script>
 }
