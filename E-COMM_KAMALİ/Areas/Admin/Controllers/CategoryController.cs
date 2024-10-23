@@ -135,8 +135,8 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 SubCategoryName = sc.SubCategoryName,
                 CategoryId = sc.CategoryId,
                 CategoryName = sc.Category.ParentCategoryName,
-                CategoryTag = sc.Category.ParentCategoryTag,
-                CategoryDescription = sc.Category.ParentCategoryDescription
+               // CategoryTag = sc.Category.ParentCategoryTag,
+               // CategoryDescription = sc.Category.ParentCategoryDescription
             }).ToList();
 
             var categories = await _categoryService.GetAllAsync();
