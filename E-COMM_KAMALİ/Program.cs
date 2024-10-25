@@ -29,9 +29,10 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 // Veritabanı bağlantısı için SQL Server kullanımı
 builder.Services.AddDbContext<ApplicationDBContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+    sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
-
+// Identity yapılandırması
 builder.Services.AddIdentity<User, ApplicationRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
@@ -53,9 +54,6 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 // Business ve Repository DI işlemleri
 builder.Services.BusinessDI();
 builder.Services.RepositoryDI();
-
-// Application Insights
-//builder.Services.AddApplicationInsightsTelemetry();
 
 var app = builder.Build();
 
@@ -79,11 +77,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Yönlendirme ayarları
-//app.MapControllerRoute(
-//    name: "PostDetail",
-//    pattern: "postdetail/{category}/{tag}/{id}",
-//    defaults: new { controller = "PostDetail", action = "Index" }
-//);
+app.MapControllerRoute(
+    name: "PostDetail",
+    pattern: "postdetail/{category}/{tag}/{id}",
+    defaults: new { controller = "PostDetail", action = "Index" }
+);
 
 app.MapControllerRoute(
     name: "areas",
