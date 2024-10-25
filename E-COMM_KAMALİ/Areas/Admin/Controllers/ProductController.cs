@@ -22,23 +22,34 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         }
 
         #endregion
-     
-        [HttpGet("Index")]
-        public IActionResult Index()
+
+        //[HttpGet("Index")]
+        //public IActionResult Index()
+        //{
+        //    var Products = _productService.GetAllAsync();
+        //    var categories = _categoryService.GetAllAsync();
+
+
+        //   var viewModel = new HomeViewModel
+        //   {
+        //       Products = Products,
+        //       Categories = categories
+        //   };
+
+
+        //    return View(viewModel);
+        //}
+        public async Task<IActionResult> Index()
         {
-            var Products = _productService.GetAllAsync();
-            var categories = _categoryService.GetAllAsync();
+            var model = new HomeViewModel
+            {
+                Products =await _productService.GetAllAsync()
+                
+            }; 
 
-          
-            //var viewModel = new HomeViewModel
-            //{
-            //    Products = Products,
-            //    Categories = categories
-            //};
-
-          
-            return View(/*viewModel*/);
+            return View(model);
         }
+
 
         public class HomeViewModel
         {
@@ -54,25 +65,21 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             _productService.GetAllAsync();
             return Ok();
         }
-
         [HttpGet("Create")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var categories = _categoryService.GetAllAsync(); 
+            var categories = await _categoryService.GetAllAsync(); // Asenkron olarak bekle
             var viewModel = new HomeViewModel
             {
-                Categories = (IEnumerable<Category>)categories
+                Categories = categories // Artık IEnumerable<Category> türünde
             };
 
             return View(viewModel);
         }
 
         [HttpPost("Create")]
-        public IActionResult Create([FromForm] Product Product, IFormFile image)
+        public async Task<IActionResult> Create([FromForm] Product Product, IFormFile image)
         {
-            //var category = _categoryService.GetCategoriesById(Product.CategoryId);
-            //Product.TagName = category.Tag.Name;
-
             if (image != null && image.Length > 0)
             {
                 var fileName = Path.GetFileName(image.FileName);
@@ -80,18 +87,16 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    image.CopyTo(stream);
+                    await image.CopyToAsync(stream); // Asenkron kopyalama
                 }
 
                 Product.ImagePath = "/images/" + fileName;
             }
 
-            _productService.AddAsync(Product);
+            await _productService.AddAsync(Product); // Asenkron olarak ekle
             return Json(new { success = true, message = "Product başarıyla kaydedildi." });
-
-
-
         }
+
 
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)

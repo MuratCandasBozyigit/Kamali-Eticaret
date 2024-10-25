@@ -5,6 +5,7 @@ namespace ECOMM.Core.ViewModels
 {
     public class ProductEditViewModel
     {
+        public Product Product { get; set; }
         public int ProductId { get; set; } // Ürün ID'si
         public string ProductTitle { get; set; } // Ürün Başlığı
         public string ProductDescription { get; set; } // Ürün Açıklaması
