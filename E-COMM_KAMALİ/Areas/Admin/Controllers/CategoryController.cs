@@ -158,7 +158,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-
         // Get By ID
         [HttpGet("SubCategoryGetById/{id}")]
         public async Task<IActionResult> GetByIdAsync(int id)
@@ -205,14 +204,10 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         }
 
         // Alt kategori güncelleme
-        [HttpPost("UpdateSubCategory")]
+        [HttpPut("UpdateSubCategory")]
         public async Task<IActionResult> UpdateSubCategory([FromBody] SubCategory subCategory)
         {
-            if (subCategory == null || !ModelState.IsValid)
-            {
-                return BadRequest("Geçersiz Alt Kategori Verisi.");
-            }
-
+           
             var category = await _categoryService.GetByIdAsync(subCategory.CategoryId);
             if (category == null)
             {

@@ -81,7 +81,7 @@ app.UseAuthorization();
 // Yönlendirme ayarları
 //app.MapControllerRoute(
 //    name: "PostDetail",
-//    pattern: "postdetail/{category}/{tag}/{id}",
+//    pattern: "postdetail/{category}/{subCategory}/{id}",
 //    defaults: new { controller = "PostDetail", action = "Index" }
 //);
 
