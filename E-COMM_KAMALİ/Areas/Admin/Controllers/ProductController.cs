@@ -2,6 +2,7 @@
 using ECOMM.Core.Models;
 using ECOMM.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECOMM.Web.Areas.Admin.Controllers
 {
@@ -133,40 +134,39 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return BadRequest(ex.Message + "sea sorun getbyıd");
             }
         }
-
-
         [HttpGet("Edit/{id}")]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var Product = _productService.GetByIdAsync(id);
-            if (Product == null)
+            var product = await _productService.GetByIdAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            var categories = _categoryService.GetAllAsync();
-            //var viewModel = new ProductEditViewModel
-            //{
-            //    Product = Product,
-            //    Categories = categories
-            //};
+            var categories = await _categoryService.GetAllAsync();
 
-            return View(/*viewModel*/);
+            var viewModel = new ProductEditViewModel
+            {
+                Product = product,
+                Categories = categories ?? new List<Category>() // Kategori listesini doğrudan atıyoruz
+            };
+
+            return View(viewModel);
         }
 
+
         [HttpPost("Edit/{id}")]
-        public IActionResult Edit(ProductEditViewModel viewModel, IFormFile image)
+        public async Task<IActionResult> Edit(ProductEditViewModel viewModel, IFormFile image)
         {
-            var ProductToUpdate = _productService.GetByIdAsync(viewModel.Product.Id);
-            if (ProductToUpdate == null)
+            var productToUpdate = await _productService.GetByIdAsync(viewModel.ProductId);
+            if (productToUpdate == null)
             {
                 return NotFound();
             }
 
-            //ProductToUpdate.Title = viewModel.Product.Title;
-            //ProductToUpdate.Content = viewModel.Product.Content;
-            //ProductToUpdate.CategoryId = viewModel.Product.CategoryId;
-           
+            // Güncellemeleri yap
+            viewModel.UpdateProductInfo(productToUpdate); // Bilgileri güncelle
+
             if (image != null && image.Length > 0)
             {
                 var fileName = Path.GetFileName(image.FileName);
@@ -174,15 +174,17 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    image.CopyTo(stream);
+                    await image.CopyToAsync(stream); // Asenkron kopyalama
                 }
 
-               // ProductToUpdate.ImagePath = "/images/" + fileName;
+                productToUpdate.ImagePath = "/images/" + fileName; // Resim yolunu güncelle
             }
 
-          //  _productService.UpdateAsync(ProductToUpdate);
+            await _productService.UpdateAsync(productToUpdate); // Ürünü güncelle
             return Json(new { success = true, message = "Product başarıyla güncellendi." });
         }
+
+
 
         #endregion
 

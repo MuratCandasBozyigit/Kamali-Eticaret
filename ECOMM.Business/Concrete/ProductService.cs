@@ -7,7 +7,7 @@ namespace ECOMM.Business.Concrete
     public class ProductService : Service<Product>,IProductService
     {
         private readonly IRepository<Product> _productRepository;
-
+        private readonly ICategoryService _categoryService;
         public ProductService(IRepository<Product> productRepository) : base(productRepository)
         {
             _productRepository = productRepository;
@@ -35,6 +35,11 @@ namespace ECOMM.Business.Concrete
         public async Task<bool> DeleteAsync(int id)
         {
             return await _productRepository.DeleteAsync(id);
+        }
+
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync() // Kategorileri döndüren metot
+        {
+            return await _categoryService.GetAllAsync();
         }
     }
 }

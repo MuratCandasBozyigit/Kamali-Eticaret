@@ -9,6 +9,6 @@ namespace ECOMM.Business.Abstract
 {
     public interface IProductService :IService<Product>
     {
-     
+        Task<IEnumerable<Category>> GetAllCategoriesAsync();
     }
 }
