@@ -1,0 +1,43 @@
+﻿@model ECOMM.Web.Areas.Admin.Controllers.ProductController.HomeViewModel
+
+<h2>Yeni Ürün Ekle</h2>
+
+<form asp-action="Create" asp-controller="Product" asp-area="Admin" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        <label for="ProductTitle">Ürün Başlığı</label>
+        <input type="text" class="form-control" id="ProductTitle" name="ProductTitle" required>
+    </div>
+
+    <div class="form-group">
+        <label for="ProductName">Ürün Adı</label>
+        <input type="text" class="form-control" id="ProductName" name="ProductName" required>
+    </div>
+
+    <div class="form-group">
+        <label for="ProductDescription">Ürün Açıklaması</label>
+        <textarea class="form-control" id="ProductDescription" name="ProductDescription" required></textarea>
+    </div>
+
+    <div class="form-group">
+        <label for="ProductPrice">Ürün Fiyatı</label>
+        <input type="number" class="form-control" id="ProductPrice" name="ProductPrice" required>
+    </div>
+
+    <div class="form-group">
+        <label for="CategoryId">Kategori</label>
+        <select class="form-control" id="CategoryId" name="CategoryId" required>
+            <option value="">Kategori Seçin</option>
+            @foreach (var category in Model.Categories)
+            {
+                <option value="@category.Id">@category.ParentCategoryName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="Image">Ürün Görseli</label>
+        <input type="file" class="form-control-file" id="Image" name="image">
+    </div>
+
+    <button type="submit" class="btn btn-primary">Kaydet</button>
+</form>

@@ -2,6 +2,7 @@
 using ECOMM.Core.Models;
 using ECOMM.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECOMM.Web.Areas.Admin.Controllers
 {
@@ -22,23 +23,35 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         }
 
         #endregion
-     
-        [HttpGet("Index")]
-        public IActionResult Index()
+
+        //[HttpGet("Index")]
+        //public IActionResult Index()
+        //{
+        //    var Products = _productService.GetAllAsync();
+        //    var categories = _categoryService.GetAllAsync();
+
+
+        //   var viewModel = new HomeViewModel
+        //   {
+        //       Products = Products,
+        //       Categories = categories
+        //   };
+
+
+        //    return View(viewModel);
+        //}
+        public async Task<IActionResult> Index()
         {
-            var Products = _productService.GetAllAsync();
-            var categories = _categoryService.GetAllAsync();
+            var model = new HomeViewModel
+            {
+                Products = await _productService.GetAllAsync(),
+                Categories = await _categoryService.GetAllAsync() // Kategorileri de yükle
+            };
 
-          
-            //var viewModel = new HomeViewModel
-            //{
-            //    Products = Products,
-            //    Categories = categories
-            //};
-
-          
-            return View(/*viewModel*/);
+            return View(model);
         }
+
+
 
         public class HomeViewModel
         {
@@ -54,25 +67,21 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             _productService.GetAllAsync();
             return Ok();
         }
-
         [HttpGet("Create")]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var categories = _categoryService.GetAllAsync(); 
+            var categories = await _categoryService.GetAllAsync(); // Asenkron olarak bekle
             var viewModel = new HomeViewModel
             {
-                Categories = (IEnumerable<Category>)categories
+                Categories = categories // Artık IEnumerable<Category> türünde
             };
 
             return View(viewModel);
         }
 
         [HttpPost("Create")]
-        public IActionResult Create([FromForm] Product Product, IFormFile image)
+        public async Task<IActionResult> Create([FromForm] Product Product, IFormFile image)
         {
-            //var category = _categoryService.GetCategoriesById(Product.CategoryId);
-            //Product.TagName = category.Tag.Name;
-
             if (image != null && image.Length > 0)
             {
                 var fileName = Path.GetFileName(image.FileName);
@@ -80,18 +89,16 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    image.CopyTo(stream);
+                    await image.CopyToAsync(stream); // Asenkron kopyalama
                 }
 
                 Product.ImagePath = "/images/" + fileName;
             }
 
-            _productService.AddAsync(Product);
+            await _productService.AddAsync(Product); // Asenkron olarak ekle
             return Json(new { success = true, message = "Product başarıyla kaydedildi." });
-
-
-
         }
+
 
         [HttpDelete("Delete/{id}")]
         public IActionResult Delete(int id)
@@ -128,40 +135,45 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return BadRequest(ex.Message + "sea sorun getbyıd");
             }
         }
-
-
         [HttpGet("Edit/{id}")]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var Product = _productService.GetByIdAsync(id);
-            if (Product == null)
+            var product = await _productService.GetByIdAsync(id);
+            if (product == null)
             {
                 return NotFound();
             }
 
-            var categories = _categoryService.GetAllAsync();
-            //var viewModel = new ProductEditViewModel
-            //{
-            //    Product = Product,
-            //    Categories = categories
-            //};
+            var categories = await _categoryService.GetAllAsync();
 
-            return View(/*viewModel*/);
+            var viewModel = new ProductEditViewModel
+            {
+                ProductId = product.Id,
+                ProductTitle = product.ProductTitle,
+                ProductDescription = product.ProductDescription,
+                ProductPrice = (decimal)product.ProductPrice, // Burada float yerine decimal kullanıyoruz
+                ImagePath = product.ImagePath,
+                Categories = categories // Kategorileri ayarlayın
+            };
+
+            return View(viewModel);
         }
 
+
+
+
         [HttpPost("Edit/{id}")]
-        public IActionResult Edit(ProductEditViewModel viewModel, IFormFile image)
+        public async Task<IActionResult> Edit(ProductEditViewModel viewModel, IFormFile image)
         {
-            var ProductToUpdate = _productService.GetByIdAsync(viewModel.Product.Id);
-            if (ProductToUpdate == null)
+            var productToUpdate = await _productService.GetByIdAsync(viewModel.ProductId);
+            if (productToUpdate == null)
             {
                 return NotFound();
             }
 
-            //ProductToUpdate.Title = viewModel.Product.Title;
-            //ProductToUpdate.Content = viewModel.Product.Content;
-            //ProductToUpdate.CategoryId = viewModel.Product.CategoryId;
-           
+            // Güncellemeleri yap
+            viewModel.UpdateProductInfo(productToUpdate); // Bilgileri güncelle
+
             if (image != null && image.Length > 0)
             {
                 var fileName = Path.GetFileName(image.FileName);
@@ -169,15 +181,17 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    image.CopyTo(stream);
+                    await image.CopyToAsync(stream); // Asenkron kopyalama
                 }
 
-               // ProductToUpdate.ImagePath = "/images/" + fileName;
+                productToUpdate.ImagePath = "/images/" + fileName; // Resim yolunu güncelle
             }
 
-          //  _productService.UpdateAsync(ProductToUpdate);
+            await _productService.UpdateAsync(productToUpdate); // Ürünü güncelle
             return Json(new { success = true, message = "Product başarıyla güncellendi." });
         }
+
+
 
         #endregion
 

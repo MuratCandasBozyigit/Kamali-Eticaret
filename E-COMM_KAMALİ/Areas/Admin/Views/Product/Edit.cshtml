@@ -1,0 +1,55 @@
+﻿@model ECOMM.Core.ViewModels.ProductEditViewModel
+
+@{
+    ViewData["Title"] = "Ürün Düzenle"; // Sayfa başlığı
+}
+
+<h1>Ürün Düzenle</h1>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="ProductId" />
+
+    <div class="form-group">
+        <label asp-for="ProductTitle">Ürün Başlığı:</label>
+        <input asp-for="ProductTitle" class="form-control" required />
+        <span asp-validation-for="ProductTitle" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProductDescription">Ürün Açıklaması:</label>
+        <textarea asp-for="ProductDescription" class="form-control" rows="4" required></textarea>
+        <span asp-validation-for="ProductDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProductPrice">Ürün Fiyatı:</label>
+        <input asp-for="ProductPrice" class="form-control" type="number" step="0.01" required />
+        <span asp-validation-for="ProductPrice" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CategoryId">Kategori:</label>
+        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Id", "ParentCategoryName"))" required>
+            <option value="">-- Kategori Seçin --</option>
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Ürün Resmi:</label>
+        <input type="file" name="image" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <img src="@Model.ImagePath" alt="Ürün Resmi" style="max-width: 200px; display: block;" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Güncelle</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

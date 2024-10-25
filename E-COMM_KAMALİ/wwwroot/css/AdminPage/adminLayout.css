@@ -1,7 +1,7 @@
 ﻿body {
    
-  /*  background: linear-gradient(to bottom right, #d9c8a2, #c2b99b);
-  */  color: #333333;
+    background: linear-gradient(to bottom right, #d9c8a2, #c2b99b);
+    color: snow;
     font-family: Arial, sans-serif;
     line-height: 1.6; 
     color: aquamarine;
@@ -15,11 +15,11 @@ header {
     background-color: lightcyan;
    /*// background-color: rgba(255, 255, 255, 0.9);*/ 
 }
-/*
+
 .navbar {
     background: linear-gradient(to bottom right, #d9c8a2, #c2b99b);
-}*/
-    
+}
+
 .nav-link {
     color: aquamarine;
     color: #5b4d36;
