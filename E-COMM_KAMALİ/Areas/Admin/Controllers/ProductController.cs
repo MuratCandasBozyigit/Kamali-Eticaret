@@ -44,12 +44,13 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         {
             var model = new HomeViewModel
             {
-                Products =await _productService.GetAllAsync()
-                
-            }; 
+                Products = await _productService.GetAllAsync(),
+                Categories = await _categoryService.GetAllAsync() // Kategorileri de yükle
+            };
 
             return View(model);
         }
+
 
 
         public class HomeViewModel
@@ -147,12 +148,18 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
             var viewModel = new ProductEditViewModel
             {
-                Product = product,
-                Categories = categories ?? new List<Category>() // Kategori listesini doğrudan atıyoruz
+                ProductId = product.Id,
+                ProductTitle = product.ProductTitle,
+                ProductDescription = product.ProductDescription,
+                ProductPrice = (decimal)product.ProductPrice, // Burada float yerine decimal kullanıyoruz
+                ImagePath = product.ImagePath,
+                Categories = categories // Kategorileri ayarlayın
             };
 
             return View(viewModel);
         }
+
+
 
 
         [HttpPost("Edit/{id}")]
