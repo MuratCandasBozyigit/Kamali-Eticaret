@@ -24,22 +24,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
         #endregion
 
-        //[HttpGet("Index")]
-        //public IActionResult Index()
-        //{
-        //    var Products = _productService.GetAllAsync();
-        //    var categories = _categoryService.GetAllAsync();
-
-
-        //   var viewModel = new HomeViewModel
-        //   {
-        //       Products = Products,
-        //       Categories = categories
-        //   };
-
-
-        //    return View(viewModel);
-        //}
         public async Task<IActionResult> Index()
         {
             var model = new HomeViewModel
@@ -70,10 +54,10 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         [HttpGet("Create")]
         public async Task<IActionResult> Create()
         {
-            var categories = await _categoryService.GetAllAsync(); // Asenkron olarak bekle
+            var categories = await _categoryService.GetAllAsync(); 
             var viewModel = new HomeViewModel
             {
-                Categories = categories // Artık IEnumerable<Category> türünde
+                Categories = categories 
             };
 
             return View(viewModel);
@@ -89,13 +73,13 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await image.CopyToAsync(stream); // Asenkron kopyalama
+                    await image.CopyToAsync(stream); 
                 }
 
                 Product.ImagePath = "/images/" + fileName;
             }
 
-            await _productService.AddAsync(Product); // Asenkron olarak ekle
+            await _productService.AddAsync(Product);
             return Json(new { success = true, message = "Product başarıyla kaydedildi." });
         }
 
@@ -151,15 +135,14 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
                 ProductDescription = product.ProductDescription,
-                ProductPrice = (decimal)product.ProductPrice, // Burada float yerine decimal kullanıyoruz
+                ProductPrice = (decimal)product.ProductPrice, 
                 ImagePath = product.ImagePath,
-                Categories = categories // Kategorileri ayarlayın
+                CategoryName=product.Category.ParentCategoryName,
+                Categories = categories.Select(c => c.ParentCategoryName)
             };
 
             return View(viewModel);
         }
-
-
 
 
         [HttpPost("Edit/{id}")]
@@ -171,8 +154,8 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Güncellemeleri yap
-            viewModel.UpdateProductInfo(productToUpdate); // Bilgileri güncelle
+         
+            viewModel.UpdateProductInfo(productToUpdate);
 
             if (image != null && image.Length > 0)
             {

@@ -37,7 +37,7 @@ namespace ECOMM.Business.Concrete
             return await _productRepository.DeleteAsync(id);
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync() // Kategorileri döndüren metot
+        public async Task<IEnumerable<Category>> GetAllCategoriesAsync() 
         {
             return await _categoryService.GetAllAsync();
         }
