@@ -27,4 +27,3 @@ namespace ECOMM.Core.ViewModels
 
     }
 }
-//public IEnumerable<Category> Categories { get; set; }

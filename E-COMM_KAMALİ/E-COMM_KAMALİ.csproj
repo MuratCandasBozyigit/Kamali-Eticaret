@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="wwwroot\css\Mağaza\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

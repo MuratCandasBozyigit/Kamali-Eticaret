@@ -24,21 +24,43 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
         #endregion
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1)
         {
+            const int pageSize = 6; // Sayfada gösterilecek ürün sayısı
+            var allProducts = await _productService.GetAllAsync(); // Tüm ürünleri yükle
+
+            // Eğer allProducts IEnumerable olarak geliyorsa, Count'lamadan önce ToList() ile listeye çeviriyoruz
+            var productList = allProducts.ToList(); // Sayfada işlem yapabilmek için listeye çevir
+            var totalCount = productList.Count; // Toplam ürün sayısı
+
+            // Mevcut sayfaya göre ürünleri al
+            var products = productList
+                .Skip((page - 1) * pageSize) // Geçerli sayfayı atla
+                .Take(pageSize) // Belirli sayıda ürün al
+                .ToList();
+
+            var categories = await _categoryService.GetAllAsync(); // Kategorileri de yükle
             var model = new HomeViewModel
             {
-                Products = await _productService.GetAllAsync(),
-                Categories = await _categoryService.GetAllAsync() // Kategorileri de yükle
+                Products = products,
+                TotalCount = totalCount,
+                CurrentPage = page,
+                PageSize = pageSize,
+                Categories = categories.ToList() // Kategorileri listeye çevir
             };
 
             return View(model);
         }
 
+
         public class HomeViewModel
         {
-            public IEnumerable<Product> Products { get; set; }
-            public IEnumerable<Category> Categories { get; set; }
+            public List<Product> Products { get; set; }
+            public List<Category> Categories { get; set; }
+            public int TotalCount { get; set; }
+            public int PageSize { get; set; } = 6; // Sayfada gösterilecek ürün sayısı
+            public int CurrentPage { get; set; } = 1; // Mevcut sayfa
+            public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
         }
 
         #region Tamamlandı 
@@ -55,11 +77,12 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             var categories = await _categoryService.GetAllAsync(); // Asenkron olarak bekle
             var viewModel = new HomeViewModel
             {
-                Categories = categories // Artık IEnumerable<Category> türünde
+                Categories = categories.ToList() // Kategorileri listeye çevir
             };
 
             return View(viewModel);
         }
+
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromForm] Product Product, IFormFile image)
         {
