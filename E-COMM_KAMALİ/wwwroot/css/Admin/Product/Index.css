@@ -1,0 +1,47 @@
+﻿/* Tablonun genel görünümü */
+.table {
+    width: 100%; /* Tablonun tam genişlikte olmasını sağlar */
+    margin-top: 20px; /* Üstte boşluk */
+    border-collapse: collapse; /* Kenarların birleşmesini sağlar */
+}
+
+    /* Tablonun başlık ve hücre stilleri */
+    .table th,
+    .table td {
+        padding: 15px; /* Hücre içi boşluk */
+        text-align: left; /* Metin hizalaması */
+        vertical-align: middle; /* Dikey hizalama */
+        border: 1px solid #ddd; /* Kenar rengi */
+    }
+
+    /* Tablonun başlık stil ayarları */
+    .table th {
+        background-color: #f8f9fa; /* Başlık arka plan rengi */
+        font-weight: bold; /* Kalın yazı */
+    }
+
+    /* Resim stilleri */
+    .table img {
+        max-width: 100px; /* Maksimum genişlik */
+        max-height: 100px; /* Maksimum yükseklik */
+        height: auto; /* Yüksekliği otomatik ayarlar */
+        border-radius: 4px; /* Kenarları yuvarlar */
+    }
+
+/* Responsive tasarım için düzenlemeler */
+@media (max-width: 768px) {
+    .table th, .table td {
+        padding: 10px; /* Daha küçük ekranlarda hücre içi boşluk */
+        font-size: 12px; /* Küçük yazı boyutu */
+    }
+
+    .table img {
+        max-width: 80px; /* Küçük ekranlarda resim boyutu */
+        max-height: 80px; /* Küçük ekranlarda resim boyutu */
+    }
+}
+
+/* Düğme stilleri */
+.btn {
+    margin: 0 5px; /* Düğmeler arasına boşluk ekler */
+}
