@@ -60,7 +60,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
             return View(viewModel);
         }
-
         [HttpPost("Create")]
         public async Task<IActionResult> Create([FromForm] Product Product, IFormFile image)
         {
@@ -78,7 +77,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
 
             await _productService.AddAsync(Product); // Asenkron olarak ekle
-            return Json(new { success = true, message = "Product başarıyla kaydedildi." });
+            return RedirectToAction("Index"); // Başarılı ekleme sonrası Index'e yönlendir
         }
 
 
@@ -178,7 +177,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
 
             await _productService.UpdateAsync(productToUpdate); // Ürünü güncelle
-            return Json(new { success = true, message = "Product başarıyla güncellendi." });
+            return RedirectToAction("Index"); // Başarılı güncelleme sonrası Index'e yönlendir
         }
 
 
