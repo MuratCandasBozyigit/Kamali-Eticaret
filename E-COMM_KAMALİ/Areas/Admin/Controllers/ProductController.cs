@@ -135,14 +135,16 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
                 ProductDescription = product.ProductDescription,
-                ProductPrice = (decimal)product.ProductPrice, 
+                ProductPrice = (decimal)product.ProductPrice,
                 ImagePath = product.ImagePath,
-                CategoryName=product.Category.ParentCategoryName,
-                Categories = categories.Select(c => c.ParentCategoryName)
+                CategoryId = product.Category?.Id ?? 0, // CategoryId ayarla
+                Categories = categories // Kategorileri doğrudan ata
             };
 
             return View(viewModel);
         }
+
+
 
 
         [HttpPost("Edit/{id}")]
