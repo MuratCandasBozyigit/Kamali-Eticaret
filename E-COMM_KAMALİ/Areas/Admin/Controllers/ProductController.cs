@@ -24,22 +24,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
         #endregion
 
-        //[HttpGet("Index")]
-        //public IActionResult Index()
-        //{
-        //    var Products = _productService.GetAllAsync();
-        //    var categories = _categoryService.GetAllAsync();
-
-
-        //   var viewModel = new HomeViewModel
-        //   {
-        //       Products = Products,
-        //       Categories = categories
-        //   };
-
-
-        //    return View(viewModel);
-        //}
         public async Task<IActionResult> Index()
         {
             var model = new HomeViewModel
@@ -50,8 +34,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
             return View(model);
         }
-
-
 
         public class HomeViewModel
         {
@@ -135,6 +117,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return BadRequest(ex.Message + "sea sorun getbyıd");
             }
         }
+
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
@@ -151,15 +134,18 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
                 ProductDescription = product.ProductDescription,
-                ProductPrice = (decimal)product.ProductPrice, // Burada float yerine decimal kullanıyoruz
+                ProductPrice = (float)product.ProductPrice,
                 ImagePath = product.ImagePath,
-                Categories = categories // Kategorileri ayarlayın
+                CategoryId = product.Category?.Id ?? 0, // CategoryId ayarla
+                Categories = categories.Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.ParentCategoryName
+                }).ToList() // Buraya ToList ekliyoruz
             };
 
             return View(viewModel);
         }
-
-
 
 
         [HttpPost("Edit/{id}")]
@@ -171,9 +157,13 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Güncellemeleri yap
-            viewModel.UpdateProductInfo(productToUpdate); // Bilgileri güncelle
+            // Yalnızca gerekli bilgileri güncelle
+            productToUpdate.ProductTitle = viewModel.ProductTitle;
+            productToUpdate.ProductDescription = viewModel.ProductDescription;
+            productToUpdate.ProductPrice = viewModel.ProductPrice;
+            productToUpdate.CategoryId = viewModel.CategoryId; // Ana kategoriyi güncelle
 
+            // Resim güncelleme işlemi
             if (image != null && image.Length > 0)
             {
                 var fileName = Path.GetFileName(image.FileName);
@@ -181,7 +171,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await image.CopyToAsync(stream); // Asenkron kopyalama
+                    await image.CopyToAsync(stream);
                 }
 
                 productToUpdate.ImagePath = "/images/" + fileName; // Resim yolunu güncelle

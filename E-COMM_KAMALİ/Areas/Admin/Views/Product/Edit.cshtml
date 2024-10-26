@@ -1,7 +1,8 @@
 ﻿@model ECOMM.Core.ViewModels.ProductEditViewModel
+@using Microsoft.AspNetCore.Mvc.Rendering;
 
 @{
-    ViewData["Title"] = "Ürün Düzenle"; // Sayfa başlığı
+    ViewData["Title"] = "Ürün Düzenle";
 }
 
 <h1>Ürün Düzenle</h1>
@@ -29,7 +30,7 @@
 
     <div class="form-group">
         <label asp-for="CategoryId">Kategori:</label>
-        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Id", "ParentCategoryName"))" required>
+        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))" required>
             <option value="">-- Kategori Seçin --</option>
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
