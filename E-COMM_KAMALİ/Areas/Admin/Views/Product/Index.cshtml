@@ -1,5 +1,4 @@
-﻿
-@model ECOMM.Web.Areas.Admin.Controllers.ProductController.HomeViewModel
+﻿@model ECOMM.Web.Areas.Admin.Controllers.ProductController.HomeViewModel
 
 @if (Model == null)
 {
@@ -12,6 +11,7 @@ else if (Model.Products == null)
 else
 {
     <h2>Ürün Listesi</h2>
+
     <div class="mt-4" style="text-align:right;font-size:45px;">
         <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-primary">Ekle</a>
     </div>
@@ -20,7 +20,7 @@ else
         <div class="row">
             @foreach (var product in Model.Products)
             {
-                <div class="col-md-4">
+                <div class="col-md-4" id="product-@product.Id">
                     <div class="card mb-4 shadow-sm">
                         <img class="card-img-top" src="@Url.Content(product.ImagePath ?? "~/images/default.jpg")" alt="Ürün Resmi">
                         <input type="hidden" id="productId" value="@product.Id" />
@@ -44,7 +44,6 @@ else
 @section Scripts {
     <script>
         $(document).ready(function () {
-            // Silme butonu işlemi
             $('.deleteCategory').on('click', function () {
                 var id = $(this).data('id');
                 Swal.fire({
@@ -61,8 +60,8 @@ else
                             type: "DELETE",
                             url: "/Admin/Product/Delete/" + id,
                             success: function () {
-                                location.reload(); // Sayfayı yenileyerek silme işlemini göster
                                 Swal.fire('Silindi!', 'Ürün başarıyla silindi.', 'success');
+                                $('#product-' + id).remove(); // DOM'dan silinen ürünü kaldır
                             },
                             error: function () {
                                 Swal.fire('Hata', 'Ürün silinirken bir sorun oluştu.', 'error');
