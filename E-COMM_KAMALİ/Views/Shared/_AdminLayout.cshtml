@@ -18,42 +18,104 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/AdminPage/adminLayout.css" />
     @await RenderSectionAsync("Css", required: false)
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="Admin" asp-controller="Category" asp-action="Index">Admin Blog.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Product" asp-action="Index">Ürün Ekle</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Category" asp-action="Index">Kategori Ekle</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Category" asp-action="SubCategoryIndex">Alt Kategori Ekle</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="UserList" asp-action="Index">Kullanıcıları Listele</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="UserList" asp-action="CreateRole">Rol Ekle</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <style>
+        <style >
+        /* Genel Gövde Yapısı */
+        body {
+            margin: 0;
+            display: flex;
+            overflow-x: hidden;
+        }
 
-    <div class="container">
+        /* Sidebar */
+        #sidebar {
+            width: 250px;
+            background: #343a40;
+            color: #fff;
+            transition: margin 0.3s;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+            #sidebar.active {
+                margin-left: -250px;
+            }
+
+            #sidebar .sidebar-header {
+                padding: 15px;
+                background: #343a40;
+                font-size: 1.25em;
+            }
+
+            #sidebar ul.components {
+                padding: 0;
+                margin: 0;
+                list-style-type: none;
+            }
+
+            #sidebar ul li a {
+                display: block;
+                padding: 12px 20px;
+                color: #fff;
+                text-decoration: none;
+                font-size: 1em;
+                background: transparent;
+                transition: background 0.3s, color 0.3s;
+            }
+
+                #sidebar ul li a:hover {
+                    color: #343a40;
+                    background: #fff;
+                }
+
+        /* İçerik Alanı */
+        #content {
+            margin-left: 250px;
+            width: calc(100% - 250px);
+            padding: 20px;
+            transition: margin 0.3s, width 0.3s;
+        }
+
+        /* Sidebar Aç/Kapat Düğmesi */
+        #sidebarCollapse {
+            background: #343a40;
+            color: #fff;
+            border: none;
+        }
+
+    </style>
+    </style>
+  
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div id="sidebar">
+        <div class="sidebar-header">
+            <h3>Admin Blog.Web</h3>
+            <button type="button" id="sidebarCollapse" class="btn btn-sm">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <ul class="list-unstyled components">
+            <li><a asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a></li>
+            <br />
+            <br />
+            <li><a asp-area="Admin" asp-controller="Home" asp-action="Index">Grafikler</a></li>
+            <li><a asp-area="Admin" asp-controller="Product" asp-action="Index">Ürünler</a></li>
+            <li><a asp-area="Admin" asp-controller="Category" asp-action="Index">Kategoriler</a></li>
+            <li><a asp-area="Admin" asp-controller="Category" asp-action="SubCategoryIndex">Alt Kategoriler</a></li>
+            <li><a asp-area="Admin" asp-controller="UserList" asp-action="Index">Kullanıcı Listesi</a></li>
+            <li><a asp-area="Admin" asp-controller="UserList" asp-action="Index">Sipariş Listesi</a></li>
+            <li><a asp-area="Admin" asp-controller="UserList" asp-action="CreateRole">Roller</a></li>
+        </ul>
+    </div>
+
+    <!-- İçerik -->
+    <div id="content">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -71,6 +133,15 @@
     <!-- Custom JS -->
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+        $(document).ready(function () {
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $('#content').toggleClass('active');
+            });
+        });
+    </script>
 </body>
-</html> 
- 
+</html>
