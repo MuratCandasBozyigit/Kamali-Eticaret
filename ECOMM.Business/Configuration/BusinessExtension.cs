@@ -20,7 +20,8 @@ namespace ECOMM.Business.Configuration
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IRoleService, RoleService>();
-         
+            services.AddScoped<IOrderService, OrderService>();
+
         }
 
         public static void RepositoryDI(this IServiceCollection services)
