@@ -1,0 +1,50 @@
+﻿@using System.Security.Claims
+
+@{
+    ViewData["Title"] = "Sipariş Bilgileri";
+}
+<h2>Siparişler</h2>
+
+
+
+<div class="card bg-light text-dark">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><box-icon name="category" color="dark" size="sm" animation="tada"></box-icon> Ana Kategorilerim</h5>
+        <button id="btnAdd" class="btn btn-outline-primary">+ Yeni Ana Kategori Ekle</button>
+    </div>
+    <div class="card-body">
+        <table id="tblCategories" class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Sipariş Id</th>
+                    <th>Sipariş Günü</th>
+                    <th>Toplam Tutar</th>
+                    <th>Kargo Adresi</th>
+                    <th>Ödeme Türü</th>
+                    <th>Müşteri Id</th>
+                    <th>Müşteri Adı</th>
+                    <th>Ürün Fiyatı</th>
+                    <th>Sipariş edilen Ürün</th>
+                    <th>Durumu </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model)
+                {
+                    <tr>
+                        <td>@order.OrderID</td>
+                        <td>@order.OrderDate</td>
+                        <td>@order.OrderTotal</td>
+                        <td>@order.ShippingAddress</td>
+                        <td>@order.PaymentMethod</td>
+                        <td>@order.UserId</td>
+                        <td>@order.User</td>
+                        <td>@order.Price</td>
+                        <td>@order.OrderItemId</td>
+                        <td>@order.Status</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
