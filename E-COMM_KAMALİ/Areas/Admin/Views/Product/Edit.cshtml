@@ -54,4 +54,28 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        document.querySelector('form').addEventListener('submit', function (e) {
+            const requiredFields = document.querySelectorAll('[required]');
+            let valid = true;
+
+            requiredFields.forEach(field => {
+                if (!field.value.trim()) {
+                    field.classList.add('is-invalid');
+                    const errorSpan = document.createElement('span');
+                    errorSpan.classList.add('text-danger');
+                    errorSpan.innerText = `${field.previousElementSibling.innerText} alanı boş bırakılamaz`;
+                    field.parentNode.appendChild(errorSpan);
+                    valid = false;
+                } else {
+                    field.classList.remove('is-invalid');
+                    const errorSpans = field.parentNode.querySelectorAll('.text-danger');
+                    errorSpans.forEach(span => span.remove());
+                }
+            });
+
+            if (!valid) e.preventDefault();
+        });
+    </script>
 }
