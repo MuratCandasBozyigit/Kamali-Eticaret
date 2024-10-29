@@ -1,30 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ECOMM.Core.ViewModels
 {
     public class RegisterViewModel
     {
-        [Required(ErrorMessage = "isim girmeniz gerekli")]
-        public string Name { get; set; }
-        //[Required(ErrorMessage = "Telefon numarası girmeniz gerekli")]
-       // public int PhoneNumber { get; set; }
+        [Required(ErrorMessage = "İsim girmeniz gerekli")]
+        public string UserName { get; set; }
 
         [Required(ErrorMessage = "Mail girmeniz gerekli")]
         [EmailAddress(ErrorMessage = "Geçersiz email formatı")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Şifre girmeniz gerekli")]
-        [StringLength(40,MinimumLength =8,ErrorMessage ="The {0} must be at {2} and at max {1} character")]
+        [StringLength(40, MinimumLength = 8, ErrorMessage = "Şifre en az {2} ve en fazla {1} karakter olmalıdır.")]
         [DataType(DataType.Password)]
-        [Compare("ConfirmPassword",ErrorMessage ="Şifreler eşleşmiyor")]
         public string Password { get; set; }
+
         [Required(ErrorMessage = "Şifreyi tekrar girmeniz gerekli")]
         [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "Şifreler eşleşmiyor")]
         [Display(Name = "Yeni şifreyi onaylayın.")]
         public string ConfirmPassword { get; set; }
     }
