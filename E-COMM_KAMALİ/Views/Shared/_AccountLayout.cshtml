@@ -11,23 +11,23 @@
     <title>@ViewBag.Title</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/LoginRegister/account.css" asp-append-version="true" />
-
+    
     <!-- App favicon -->
     <link rel="shortcut icon" href="~/assets/images/favicon.ico">
-
+   
     @* Sorun olmaması lazım *@
     @await RenderSectionAsync("Html", required: false)
     @await RenderSectionAsync("Css", required: false)
 </head>
 <body>
-
+   
     <div>
-
-        @RenderBody()
-
+     
+            @RenderBody()
+        
     </div>
 
-
+  
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

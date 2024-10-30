@@ -29,18 +29,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="Admin" asp-controller="Home" asp-action="Index">ADMİN</a>
                         </li>
-                    </ul>
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
-                        </li>
-                    </ul>
+                    </ul> 
+                    <partial name="_LoginPartial" />
                 </div>
             </div>
         </nav>
+
     </header>
     <div class="container">
         <main role="main" class="pb-3">

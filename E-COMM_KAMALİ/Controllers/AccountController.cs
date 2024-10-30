@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using ECOMM.Core.Models;
 using System.Threading.Tasks;
-using ECOMM.Core.ViewModels;
 
-namespace Blog.Web.Controllers
+namespace ECOMM.Web.Controllers
 {
     public class AccountController : Controller
     {
@@ -53,7 +52,7 @@ namespace Blog.Web.Controllers
                 {
                     FullName = model.Name,
                     Email = model.Email,
-                    UserName = model.Email,
+                    UserName = model.Email,  
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
@@ -81,26 +80,26 @@ namespace Blog.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
         {
-
-            var user = await _userManager.FindByNameAsync(model.Email);
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Bir şeyler ters gitti");
-                return View(model);
-            }
-            else
-            {
-
-                return RedirectToAction("ChangePassword", "Account", new { username = user.UserName });
-            }
-
-
-            ModelState.AddModelError("", "Maildesorunvarbro");
-
+          
+                var user = await _userManager.FindByNameAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Bir şeyler ters gitti");
+                    return View(model);
+                }
+                else
+                {
+                  
+                    return RedirectToAction("ChangePassword", "Account", new { username = user.UserName });
+                }
+           
+          
+                ModelState.AddModelError("", "Maildesorunvarbro");
+          
             return View(model);
         }
 
-
+     
 
         public IActionResult ChangePassword(string username)
         {
@@ -146,9 +145,9 @@ namespace Blog.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index","Home");
         }
 
-
+       
     }
 }

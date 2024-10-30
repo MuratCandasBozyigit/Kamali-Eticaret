@@ -17,8 +17,22 @@ namespace ECOMM.Data
         public DbSet<ApplicationUserRole> ApplicationUserRoles { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<Orders> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems{ get; set; }
+        public DbSet<User>Users {  get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Orders>()
+            .HasOne(o => o.User)
+            .WithMany()
+            .HasForeignKey(o => o.UserId);
+
+            modelBuilder.Entity<OrderItem>()
+                .Property(oi => oi.Price)
+                .HasPrecision(18, 2);
+
+            modelBuilder.Entity<Orders>()
+                .Property(o => o.TotalAmount)
+                .HasPrecision(18, 2);
 
             modelBuilder.Entity<ApplicationUserRole>()
                 .HasKey(aur => new { aur.UserId, aur.RoleId });

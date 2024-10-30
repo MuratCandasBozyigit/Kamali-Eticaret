@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.10" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\ECOMM.DATA\ECOMM.Data.csproj" />
     <ProjectReference Include="..\ECOMM.Models\ECOMM.Core.csproj" />
   </ItemGroup>

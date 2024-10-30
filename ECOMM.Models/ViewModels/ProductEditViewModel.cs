@@ -11,7 +11,7 @@ namespace ECOMM.Core.ViewModels
         public int ProductId { get; set; } 
         public string ProductTitle { get; set; } 
         public string ProductDescription { get; set; } 
-        public float ProductPrice { get; set; } 
+        public decimal ProductPrice { get; set; } 
         public string ImagePath { get; set; }
         public int CategoryId { get; set; } 
         public string CategoryName { get; set; }
@@ -21,7 +21,7 @@ namespace ECOMM.Core.ViewModels
         {
             product.ProductTitle = this.ProductTitle;
             product.ProductDescription = this.ProductDescription;
-            product.ProductPrice =(float)this.ProductPrice;
+            product.ProductPrice =(decimal)this.ProductPrice;
             product.CategoryId = this.CategoryId; // Kategori ID'sini güncelle
         }
 
