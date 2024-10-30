@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECOMM.Core.Models
 {
-    public class Product:BaseModel
+    public class Product : BaseModel
     {
-       
         public string ProductTitle { get; set; }
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }
-        public float ProductPrice { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")] // Hassasiyeti belirleme
+        public decimal ProductPrice { get; set; } // Ürün fiyatı için decimal kullanıyoruz
+
         public string? ImagePath { get; set; }
 
         public virtual ICollection<Favourites> FavouritedBy { get; set; } // Ürünü favorilerine ekleyen kullanıcılar
@@ -24,5 +27,3 @@ namespace ECOMM.Core.Models
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }
-
-

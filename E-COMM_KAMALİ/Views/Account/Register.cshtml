@@ -1,4 +1,4 @@
-﻿@* @using ECOMM.Core.ViewModels
+﻿@using ECOMM.Core.ViewModels
 @model RegisterViewModel
 @{
     ViewData["Title"] = "Register";
@@ -19,11 +19,11 @@
         <form asp-action="Register" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <div class="mb-3">
-                <label asp-for="UserName" class="form-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
+          <div class="mb-3">
+                <label asp-for="Name" class="form-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div> 
 
             <div class="mb-3">
                 <label asp-for="Email" class="form-label"></label>
@@ -54,4 +54,3 @@
         </form>
     </div>
 </div>
- *@

@@ -156,7 +156,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
                 ProductDescription = product.ProductDescription,
-                ProductPrice = (float)product.ProductPrice,
+                ProductPrice = (decimal)product.ProductPrice,
                 ImagePath = product.ImagePath,
                 CategoryId = product.Category?.Id ?? 0, // CategoryId ayarla
                 Categories = categories.Select(c => new SelectListItem
