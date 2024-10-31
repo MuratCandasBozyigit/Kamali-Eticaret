@@ -5,23 +5,26 @@
     Layout = "/Views/Shared/_AccountLayout.cshtml";
 }
 
-<div class="account-container">
-    <div class="account-box">
-        <h2 class="text-center mb-4">Login</h2>
-        <form asp-action="Login" method="post">
+<link rel="stylesheet" href="~/css/Login/Login.css" />
+
+<div class="session">
+    <div class="left">
+    
+    </div>
+    <div class="log-in">
+        <h4>We are <span>NUVA</span></h4>
+        <p>Welcome back! Log in to your account to view today's clients:</p>
+        <form asp-action="Login" method="post" autocomplete="off">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="mb-3">
+            <div class="floating-label">
+                <input asp-for="Email" placeholder="Email" class="form-control" required autocomplete="off" />
                 <label asp-for="Email" class="form-label"></label>
-                <input asp-for="Email" class="form-control">
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
-            <div class="mb-3">
+            <div class="floating-label">
+                <input asp-for="Password" type="password" placeholder="Password" class="form-control" required autocomplete="off" />
                 <label asp-for="Password" class="form-label"></label>
-                <input asp-for="Password" class="form-control" type="password">
                 <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="float-end">
-                <a asp-controller="Account" asp-action="VerifyEmail" class="text-decoration-none">Şifremi Unuttum</a>
             </div>
             <div class="form-check mb-3">
                 <label class="form-check-label">
@@ -29,22 +32,13 @@
                     @Html.DisplayNameFor(a => a.RememberMe)
                 </label>
             </div>
-            <input type="submit" value="Login" class="btn btn-success p-2 w-100" />
-            <p class="text-center mt-2">
-                Don't Have An Account?
-                <a class="text-decoration-none" asp-controller="Account" asp-action="Register">Register</a>
-            </p>
-            <div class="text-center">
-                <a asp-controller="Home" asp-action="Index" class="text-decoration-none mt-3">Back</a>
+            <button type="submit" class="btn btn-primary w-100">Log in</button>
+            <div class="text-center mt-2">
+                <a asp-controller="Account" asp-action="Register" class="text-decoration-none">Create Account</a>
             </div>
         </form>
+        <div class="text-center mt-3">
+            <a asp-controller="Account" asp-action="VerifyEmail" class="text-decoration-none">Forgot Password?</a>
+        </div>
     </div>
 </div>
-
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial.cshtml");
-    }
-
-}

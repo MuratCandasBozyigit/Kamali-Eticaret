@@ -8,6 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\css\Login\ChangePassword.css" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\assets\libs\datatables.net-autofill-bs4\node_modules\jquery\AUTHORS.txt" />
     <Content Include="wwwroot\assets\libs\datatables.net-autofill-bs4\node_modules\jquery\external\sizzle\LICENSE.txt" />
     <Content Include="wwwroot\assets\libs\datatables.net-autofill-bs4\node_modules\jquery\LICENSE.txt" />

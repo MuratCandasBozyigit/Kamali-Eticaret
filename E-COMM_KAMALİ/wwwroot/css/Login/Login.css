@@ -1,0 +1,102 @@
+﻿* {
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", Helvetica, Arial, sans-serif;
+    font-weight: 300;
+    margin: 0;
+}
+
+html, body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    display: flex;
+    align-items: center; /* Dikey ortalama */
+    justify-content: center; /* Yatay ortalama */
+    background: #f3f2f2;
+}
+
+.session {
+    display: flex;
+    width: 100%;
+    max-width: 800px; /* İsteğe bağlı olarak genişlik sınırı ekleyebilirsin */
+    height: auto;
+    margin: 0; /* Margin'i kaldır */
+    background: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0px 2px 6px -1px rgba(0, 0, 0, .12);
+}
+
+
+.left {
+    width: 220px;
+    min-height: 100%;
+    background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
+    background-size: cover;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+}
+
+.log-in {
+    padding: 40px 30px;
+    background: #fefefe;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 300px;
+}
+
+h4 {
+    font-size: 24px;
+    font-weight: 600;
+    color: #000;
+    opacity: .85;
+}
+
+.floating-label {
+    position: relative;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+    .floating-label input {
+        font-size: 16px;
+        padding: 20px 0;
+        height: 56px;
+        border: none;
+        border-bottom: solid 1px rgba(0,0,0,.1);
+        background: #fff;
+        width: 100%;
+        box-sizing: border-box;
+        transition: all .3s linear;
+    }
+
+    .floating-label label {
+        position: absolute;
+        top: calc(50% - 7px);
+        left: 0;
+        opacity: 0;
+        transition: all .3s ease;
+        padding-left: 10px; /* Adjust padding to avoid overlap */
+    }
+
+    .floating-label input:focus {
+        border-bottom: solid 1px rgb(182,157,230);
+        outline: 0;
+    }
+
+button {
+    border-radius: 24px;
+    text-align: center;
+    padding: 15px 40px;
+    margin-top: 5px;
+    background-color: rgb(182,157,230);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    transition: all .3s ease;
+}
+
+    button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 2px 6px -1px rgba(182,157,230, .65);
+    }
