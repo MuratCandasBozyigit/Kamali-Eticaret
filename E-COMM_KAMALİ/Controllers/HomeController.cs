@@ -26,7 +26,7 @@ namespace E_COMM_KAMALİ.Controllers
 
         public async Task<IActionResult> Index(int page = 1)
         {
-            int pageSize = 5;
+            int pageSize = 4;
             var products = await _productService.GetAllAsync();
          
             var paginatedProducts = products.Skip((page - 1) * pageSize)

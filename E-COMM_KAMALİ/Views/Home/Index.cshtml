@@ -3,6 +3,7 @@
     ViewData["Title"] = "Home Page";
 }
 
+<!-- Billboard Bölümü -->
 <section id="billboard" class="position-relative overflow-hidden" style="background-color: #4B4B4B; height: 400px;">
     <div class="swiper main-swiper" data-autoplay="true" data-delay="4000">
         <div class="swiper-wrapper">
@@ -44,6 +45,7 @@
     </div>
 </section>
 
+<!-- Ürün Listesi Bölümü -->
 <div class="container mt-4">
     <div class="row justify-content-center align-items-center">
         <!-- Sol Yön Okları -->
@@ -57,8 +59,10 @@
             <div class="row g-3 justify-content-center">
                 @foreach (var product in Model)
                 {
-                    <div class="col-6 col-md-4 col-lg-2 custom-col">
-                        <div class="card mb-2 product-card">
+                    <div class="col-6 col-md-4 col-lg-3 custom-col">
+                        <!-- Her sırada 4 item olacak şekilde düzenlendi -->
+                        <div class="card mb-3 product-card" style="width: 220px;">
+                            <!-- Kartın genişliğini burada 220px yapıyoruz -->
                             <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
                             <div class="card-body text-center">
                                 <h5 class="card-title">@product.ProductName</h5>
@@ -97,6 +101,7 @@
     });
 </script>
 
+<!-- Stil Bölümü -->
 <style>
     body {
         background-color: #FFFFFF; /* Açık gri ton */
@@ -124,12 +129,15 @@
     }
 
     .custom-col {
-        margin-bottom: 0.5rem; /* Kartlar arasında dikey boşluk */
+        display: flex; /* Flexbox ile düzenleme */
+        justify-content: center; /* Kartları ortalar */
+        align-items: flex-start; /* Kartların üstte başlamasını sağlar */
+        padding: 10px; /* Kartlar arası boşluk */
     }
 
     .product-card {
-        width: 100%; /* Kartın sütun boyutuna uyumlu olmasını sağlar */
-        height: 360px; /* Kartın sabit yüksekliği (1 cm artırıldı) */
+        width: 220px; /* Kartın genişliği */
+        height: 450px; /* Kartın yüksekliği */
     }
 
     .product-image {
@@ -187,14 +195,5 @@
 
     .swiper-arrow-next {
         right: 10px; /* Sağ ok konumu */
-    }
-
-    /* Her sırada 5 ürün göstermek için */
-    /* Mobil ve daha küçük ekranlar için */
-    .media (min-width: 576px) {
-        .col-lg-2 {
-            flex: 0 0 20%; /* %20 genişlik, her sırada 5 ürün */
-            max-width: 20%; /* Maksimum %20 genişlik */
-        }
     }
 </style>
