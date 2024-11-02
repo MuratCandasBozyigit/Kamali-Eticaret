@@ -1,197 +1,106 @@
 ﻿@model IEnumerable<ECOMM.Core.Models.Product>
 @{
     ViewData["Title"] = "Home Page";
+    Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-<!-- Şirket Hizmetleri Bölümü -->
-<section id="company-services" class="padding-large">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-3 col-md-6 pb-3">
-                <div class="icon-box d-flex">
-                    <div class="icon-box-icon pe-3 pb-3">
-                        <i class="fas fa-shipping-fast fa-2x text-primary"></i>
-                    </div>
-                    <div class="icon-box-content">
-                        <h3 class="card-title text-uppercase text-dark">Ücretsiz Teslimat</h3>
-                        <p>Belirli siparişlerde hızlı ve ücretsiz teslimat.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 pb-3">
-                <div class="icon-box d-flex">
-                    <div class="icon-box-icon pe-3 pb-3">
-                        <i class="fas fa-medal fa-2x text-primary"></i>
-                    </div>
-                    <div class="icon-box-content">
-                        <h3 class="card-title text-uppercase text-dark">Kalite Garantisi</h3>
-                        <p>Ürünlerimiz yüksek kalite standartlarında sunulur.</p>
+
+<section id="billboard" class="position-relative overflow-hidden" style="background-color: rgba(135, 206, 235, 0.5);">
+    <div class="swiper main-swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="container">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-6">
+                            <div class="banner-content">
+                                <h1 class="display-2 text-uppercase text-dark pb-5">Kategoriler</h1>
+                                <a href="categories.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">İncele</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 pb-3">
-                <div class="icon-box d-flex">
-                    <div class="icon-box-icon pe-3 pb-3">
-                        <i class="fas fa-tags fa-2x text-primary"></i>
-                    </div>
-                    <div class="icon-box-content">
-                        <h3 class="card-title text-uppercase text-dark">Günlük Fırsatlar</h3>
-                        <p>Her gün yeni ve heyecan verici indirimler.</p>
+            <div class="swiper-slide">
+                <div class="container">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-6">
+                            <div class="banner-content">
+                                <h1 class="display-2 text-uppercase text-dark pb-5">Elektronik</h1>
+                                <a href="electronics.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">İncele</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 pb-3">
-                <div class="icon-box d-flex">
-                    <div class="icon-box-icon pe-3 pb-3">
-                        <i class="fas fa-shield-alt fa-2x text-primary"></i>
-                    </div>
-                    <div class="icon-box-content">
-                        <h3 class="card-title text-uppercase text-dark">Güvenli Ödeme</h3>
-                        <p>Ödemeleriniz %100 güvenli altyapı ile korunur.</p>
+            <div class="swiper-slide">
+                <div class="container">
+                    <div class="row d-flex align-items-center">
+                        <div class="col-md-6">
+                            <div class="banner-content">
+                                <h1 class="display-2 text-uppercase text-dark pb-5">Ev Eşyaları</h1>
+                                <a href="home-appliances.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">İncele</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+    </div>
+    <div class="swiper-icon swiper-arrow swiper-arrow-prev">
+        <svg class="chevron-left">
+            <use xlink:href="#chevron-left"></use>
+        </svg>
+    </div>
+    <div class="swiper-icon swiper-arrow swiper-arrow-next">
+        <svg class="chevron-right">
+            <use xlink:href="#chevron-right"></use>
+        </svg>
     </div>
 </section>
 
-<!-- Ürün Listesi Bölümü -->
-<div class="container mt-4">
-    <div class="row justify-content-center align-items-center">
-        <!-- Sol Yön Okları -->
-        <div class="col-auto">
-            <button class="btn btn-light btn-prev @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </button>
-        </div>
 
-        <div class="col-10">
-            <div id="productList">
-                @await Html.PartialAsync("_ProductListPartial", Model)
-            </div>
-        </div>
 
-        <!-- Sağ Yön Okları -->
-        <div class="col-auto">
-            <button class="btn btn-light btn-next @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </button>
-        </div>
-    </div>
-</div>
 
-@section Scripts {
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-        var currentPage = @ViewBag.CurrentPage ?? 1; // Sayfanın ViewBag'den alınması
-        var totalPages = @ViewBag.TotalPages ?? 1; // Toplam sayfa sayısının ViewBag'den alınması
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var swiper = new Swiper('.main-swiper', {
-                loop: true,
-                autoplay: {
-                    delay: 4000,
-                    disableOnInteraction: false,
-                },
-                navigation: {
-                    nextEl: '.swiper-arrow-next',
-                    prevEl: '.swiper-arrow-prev',
-                },
-                slidesPerView: 1,
-                spaceBetween: 0,
-            });
-        });
 
-        function loadProducts(page) {
-            $.ajax({
-                url: '@Url.Action("Index", "Home")',
-                type: 'GET',
-                data: { page: page },
-                beforeSend: function () {
-                    $('#productList').html('<div class="text-center">Yükleniyor...</div>');
-                },
-                success: function (data) {
-                    $('#productList').html(data);
-                    currentPage = page;
-                    updateButtonState();
-                },
-                error: function () {
-                    alert('Ürünler yüklenirken bir hata oluştu.');
-                }
-            });
-        }
 
-        function updateButtonState() {
-            $('.btn-prev').prop('disabled', currentPage <= 1);
-            $('.btn-next').prop('disabled', currentPage >= totalPages);
-        }
 
-        $('.btn-prev').click(function () {
-            if (currentPage > 1) {
-                loadProducts(currentPage - 1);
-            }
-        });
 
-        $('.btn-next').click(function () {
-            if (currentPage < totalPages) {
-                loadProducts(currentPage + 1);
-            }
-        });
 
-        $(document).ready(function () {
-            updateButtonState();
-        });
-    </script>
-}
-
-<!-- Stil Bölümü -->
-<style>
-    body {
-        background-color: #FFFFFF;
-    }
-
+@section Css {
     #billboard {
-        background-color: #4B4B4B;
-        width: 100%;
-        height: 400px;
         position: relative;
         overflow: hidden;
+        background-color: rgba(135, 206, 235, 0.5); /* Koyu açık yeşil-mavi tonları */
+        height: 450px; /* Yüksekliği ayarla */
     }
 
-    .main-swiper {
-        width: 100%;
-        height: 100%;
+    .banner-content {
+        color: #000; /* Yazı rengi */
+        text-align: left; /* Yazı hizalaması */
+    }
+
+    .swiper {
+        height: 100%; /* Yüksekliği tam ayarlama */
     }
 
     .swiper-slide {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
+        display: flex; /* Slaytları esnek hale getir */
+        align-items: center; /* Dikey ortalama */
+        justify-content: center; /* Yatay ortalama */
     }
-
-    .icon-box {
-        display: flex;
-        align-items: flex-start;
-    }
-
-    .icon-box-icon {
-        flex-shrink: 0;
-    }
-
-    .product-card {
-        width: 220px;
-        height: 450px;
-    }
-
-    .product-image {
-        width: 100%;
-        height: 200px;
-    }
-
-    .btn-hover {
-        cursor: pointer;
-    }
-</style>
+}
+@section Scripts {
+    const swiper = new Swiper('.main-swiper', {
+        loop: true, // Döngü
+        autoplay: {
+            delay: 4000, // Her 4 saniyede bir geçiş
+            disableOnInteraction: false, // Kullanıcı etkileşimde olsa devam etsin
+        },
+        navigation: {
+            nextEl: '.swiper-arrow-next',
+            prevEl: '.swiper-arrow-prev',
+        },
+        direction: 'horizontal', // Yatay kaydırma
+    });
+}
