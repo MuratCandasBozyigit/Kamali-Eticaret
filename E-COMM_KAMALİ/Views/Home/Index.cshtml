@@ -3,31 +3,7 @@
     ViewData["Title"] = "Home Page";
 }
 
-<!-- Billboard Bölümü -->
-<section id="billboard" class="position-relative overflow-hidden" style="background-color: #4B4B4B; height: 400px;">
-    <div class="swiper main-swiper" data-autoplay="true" data-delay="4000">
-        <div class="swiper-wrapper">
-            <div class="swiper-slide">
-                <div class="row d-flex align-items-center text-center" style="height: 100%;">
-                    <div class="col-12">
-                        <h1 class="display-2 text-uppercase text-white">Kategoriler</h1>
-                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="swiper-icon swiper-arrow swiper-arrow-prev">
-        <svg class="chevron-left" width="24" height="24">
-            <path d="M15 18l-6-6 6-6" fill="none" stroke="white" />
-        </svg>
-    </div>
-    <div class="swiper-icon swiper-arrow swiper-arrow-next">
-        <svg class="chevron-right" width="24" height="24">
-            <path d="M9 6l6 6-6 6" fill="none" stroke="white" />
-        </svg>
-    </div>
-</section>
+<!-- Şirket Hizmetleri Bölümü -->
 <section id="company-services" class="padding-large">
     <div class="container">
         <div class="row">
@@ -84,7 +60,7 @@
     <div class="row justify-content-center align-items-center">
         <!-- Sol Yön Okları -->
         <div class="col-auto">
-            <button class="btn btn-light @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" id="prevPage" aria-label="Previous">
+            <button class="btn btn-light btn-prev @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </button>
         </div>
@@ -97,7 +73,7 @@
 
         <!-- Sağ Yön Okları -->
         <div class="col-auto">
-            <button class="btn btn-light @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" id="nextPage" aria-label="Next">
+            <button class="btn btn-light btn-next @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </button>
         </div>
@@ -105,20 +81,39 @@
 </div>
 
 @section Scripts {
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
-        var currentPage = @ViewBag.CurrentPage;
-        var totalPages = @ViewBag.TotalPages;
+        var currentPage = @ViewBag.CurrentPage ?? 1; // Sayfanın ViewBag'den alınması
+        var totalPages = @ViewBag.TotalPages ?? 1; // Toplam sayfa sayısının ViewBag'den alınması
 
-        // AJAX ile yeni ürünleri yükle
+        document.addEventListener('DOMContentLoaded', function () {
+            var swiper = new Swiper('.main-swiper', {
+                loop: true,
+                autoplay: {
+                    delay: 4000,
+                    disableOnInteraction: false,
+                },
+                navigation: {
+                    nextEl: '.swiper-arrow-next',
+                    prevEl: '.swiper-arrow-prev',
+                },
+                slidesPerView: 1,
+                spaceBetween: 0,
+            });
+        });
+
         function loadProducts(page) {
             $.ajax({
                 url: '@Url.Action("Index", "Home")',
                 type: 'GET',
                 data: { page: page },
+                beforeSend: function () {
+                    $('#productList').html('<div class="text-center">Yükleniyor...</div>');
+                },
                 success: function (data) {
                     $('#productList').html(data);
-                    currentPage = page; // Sayfa numarasını doğru güncelle
+                    currentPage = page;
                     updateButtonState();
                 },
                 error: function () {
@@ -127,127 +122,76 @@
             });
         }
 
-
-        // Butonların durumunu güncelle
         function updateButtonState() {
-            $('#prevPage').prop('disabled', currentPage <= 1); 
-            $('#nextPage').prop('disabled', currentPage >= totalPages);
+            $('.btn-prev').prop('disabled', currentPage <= 1);
+            $('.btn-next').prop('disabled', currentPage >= totalPages);
         }
 
-
-        // Önceki sayfa butonu
-        $('#prevPage').click(function () {
+        $('.btn-prev').click(function () {
             if (currentPage > 1) {
                 loadProducts(currentPage - 1);
             }
         });
 
-        // Sonraki sayfa butonu
-        $('#nextPage').click(function () {
+        $('.btn-next').click(function () {
             if (currentPage < totalPages) {
                 loadProducts(currentPage + 1);
             }
         });
 
         $(document).ready(function () {
-            updateButtonState(); // Sayfa yüklendiğinde buton durumunu güncelle
-        })
+            updateButtonState();
+        });
     </script>
 }
 
 <!-- Stil Bölümü -->
 <style>
     body {
-        background-color: #FFFFFF; /* Açık gri ton */
+        background-color: #FFFFFF;
     }
 
     #billboard {
-        background-color: #4B4B4B; /* Billboard arka plan rengi */
-        width: 100%; /* Tam genişlik ayarı */
-        height: 400px; /* Yükseklik ayarı */
-        position: relative; /* Pozisyonlandırma */
-        overflow: hidden; /* Taşmayı gizle */
+        background-color: #4B4B4B;
+        width: 100%;
+        height: 400px;
+        position: relative;
+        overflow: hidden;
     }
 
     .main-swiper {
-        width: 100%; /* Swiper genişliği */
-        height: 100%; /* Swiper yüksekliği */
+        width: 100%;
+        height: 100%;
     }
 
     .swiper-slide {
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 100%; /* Her slide tam genişlik kaplasın */
-        height: 100%; /* Her slide tam yükseklik kaplasın */
+        width: 100%;
+        height: 100%;
     }
 
-    .custom-col {
-        display: flex; /* Flexbox ile düzenleme */
-        justify-content: center; /* Kartları ortalar */
-        align-items: flex-start; /* Kartların üstte başlamasını sağlar */
-        padding: 10px; /* Kartlar arası boşluk */
+    .icon-box {
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .icon-box-icon {
+        flex-shrink: 0;
     }
 
     .product-card {
-        width: 220px; /* Kartın genişliği */
-        height: 450px; /* Kartın yüksekliği */
+        width: 220px;
+        height: 450px;
     }
 
     .product-image {
-        width: 100%; /* Kartın genişliğine uyum sağlar */
-        height: 200px; /* Sabit resim yüksekliği */
-        object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
-        object-position: center; /* Resmin ortalanmasını sağlar */
-    }
-
-    /* Buton tasarımı */
-    .btn-light {
-        background-color: lightgray; /* Açık gri arka plan */
-        color: black; /* Yazı rengi */
-        border: none; /* Kenar çizgisi yok */
+        width: 100%;
+        height: 200px;
     }
 
     .btn-hover {
-        background-color: gray; /* Hover durumunda daha koyu gri */
-        color: white; /* Hover durumunda yazı rengi beyaz */
-    }
-
-    /* Butonlar arasında biraz boşluk bırakmak için */
-    .col-auto {
-        display: flex;
-        align-items: center;
-    }
-
-    .row.justify-content-center {
-        margin: 0; /* Boşluğu sıfırla */
-    }
-
-    #billboard {
-        margin-bottom: 2rem; /* Billboard ve ürün kartları arasında boşluk */
-    }
-
-    .swiper-icon {
-        color: white; /* Ok ikonlarının rengi beyaz */
-        background-color: rgba(0, 0, 0, 0.5); /* Okların arka planı yarı saydam siyah */
-        border-radius: 50%; /* Daire şekli */
-        width: 40px; /* Genişlik */
-        height: 40px; /* Yükseklik */
-        display: flex; /* Flexbox kullanarak içerikleri ortalayalım */
-        align-items: center; /* Dikey ortalama */
-        justify-content: center; /* Yatay ortalama */
-        cursor: pointer; /* İmleci pointer yap */
-        position: absolute; /* Pozisyonlandırma */
-        top: 50%; /* Dikey merkezleme */
-        transform: translateY(-50%); /* Dikey olarak tam merkezde */
-        z-index: 10; /* Üstte görünmesi için */
-    }
-
-    .swiper-arrow-prev {
-        left: 10px; /* Sol ok konumu */
-    }
-
-    .swiper-arrow-next {
-        right: 10px; /* Sağ ok konumu */
+        cursor: pointer;
     }
 </style>
