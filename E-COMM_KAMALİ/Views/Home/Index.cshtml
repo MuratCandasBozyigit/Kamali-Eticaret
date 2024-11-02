@@ -15,22 +15,6 @@
                     </div>
                 </div>
             </div>
-            <div class="swiper-slide">
-                <div class="row d-flex align-items-center text-center" style="height: 100%;">
-                    <div class="col-12">
-                        <h1 class="display-2 text-uppercase text-white">Elektronik</h1>
-                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-slide">
-                <div class="row d-flex align-items-center text-center" style="height: 100%;">
-                    <div class="col-12">
-                        <h1 class="display-2 text-uppercase text-white">Sayani</h1>
-                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
     <div class="swiper-icon swiper-arrow swiper-arrow-prev">
@@ -44,62 +28,132 @@
         </svg>
     </div>
 </section>
+<section id="company-services" class="padding-large">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 pb-3">
+                <div class="icon-box d-flex">
+                    <div class="icon-box-icon pe-3 pb-3">
+                        <i class="fas fa-shipping-fast fa-2x text-primary"></i>
+                    </div>
+                    <div class="icon-box-content">
+                        <h3 class="card-title text-uppercase text-dark">Ücretsiz Teslimat</h3>
+                        <p>Belirli siparişlerde hızlı ve ücretsiz teslimat.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 pb-3">
+                <div class="icon-box d-flex">
+                    <div class="icon-box-icon pe-3 pb-3">
+                        <i class="fas fa-medal fa-2x text-primary"></i>
+                    </div>
+                    <div class="icon-box-content">
+                        <h3 class="card-title text-uppercase text-dark">Kalite Garantisi</h3>
+                        <p>Ürünlerimiz yüksek kalite standartlarında sunulur.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 pb-3">
+                <div class="icon-box d-flex">
+                    <div class="icon-box-icon pe-3 pb-3">
+                        <i class="fas fa-tags fa-2x text-primary"></i>
+                    </div>
+                    <div class="icon-box-content">
+                        <h3 class="card-title text-uppercase text-dark">Günlük Fırsatlar</h3>
+                        <p>Her gün yeni ve heyecan verici indirimler.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 pb-3">
+                <div class="icon-box d-flex">
+                    <div class="icon-box-icon pe-3 pb-3">
+                        <i class="fas fa-shield-alt fa-2x text-primary"></i>
+                    </div>
+                    <div class="icon-box-content">
+                        <h3 class="card-title text-uppercase text-dark">Güvenli Ödeme</h3>
+                        <p>Ödemeleriniz %100 güvenli altyapı ile korunur.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Ürün Listesi Bölümü -->
 <div class="container mt-4">
     <div class="row justify-content-center align-items-center">
         <!-- Sol Yön Okları -->
         <div class="col-auto">
-            <a class="btn btn-light @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" aria-label="Previous">
+            <button class="btn btn-light @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" id="prevPage" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
-            </a>
+            </button>
         </div>
 
         <div class="col-10">
-            <div class="row g-3 justify-content-center">
-                @foreach (var product in Model)
-                {
-                    <div class="col-6 col-md-4 col-lg-3 custom-col">
-                        <!-- Her sırada 4 item olacak şekilde düzenlendi -->
-                        <div class="card mb-3 product-card" style="width: 220px;">
-                            <!-- Kartın genişliğini burada 220px yapıyoruz -->
-                            <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
-                            <div class="card-body text-center">
-                                <h5 class="card-title">@product.ProductName</h5>
-                                <p class="card-text">@product.ProductPrice.ToString("C")</p>
-                                <a href="#" class="btn btn-primary">Detaylar</a>
-                            </div>
-                        </div>
-                    </div>
-                }
+            <div id="productList">
+                @await Html.PartialAsync("_ProductListPartial", Model)
             </div>
         </div>
 
         <!-- Sağ Yön Okları -->
         <div class="col-auto">
-            <a class="btn btn-light @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" aria-label="Next">
+            <button class="btn btn-light @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" id="nextPage" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
-            </a>
+            </button>
         </div>
     </div>
 </div>
 
-<!-- Swiper.js ve CSS Dosyalarını Ekleyin -->
-<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script>
-    var swiper = new Swiper('.main-swiper', {
-        loop: true,
-        autoplay: {
-            delay: 4000,
-            disableOnInteraction: false,
-        },
-        navigation: {
-            nextEl: '.swiper-arrow-next',
-            prevEl: '.swiper-arrow-prev',
-        },
-    });
-</script>
+@section Scripts {
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var currentPage = @ViewBag.CurrentPage;
+        var totalPages = @ViewBag.TotalPages;
+
+        // AJAX ile yeni ürünleri yükle
+        function loadProducts(page) {
+            $.ajax({
+                url: '@Url.Action("Index", "Home")',
+                type: 'GET',
+                data: { page: page },
+                success: function (data) {
+                    $('#productList').html(data);
+                    currentPage = page; // Sayfa numarasını doğru güncelle
+                    updateButtonState();
+                },
+                error: function () {
+                    alert('Ürünler yüklenirken bir hata oluştu.');
+                }
+            });
+        }
+
+
+        // Butonların durumunu güncelle
+        function updateButtonState() {
+            $('#prevPage').prop('disabled', currentPage <= 1); 
+            $('#nextPage').prop('disabled', currentPage >= totalPages);
+        }
+
+
+        // Önceki sayfa butonu
+        $('#prevPage').click(function () {
+            if (currentPage > 1) {
+                loadProducts(currentPage - 1);
+            }
+        });
+
+        // Sonraki sayfa butonu
+        $('#nextPage').click(function () {
+            if (currentPage < totalPages) {
+                loadProducts(currentPage + 1);
+            }
+        });
+
+        $(document).ready(function () {
+            updateButtonState(); // Sayfa yüklendiğinde buton durumunu güncelle
+        })
+    </script>
+}
 
 <!-- Stil Bölümü -->
 <style>
