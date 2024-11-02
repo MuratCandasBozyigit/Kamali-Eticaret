@@ -1,106 +1,199 @@
 ﻿@model IEnumerable<ECOMM.Core.Models.Product>
 @{
     ViewData["Title"] = "Home Page";
-    Layout = "/Views/Shared/_Layout.cshtml";
 }
 
-
-<section id="billboard" class="position-relative overflow-hidden" style="background-color: rgba(135, 206, 235, 0.5);">
-    <div class="swiper main-swiper">
+<!-- Billboard Bölümü -->
+<section id="billboard" class="position-relative overflow-hidden" style="background-color: #4B4B4B; height: 400px;">
+    <div class="swiper main-swiper" data-autoplay="true" data-delay="4000">
         <div class="swiper-wrapper">
             <div class="swiper-slide">
-                <div class="container">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-md-6">
-                            <div class="banner-content">
-                                <h1 class="display-2 text-uppercase text-dark pb-5">Kategoriler</h1>
-                                <a href="categories.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">İncele</a>
-                            </div>
-                        </div>
+                <div class="row d-flex align-items-center text-center" style="height: 100%;">
+                    <div class="col-12">
+                        <h1 class="display-2 text-uppercase text-white">Kategoriler</h1>
+                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
                     </div>
                 </div>
             </div>
             <div class="swiper-slide">
-                <div class="container">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-md-6">
-                            <div class="banner-content">
-                                <h1 class="display-2 text-uppercase text-dark pb-5">Elektronik</h1>
-                                <a href="electronics.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">İncele</a>
-                            </div>
-                        </div>
+                <div class="row d-flex align-items-center text-center" style="height: 100%;">
+                    <div class="col-12">
+                        <h1 class="display-2 text-uppercase text-white">Elektronik</h1>
+                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
                     </div>
                 </div>
             </div>
             <div class="swiper-slide">
-                <div class="container">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-md-6">
-                            <div class="banner-content">
-                                <h1 class="display-2 text-uppercase text-dark pb-5">Ev Eşyaları</h1>
-                                <a href="home-appliances.html" class="btn btn-medium btn-dark text-uppercase btn-rounded-none">İncele</a>
-                            </div>
-                        </div>
+                <div class="row d-flex align-items-center text-center" style="height: 100%;">
+                    <div class="col-12">
+                        <h1 class="display-2 text-uppercase text-white">Sayani</h1>
+                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="swiper-icon swiper-arrow swiper-arrow-prev">
-        <svg class="chevron-left">
-            <use xlink:href="#chevron-left"></use>
+        <svg class="chevron-left" width="24" height="24">
+            <path d="M15 18l-6-6 6-6" fill="none" stroke="white" />
         </svg>
     </div>
     <div class="swiper-icon swiper-arrow swiper-arrow-next">
-        <svg class="chevron-right">
-            <use xlink:href="#chevron-right"></use>
+        <svg class="chevron-right" width="24" height="24">
+            <path d="M9 6l6 6-6 6" fill="none" stroke="white" />
         </svg>
     </div>
 </section>
 
+<!-- Ürün Listesi Bölümü -->
+<div class="container mt-4">
+    <div class="row justify-content-center align-items-center">
+        <!-- Sol Yön Okları -->
+        <div class="col-auto">
+            <a class="btn btn-light @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </div>
 
+        <div class="col-10">
+            <div class="row g-3 justify-content-center">
+                @foreach (var product in Model)
+                {
+                    <div class="col-6 col-md-4 col-lg-3 custom-col">
+                        <!-- Her sırada 4 item olacak şekilde düzenlendi -->
+                        <div class="card mb-3 product-card" style="width: 220px;">
+                            <!-- Kartın genişliğini burada 220px yapıyoruz -->
+                            <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
+                            <div class="card-body text-center">
+                                <h5 class="card-title">@product.ProductName</h5>
+                                <p class="card-text">@product.ProductPrice.ToString("C")</p>
+                                <a href="#" class="btn btn-primary">Detaylar</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
 
+        <!-- Sağ Yön Okları -->
+        <div class="col-auto">
+            <a class="btn btn-light @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </div>
+    </div>
+</div>
 
-
-
-
-
-
-
-@section Css {
-    #billboard {
-        position: relative;
-        overflow: hidden;
-        background-color: rgba(135, 206, 235, 0.5); /* Koyu açık yeşil-mavi tonları */
-        height: 450px; /* Yüksekliği ayarla */
-    }
-
-    .banner-content {
-        color: #000; /* Yazı rengi */
-        text-align: left; /* Yazı hizalaması */
-    }
-
-    .swiper {
-        height: 100%; /* Yüksekliği tam ayarlama */
-    }
-
-    .swiper-slide {
-        display: flex; /* Slaytları esnek hale getir */
-        align-items: center; /* Dikey ortalama */
-        justify-content: center; /* Yatay ortalama */
-    }
-}
-@section Scripts {
-    const swiper = new Swiper('.main-swiper', {
-        loop: true, // Döngü
+<!-- Swiper.js ve CSS Dosyalarını Ekleyin -->
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<script>
+    var swiper = new Swiper('.main-swiper', {
+        loop: true,
         autoplay: {
-            delay: 4000, // Her 4 saniyede bir geçiş
-            disableOnInteraction: false, // Kullanıcı etkileşimde olsa devam etsin
+            delay: 4000,
+            disableOnInteraction: false,
         },
         navigation: {
             nextEl: '.swiper-arrow-next',
             prevEl: '.swiper-arrow-prev',
         },
-        direction: 'horizontal', // Yatay kaydırma
     });
-}
+</script>
+
+<!-- Stil Bölümü -->
+<style>
+    body {
+        background-color: #FFFFFF; /* Açık gri ton */
+    }
+
+    #billboard {
+        background-color: #4B4B4B; /* Billboard arka plan rengi */
+        width: 100%; /* Tam genişlik ayarı */
+        height: 400px; /* Yükseklik ayarı */
+        position: relative; /* Pozisyonlandırma */
+        overflow: hidden; /* Taşmayı gizle */
+    }
+
+    .main-swiper {
+        width: 100%; /* Swiper genişliği */
+        height: 100%; /* Swiper yüksekliği */
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%; /* Her slide tam genişlik kaplasın */
+        height: 100%; /* Her slide tam yükseklik kaplasın */
+    }
+
+    .custom-col {
+        display: flex; /* Flexbox ile düzenleme */
+        justify-content: center; /* Kartları ortalar */
+        align-items: flex-start; /* Kartların üstte başlamasını sağlar */
+        padding: 10px; /* Kartlar arası boşluk */
+    }
+
+    .product-card {
+        width: 220px; /* Kartın genişliği */
+        height: 450px; /* Kartın yüksekliği */
+    }
+
+    .product-image {
+        width: 100%; /* Kartın genişliğine uyum sağlar */
+        height: 200px; /* Sabit resim yüksekliği */
+        object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
+        object-position: center; /* Resmin ortalanmasını sağlar */
+    }
+
+    /* Buton tasarımı */
+    .btn-light {
+        background-color: lightgray; /* Açık gri arka plan */
+        color: black; /* Yazı rengi */
+        border: none; /* Kenar çizgisi yok */
+    }
+
+    .btn-hover {
+        background-color: gray; /* Hover durumunda daha koyu gri */
+        color: white; /* Hover durumunda yazı rengi beyaz */
+    }
+
+    /* Butonlar arasında biraz boşluk bırakmak için */
+    .col-auto {
+        display: flex;
+        align-items: center;
+    }
+
+    .row.justify-content-center {
+        margin: 0; /* Boşluğu sıfırla */
+    }
+
+    #billboard {
+        margin-bottom: 2rem; /* Billboard ve ürün kartları arasında boşluk */
+    }
+
+    .swiper-icon {
+        color: white; /* Ok ikonlarının rengi beyaz */
+        background-color: rgba(0, 0, 0, 0.5); /* Okların arka planı yarı saydam siyah */
+        border-radius: 50%; /* Daire şekli */
+        width: 40px; /* Genişlik */
+        height: 40px; /* Yükseklik */
+        display: flex; /* Flexbox kullanarak içerikleri ortalayalım */
+        align-items: center; /* Dikey ortalama */
+        justify-content: center; /* Yatay ortalama */
+        cursor: pointer; /* İmleci pointer yap */
+        position: absolute; /* Pozisyonlandırma */
+        top: 50%; /* Dikey merkezleme */
+        transform: translateY(-50%); /* Dikey olarak tam merkezde */
+        z-index: 10; /* Üstte görünmesi için */
+    }
+
+    .swiper-arrow-prev {
+        left: 10px; /* Sol ok konumu */
+    }
+
+    .swiper-arrow-next {
+        right: 10px; /* Sağ ok konumu */
+    }
+</style>
