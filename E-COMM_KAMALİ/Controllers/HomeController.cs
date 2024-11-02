@@ -7,25 +7,28 @@ namespace E_COMM_KAMALİ.Controllers
 {
     public class HomeController : Controller
     {
+        #region Servisler 
         private readonly ILogger<HomeController> _logger;
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
-       // private readonly IFavouritesService _favouritesService;
+        // private readonly IFavouritesService _favouritesService;
         private readonly ICommentService _commentService;
         public HomeController(ILogger<HomeController> logger, IProductService productService, IOrderService orderService, /*IFavouritesService favouritesService,*/ ICommentService commentService)
         {
             _logger = logger;
             _productService = productService;
             _orderService = orderService;
-          //  _favouritesService = favouritesService;
+            //  _favouritesService = favouritesService;
             _commentService = commentService;
-        }
+        } 
+        #endregion
+
+
         public async Task<IActionResult> Index(int page = 1)
         {
-            int pageSize = 15; // Sayfa başına 15 ürün
+            int pageSize = 5;
             var products = await _productService.GetAllAsync();
-
-            // Sayfalama işlemi
+         
             var paginatedProducts = products.Skip((page - 1) * pageSize)
                                             .Take(pageSize)
                                             .ToList();
@@ -37,6 +40,12 @@ namespace E_COMM_KAMALİ.Controllers
         }
 
 
+        public async Task<IActionResult> GetAllCategories()
+        {
+            var categories = await _productService.GetAllAsync();
+            ViewBag.Categories = categories;
+            return View(categories);
+        }
 
 
 
