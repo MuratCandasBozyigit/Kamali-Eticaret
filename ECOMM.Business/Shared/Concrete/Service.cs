@@ -17,10 +17,11 @@ namespace ECOMM.Business.Concrete
             _repository = repository;
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public async Task<IEnumerable<T>> GetAllAsync() // IEnumerable dönmelidir
         {
-            return await _repository.GetAllAsync();
+            return await _repository.GetAllAsync(); // Burada doğrudan _repository'den dönen sonucu bekleyin
         }
+
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
         {

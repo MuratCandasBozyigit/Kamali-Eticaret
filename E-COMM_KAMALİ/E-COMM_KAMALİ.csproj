@@ -10,6 +10,7 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Views\Shared\_ShopLayout.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\css\Login\ChangePassword.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\Mağaza\HomePage.css" />
   </ItemGroup>
 
   <ItemGroup>
@@ -80,7 +81,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\css\Mağaza\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
 

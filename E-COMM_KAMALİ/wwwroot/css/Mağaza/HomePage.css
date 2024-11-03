@@ -1,0 +1,232 @@
+﻿<style >
+body {
+    background-color: rgb(230, 228, 223); /* Açık gri ton */
+}
+
+#billboard {
+    background-color: rgb(107, 106, 122) !important;
+    width: 100%; /* Tam genişlik ayarı */
+    height: 400px; /* Yükseklik ayarı */
+    position: relative; /* Pozisyonlandırma */
+    overflow: hidden; /* Taşmayı gizle */
+}
+
+.main-swiper {
+    width: 100%; /* Swiper genişliği */
+    height: 100%; /* Swiper yüksekliği */
+}
+
+.swiper-slide {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%; /* Her slide tam genişlik kaplasın */
+    height: 100%; /* Her slide tam yükseklik kaplasın */
+}
+
+.custom-col {
+    display: flex; /* Flexbox ile düzenleme */
+    justify-content: center; /* Kartları ortalar */
+    align-items: flex-start; /* Kartların üstte başlamasını sağlar */
+    padding: 10px; /* Kartlar arası boşluk */
+}
+
+.product-card {
+    width: 520px; /* Kartın genişliği */
+    height: 450px; /* Kartın yüksekliği */
+}
+
+.product-image {
+    width: 100%; /* Kartın genişliğine uyum sağlar */
+    height: 200px; /* Sabit resim yüksekliği */
+    object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
+    object-position: center; /* Resmin ortalanmasını sağlar */
+}
+
+/* Buton tasarımı */
+.btn-light {
+    background-color: lightgray; /* Açık gri arka plan */
+    color: black; /* Yazı rengi */
+    border: none; /* Kenar çizgisi yok */
+}
+
+.btn-hover {
+    background-color: gray; /* Hover durumunda daha koyu gri */
+    color: white; /* Hover durumunda yazı rengi beyaz */
+}
+
+/* Butonlar arasında biraz boşluk bırakmak için */
+.col-auto {
+    display: flex;
+    align-items: center;
+}
+
+.row.justify-content-center {
+    margin: 0; /* Boşluğu sıfırla */
+}
+
+#billboard {
+    margin-bottom: 2rem; /* Billboard ve ürün kartları arasında boşluk */
+}
+
+.swiper-icon {
+    color: white; /* Ok ikonlarının rengi beyaz */
+    background-color: rgba(0, 0, 0, 0.5); /* Okların arka planı yarı saydam siyah */
+    border-radius: 50%; /* Daire şekli */
+    width: 40px; /* Genişlik */
+    height: 40px; /* Yükseklik */
+    display: flex; /* Flexbox kullanarak içerikleri ortalayalım */
+    align-items: center; /* Dikey ortalama */
+    justify-content: center; /* Yatay ortalama */
+    cursor: pointer; /* İmleci pointer yap */
+    position: absolute; /* Pozisyonlandırma */
+    top: 50%; /* Dikey merkezleme */
+    transform: translateY(-50%); /* Dikey olarak tam merkezde */
+    z-index: 10; /* Üstte görünmesi için */
+}
+
+.swiper-arrow-prev {
+    left: 10px; /* Sol ok konumu */
+}
+
+.swiper-arrow-next {
+    right: 10px; /* Sağ ok konumu */
+}
+
+#company-services {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    padding: 60px 0; /* Üst ve alt boşluklar */
+    background-color: #f8f9fa; /* Arka plan rengi */
+}
+
+.icon-box {
+    position: relative; /* Pozisyon ayarlama */
+    width: 250px; /* Genişlik */
+    height: 250px; /* Yükseklik */
+    background-color: #fff; /* Beyaz arka plan */
+    border-radius: 8px; /* Köşe yuvarlama */
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Kutunun arkasındaki gölge efekti */
+    padding: 20px; /* İç boşluk */
+    text-align: center; /* İçerik merkezleme */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Animasyon geçişi */
+    margin: 10px; /* Dış boşluk */
+    display: flex; /* Flexbox kullanarak içeriği ayarlama */
+    flex-direction: column; /* Dikey yönde yerleştirme */
+    align-items: center; /* İçerikleri yatayda ortalama */
+    justify-content: center; /* İçerikleri dikeyde ortalama */
+    box-sizing: border-box; /* Boyutlandırma modelini kutu içeriklerine dahil et */
+}
+
+    .icon-box:hover {
+        transform: scale(1.75); /* Hover durumunda büyütme */
+        color: aliceblue;
+        background-color: darkslategray; /* Arka plan rengi değişikliği */
+        box-shadow: 0 0 40px rgba(0, 0, 0, 0.3); /* Gölgeyi artırma */
+    }
+
+.icon-box-icon {
+    margin-bottom: 10px; /* İkon ve başlık arasındaki boşluk */
+}
+
+.card-title {
+    margin-bottom: 5px; /* Başlık ve açıklama arasındaki boşluk */
+}
+
+.icon-box::after {
+    content: '';
+    position: absolute;
+    top: 0; /* Kutunun üstüne gölge */
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1); /* Gölgenin rengi */
+    border-radius: 8px; /* Köşe yuvarlama */
+    z-index: -1; /* Arka planda kalması için */
+}
+
+#testimonials {
+    font-size: 30px;
+    width: 100%; /* Yüzde 100 genişlik */
+    height: 350px; /* Yükseklik 350px */
+    background-color: #f8f9fa; /* Arka plan rengi */
+    padding: 20px; /* İçeride biraz boşluk bırakmak için */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Gölgelendirme efekti */
+    overflow: hidden; /* Taşmayı gizlemek için */
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Footer genel stilleri */
+#footer {
+    background-color: #f8f9fa; /* Açık gri arka plan */
+    padding: 40px 0; /* Yükseklik için padding */
+    width: 100%;
+    text-decoration:none;
+    position: relative;
+}
+
+/* Footer alt kısmı */
+#footer-bottom {
+    background-color: #343a40; /* Koyu arka plan */
+    color: #ffffff; /* Beyaz yazı rengi */
+    padding: 20px 0;
+}
+#footer a {
+    text-decoration: none; /* Alt çizgiyi kaldırır */
+    color: inherit; /* Bağlantı rengini üst öğeden alır, istersen burada belirli bir renk de verebilirsin */
+}
+
+    #footer a:hover {
+        color: #007bff; /* Hover sırasında renk değişikliği için isteğe bağlı */
+    }
+/* Logo stil */
+.footer-logo {
+    max-width: 100%; /* Responsive logo */
+    height: auto;
+}
+
+/* Sosyal ikon stilleri */
+.social-links svg {
+    width: 20px;
+    height: 20px;
+    color: var(--light-gray-color);
+    transition: color 0.3s; /* Renk geçişi için */
+}
+
+    .social-links svg:hover {
+        color: var(--primary-color);
+    }
+
+.social-links li {
+    padding-right: 15px; /* Sosyal ikonlar arasındaki mesafe */
+}
+
+/* Menü başlık stilleri */
+.widget-title {
+    font-weight: bold;
+    margin-bottom: 10px; /* Başlık ile içerik arasındaki boşluk */
+}
+
+/* Footer metin stilleri */
+.footer-menu p {
+    margin: 0; /* Varsayılan margin'i sıfırla */
+    line-height: 1.5; /* Okunabilirlik için satır yüksekliği */
+}
+
+/* Responsive düzenleme */
+@media (max-width: 767px) {
+    .footer-menu {
+        text-align: center; /* Küçük ekranlarda ortala */
+    }
+
+    .social-links {
+        justify-content: center; /* Sosyal bağlantıları ortala */
+    }
+}
+
+
+
+
+</style >

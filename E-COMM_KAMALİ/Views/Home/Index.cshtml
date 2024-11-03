@@ -1,7 +1,10 @@
-﻿@model IEnumerable<ECOMM.Core.Models.Product>
+﻿@model ECOMM.Core.ViewModels.IndexViewModel
+
 @{
     ViewData["Title"] = "Home Page";
 }
+
+<link rel="stylesheet" href="/css/Mağaza/HomePage.css">
 
 <!-- Billboard Bölümü -->
 <section id="billboard" class="position-relative overflow-hidden" style="background-color: #4B4B4B; height: 400px;">
@@ -11,7 +14,7 @@
                 <div class="row d-flex align-items-center text-center" style="height: 100%;">
                     <div class="col-12">
                         <h1 class="display-2 text-uppercase text-white">Kategoriler</h1>
-                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
+                        <a asp-controller="Category" asp-action="Index" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
                     </div>
                 </div>
             </div>
@@ -19,7 +22,7 @@
                 <div class="row d-flex align-items-center text-center" style="height: 100%;">
                     <div class="col-12">
                         <h1 class="display-2 text-uppercase text-white">Elektronik</h1>
-                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
+                        <a asp-controller="Category" asp-action="Index" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
                     </div>
                 </div>
             </div>
@@ -27,7 +30,7 @@
                 <div class="row d-flex align-items-center text-center" style="height: 100%;">
                     <div class="col-12">
                         <h1 class="display-2 text-uppercase text-white">Sayani</h1>
-                        <a href="index.html" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
+                        <a asp-controller="Category" asp-action="Index" class="btn btn-medium btn-light text-uppercase btn-rounded-none mt-3">Devamını Gör</a>
                     </div>
                 </div>
             </div>
@@ -45,6 +48,45 @@
     </div>
 </section>
 
+<section id="company-services" class="padding-large">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-3 col-md-6 pb-3">
+                <div class="icon-box">
+                    <div class="icon-box-content">
+                        <h3 class="card-title text-uppercase text-dark">Ücretsiz Kargo</h3>
+                        <p>Kapınıza kadar ücretsiz teslimat.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 pb-3">
+                <div class="icon-box">
+                    <div class="icon-box-content">
+                        <h3 class="card-title text-uppercase text-dark">Kalite Garantisi</h3>
+                        <p>Ürünlerimizde yüksek kalite standardı.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 pb-3">
+                <div class="icon-box">
+                    <div class="icon-box-content">
+                        <h3 class="card-title text-uppercase text-dark">Günlük Fırsatlar</h3>
+                        <p>Her gün yenilenen fırsatlar ve indirimler.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 pb-3">
+                <div class="icon-box">
+                    <div class="icon-box-content">
+                        <h3 class="card-title text-uppercase text-dark">%100 Güvenli Ödeme</h3>
+                        <p>Ödemeleriniz güvenli bir şekilde işlenir.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- Ürün Listesi Bölümü -->
 <div class="container mt-4">
     <div class="row justify-content-center align-items-center">
@@ -56,13 +98,12 @@
         </div>
 
         <div class="col-10">
+            <h2>ÜRÜNLER</h2>
             <div class="row g-3 justify-content-center">
-                @foreach (var product in Model)
+                @foreach (var product in Model.Products)
                 {
                     <div class="col-6 col-md-4 col-lg-3 custom-col">
-                        <!-- Her sırada 4 item olacak şekilde düzenlendi -->
-                        <div class="card mb-3 product-card" style="width: 220px;">
-                            <!-- Kartın genişliğini burada 220px yapıyoruz -->
+                        <div class="card mb-3 product-card">
                             <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
                             <div class="card-body text-center">
                                 <h5 class="card-title">@product.ProductName</h5>
@@ -84,6 +125,119 @@
     </div>
 </div>
 
+<section id="testimonials" class="position-relative mb-4" ">
+    <div class="container">
+        <div class="row">
+            <div class="review-content position-relative">
+                <div class="swiper-icon swiper-arrow swiper-arrow-prev position-absolute d-flex align-items-center">
+                    <svg class="chevron-left">
+                        <use xlink:href="#chevron-left" />
+                    </svg>
+                </div>
+
+                <div class="swiper testimonial-swiper">
+                    <div class="swiper-wrapper">
+                        @if (Model.Comments != null && Model.Comments.Any()) // Eğer yorum varsa
+                        {
+                            foreach (var comment in Model.Comments)
+                            {
+                                <div class="swiper-slide text-center d-flex justify-content-center">
+                                    <div class="review-item col-md-10 card">
+                                        <blockquote>“@comment.Content”</blockquote> <!-- Yorum içeriği -->
+                                        <div class="author-detail">
+                                            <div class="name text-dark text-uppercase pt-2">@comment.Author</div> <!-- Yazar ismi -->
+                                            <div class="date text-muted">@comment.DateCommented.ToString("g")</div> <!-- Yorum tarihi -->
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="swiper-slide text-center d-flex justify-content-center">
+                                <div class="review-item col-md-10 card">
+                                    <blockquote>“Henüz yorum yok”</blockquote>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="swiper-icon swiper-arrow swiper-arrow-next position-absolute d-flex align-items-center">
+                    <svg class="chevron-right">
+                        <use xlink:href="#chevron-right" />
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="swiper-pagination"></div>
+</section>
+
+<footer id="footer" class="overflow-hidden mt-4" ">
+    <div class="container">
+        <div class="row">
+            <div class="footer-top-area">
+                <div class="row d-flex flex-wrap justify-content-between">
+                    <div class="col-lg-3 col-sm-6 pb-3">
+                        <div class="footer-menu">
+                            <img src="images/main-logo.png" alt="logo" class="footer-logo">
+                            <p>Nisi, purus vitae, ultrices nunc. Sit ac sit suscipit hendrerit. Gravida massa volutpat aenean odio erat nullam fringilla.</p>
+                            <div class="social-links">
+                                <ul class="d-flex list-unstyled">
+                                    <li><a href="#"><svg class="facebook"><use xlink:href="#facebook" /></svg></a></li>
+                                    <li><a href="#"><svg class="instagram"><use xlink:href="#instagram" /></svg></a></li>
+                                    <li><a href="#"><svg class="twitter"><use xlink:href="#twitter" /></svg></a></li>
+                                    <li><a href="#"><svg class="linkedin"><use xlink:href="#linkedin" /></svg></a></li>
+                                    <li><a href="#"><svg class="pinterest"><use xlink:href="#pinterest" /></svg></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 pb-3">
+                        <h4 class="footer-title">Hizmetlerimiz</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Kargo</a></li>
+                            <li><a href="#">İade</a></li>
+                            <li><a href="#">Yardım</a></li>
+                            <li><a href="#">İletişim</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 pb-3">
+                        <h4 class="footer-title">Bilgilendirme</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#">Hakkımızda</a></li>
+                            <li><a href="#">Gizlilik Politikası</a></li>
+                            <li><a href="#">Şartlar ve Koşullar</a></li>
+                            <li><a href="#">Blog</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-3 col-sm-6 pb-3">
+                        <h4 class="footer-title">İletişim</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#">info@example.com</a></li>
+                            <li><a href="#">(555) 555-5555</a></li>
+                            <li><a href="#">123 Sokak, Şehir, Ülke</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom-area">
+                <p>© 2024 Tüm Hakları Saklıdır.</p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+
+
+
+
+
+
+
+
 <!-- Swiper.js ve CSS Dosyalarını Ekleyin -->
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -102,98 +256,3 @@
 </script>
 
 <!-- Stil Bölümü -->
-<style>
-    body {
-        background-color: #FFFFFF; /* Açık gri ton */
-    }
-
-    #billboard {
-        background-color: #4B4B4B; /* Billboard arka plan rengi */
-        width: 100%; /* Tam genişlik ayarı */
-        height: 400px; /* Yükseklik ayarı */
-        position: relative; /* Pozisyonlandırma */
-        overflow: hidden; /* Taşmayı gizle */
-    }
-
-    .main-swiper {
-        width: 100%; /* Swiper genişliği */
-        height: 100%; /* Swiper yüksekliği */
-    }
-
-    .swiper-slide {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%; /* Her slide tam genişlik kaplasın */
-        height: 100%; /* Her slide tam yükseklik kaplasın */
-    }
-
-    .custom-col {
-        display: flex; /* Flexbox ile düzenleme */
-        justify-content: center; /* Kartları ortalar */
-        align-items: flex-start; /* Kartların üstte başlamasını sağlar */
-        padding: 10px; /* Kartlar arası boşluk */
-    }
-
-    .product-card {
-        width: 220px; /* Kartın genişliği */
-        height: 450px; /* Kartın yüksekliği */
-    }
-
-    .product-image {
-        width: 100%; /* Kartın genişliğine uyum sağlar */
-        height: 200px; /* Sabit resim yüksekliği */
-        object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
-        object-position: center; /* Resmin ortalanmasını sağlar */
-    }
-
-    /* Buton tasarımı */
-    .btn-light {
-        background-color: lightgray; /* Açık gri arka plan */
-        color: black; /* Yazı rengi */
-        border: none; /* Kenar çizgisi yok */
-    }
-
-    .btn-hover {
-        background-color: gray; /* Hover durumunda daha koyu gri */
-        color: white; /* Hover durumunda yazı rengi beyaz */
-    }
-
-    /* Butonlar arasında biraz boşluk bırakmak için */
-    .col-auto {
-        display: flex;
-        align-items: center;
-    }
-
-    .row.justify-content-center {
-        margin: 0; /* Boşluğu sıfırla */
-    }
-
-    #billboard {
-        margin-bottom: 2rem; /* Billboard ve ürün kartları arasında boşluk */
-    }
-
-    .swiper-icon {
-        color: white; /* Ok ikonlarının rengi beyaz */
-        background-color: rgba(0, 0, 0, 0.5); /* Okların arka planı yarı saydam siyah */
-        border-radius: 50%; /* Daire şekli */
-        width: 40px; /* Genişlik */
-        height: 40px; /* Yükseklik */
-        display: flex; /* Flexbox kullanarak içerikleri ortalayalım */
-        align-items: center; /* Dikey ortalama */
-        justify-content: center; /* Yatay ortalama */
-        cursor: pointer; /* İmleci pointer yap */
-        position: absolute; /* Pozisyonlandırma */
-        top: 50%; /* Dikey merkezleme */
-        transform: translateY(-50%); /* Dikey olarak tam merkezde */
-        z-index: 10; /* Üstte görünmesi için */
-    }
-
-    .swiper-arrow-prev {
-        left: 10px; /* Sol ok konumu */
-    }
-
-    .swiper-arrow-next {
-        right: 10px; /* Sağ ok konumu */
-    }
-</style>
