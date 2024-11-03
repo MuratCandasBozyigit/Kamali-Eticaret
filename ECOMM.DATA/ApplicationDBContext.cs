@@ -33,7 +33,16 @@ namespace ECOMM.Data
             modelBuilder.Entity<Orders>()
                 .Property(o => o.TotalAmount)
                 .HasPrecision(18, 2);
+            // İlişkiler
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Author)
+                .WithMany() // Eğer User ile Comment arasında bir koleksiyon ilişkisi yoksa
+                .HasForeignKey(c => c.AuthorId);
 
+            modelBuilder.Entity<Comment>()
+                .HasOne(c => c.Product)
+                .WithMany() // Eğer Product ile Comment arasında bir koleksiyon ilişkisi yoksa
+                .HasForeignKey(c => c.PostId);
             modelBuilder.Entity<ApplicationUserRole>()
                 .HasKey(aur => new { aur.UserId, aur.RoleId });
 

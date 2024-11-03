@@ -9,5 +9,6 @@ namespace ECOMM.Business.Abstract
 {
     public interface ICommentService : IService<Comment>
     {
+
     }
 }
