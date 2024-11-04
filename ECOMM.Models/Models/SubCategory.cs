@@ -12,7 +12,8 @@ namespace ECOMM.Core.Models
         [ForeignKey("CategoryId")]
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
-    
-      
+        [NotMapped] // Veritabanında tutulmayacak
+        public int ProductCount { get; set; }
+
     }
 }

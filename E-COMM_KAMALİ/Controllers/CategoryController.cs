@@ -32,7 +32,18 @@ namespace E_COMM_KAMALİ.Controllers
                 return NotFound();
             }
 
+            // Tüm ürünleri al
+            var allProducts = await _productService.GetAllAsync();
+
+            // Her alt kategori için ürün sayısını hesapla
+            foreach (var subCategory in category.SubCategories)
+            {
+                // Alt kategoriye ait ürünlerin sayısını hesapla
+                subCategory.ProductCount = allProducts.Count(p => p.Id == subCategory.Id);
+            }
+
             return View(category.SubCategories); // Alt kategorileri doğrudan döndür
         }
+
     }
 }
