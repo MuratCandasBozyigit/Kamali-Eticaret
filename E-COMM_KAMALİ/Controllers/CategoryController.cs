@@ -24,16 +24,15 @@ namespace E_COMM_KAMALİ.Controllers
             return View(categories);
         }
 
-        // Belirli bir kategoriye ait alt kategorileri listeleyen metod
-        //public async Task<IActionResult> SubCategories(int categoryId)
-        //{
-        //  //  var category = await _categoryService.GetByIdAsyncSub(categoryId); // Eager loading ile alt kategorileri de yükle
-        //    if (category == null)
-        //    {
-        //        return NotFound();
-        //    }
+        public async Task<IActionResult> SubCategories(int categoryId)
+        {
+            var category = await _categoryService.GetByIdAsyncWithSubCategories(categoryId); // Eager loading ile alt kategorileri de yükle
+            if (category == null)
+            {
+                return NotFound();
+            }
 
-        //    return View(category.SubCategories); // Alt kategorileri doğrudan döndür
-        //}
+            return View(category.SubCategories); // Alt kategorileri doğrudan döndür
+        }
     }
 }
