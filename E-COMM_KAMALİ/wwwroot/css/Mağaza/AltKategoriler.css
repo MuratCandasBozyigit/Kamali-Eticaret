@@ -1,2 +1,44 @@
-﻿body {
+﻿
+body {
+    font-family: Arial, sans-serif; /* Yazı tipi stili */
+    background-color: #f8f9fa; /* Arka plan rengi */
+    margin: 0;
+    padding: 20px; /* Genel iç boşluk */
 }
+
+.subcategory-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Kartlar arasında boşluk */
+    justify-content: center; /* Kartları ortala */
+}
+
+.subcategory-card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    width: 220px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s; /* Geçiş efekti */
+    background-color: white; /* Kart arka plan rengi */
+}
+
+    .subcategory-card h4 {
+        margin: 0; /* Başlık için varsayılan marjı sıfırla */
+        font-size: 18px; /* Başlık boyutu */
+        color: #333; /* Başlık rengi */
+        text-align: center; /* Başlığı ortala */
+    }
+
+    .subcategory-card:hover {
+        transform: scale(1.05); /* Kartı büyüt */
+        box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2); /* Hover'da gölgeyi artır */
+    }
+
+.no-subcategories {
+    text-align: center; /* Mesajı ortala */
+    color: #666; /* Mesaj rengi */
+    font-size: 16px; /* Mesaj boyutu */
+    margin-top: 20px; /* Mesaj üst boşluğu */
+}
+
