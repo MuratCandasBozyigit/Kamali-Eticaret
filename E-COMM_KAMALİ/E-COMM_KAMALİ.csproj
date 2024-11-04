@@ -83,6 +83,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\site_photos\Ana_Sayfa\" />
   </ItemGroup>
 
   <ItemGroup>
