@@ -1,5 +1,21 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<ECOMM.Core.Models.Category>
+
 @{
+    ViewData["Title"] = "Kategoriler";
 }
+
+<link rel="stylesheet" href="~/css/Mağaza/Kategoriler.css" />
+
+<h2>Kategoriler</h2>
+
+<div class="category-container">
+    @foreach (var category in Model)
+    {
+        <div class="category-card" onclick="location.href='@Url.Action("SubCategories", "Category", new { categoryId = category.Id })'">
+            <h3>@category.ParentCategoryName</h3>
+            <div class="description">
+                <p>@category.ParentCategoryDescription</p>
+            </div>
+        </div>
+    }
+</div>

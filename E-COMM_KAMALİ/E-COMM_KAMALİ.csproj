@@ -78,6 +78,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ECOMM.Business\ECOMM.Business.csproj" />
+    <ProjectReference Include="..\ECOMM.Models\ECOMM.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

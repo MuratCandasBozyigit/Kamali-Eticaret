@@ -1,16 +1,18 @@
 ﻿using ECOMM.Core.Models;
 using ECOMM.Business.Abstract;
 using ECOMM.Data.Shared.Abstract;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECOMM.Business.Concrete
 {
     public class CategoryService : Service<Category>, ICategoryService
     {
         private readonly IRepository<Category> _categoryRepository;
-
-        public CategoryService(IRepository<Category> categoryRepository) : base(categoryRepository)
+       
+        public CategoryService(IRepository<Category> categoryRepository, DbContext context) : base(categoryRepository)
         {
             _categoryRepository = categoryRepository;
+          
         }
 
         #region Kategori İşlemleri
@@ -39,6 +41,13 @@ namespace ECOMM.Business.Concrete
         {
             return await _categoryRepository.DeleteAsync(id);
         }
+
+        //public async Task<Category> GetByIdAsyncWithSubCategories(int id)
+        //{
+        //    return await _categoryRepository.GetAllAsync() // Tüm kategorileri al
+        //                    .Include(c => c.SubCategories) // Alt kategorileri içeren eager loading
+        //                    .FirstOrDefaultAsync(c => c.Id == id);
+        //}
 
         #endregion
     }

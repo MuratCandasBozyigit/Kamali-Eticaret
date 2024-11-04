@@ -1,0 +1,40 @@
+﻿@model IEnumerable<ECOMM.Core.Models.SubCategory>
+
+@{
+    ViewData["Title"] = "Alt Kategoriler";
+}
+
+<h2>Alt Kategoriler</h2>
+
+@if (Model != null && Model.Any())
+{
+    <div class="subcategory-container">
+        @foreach (var subCategory in Model)
+        {
+            <div class="subcategory-card">
+                <h4>@subCategory.SubCategoryName</h4>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>Bu kategoride alt kategori bulunmamaktadır.</p>
+}
+
+
+<style>
+    .subcategory-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .subcategory-card {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 15px;
+        width: 220px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>

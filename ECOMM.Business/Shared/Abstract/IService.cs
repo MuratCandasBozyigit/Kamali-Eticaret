@@ -8,6 +8,7 @@ namespace ECOMM.Business.Abstract
 {
     public interface IService<T> where T : BaseModel
     {
+        
         Task<IEnumerable<T>> GetAllAsync(); // Tüm verileri getirir
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate); // Şarta göre verileri getirir
         Task<T> GetByIdAsync(int id); // ID ile veri getirir
