@@ -4,7 +4,8 @@
     ViewData["Title"] = "Alt Kategoriler";
 }
 <link rel="stylesheet" href="~/css/Mağaza/AltKategoriler.css" />
-<h2>Alt Kategoriler</h2>
+
+<h1 style="text-align: center;">Alt Kategoriler</h1>
 
 @if (Model != null && Model.Any())
 {
@@ -12,13 +13,15 @@
         @foreach (var subCategory in Model)
         {
             <div class="subcategory-card">
-                <h4>@subCategory.SubCategoryName</h4>
+                <a asp-controller="Category" asp-action="Products" asp-route-subCategoryId="@subCategory.Id" style="text-decoration: none; color: inherit;">
+                    <h4>@subCategory.SubCategoryName</h4>
+                    <p>Ürün sayısı: @subCategory.ProductCount</p>
+                </a>
             </div>
         }
     </div>
 }
 else
 {
-    <p>Bu kategoride alt kategori bulunmamaktadır.</p>
+    <p class="no-subcategories">Bu kategoride alt kategori bulunmamaktadır.</p>
 }
-

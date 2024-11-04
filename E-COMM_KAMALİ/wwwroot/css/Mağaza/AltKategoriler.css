@@ -1,14 +1,12 @@
-﻿
-body {
+﻿body {
     font-family: Arial, sans-serif; /* Yazı tipi stili */
-    background-color: #f8f9fa; /* Arka plan rengi */
-    margin: 0;
-    padding: 20px; /* Genel iç boşluk */
+    background-color: rgb(233, 237, 245); /* Arka plan rengi */
+    /* Genel iç boşluk */
 }
 
 .subcategory-container {
     display: flex;
-    margin-top:45px;
+    margin-top: 45px; /* Üstten boşluk */
     flex-wrap: wrap;
     gap: 20px; /* Kartlar arasında boşluk */
     justify-content: center; /* Kartları ortala */
@@ -19,9 +17,10 @@ body {
     border-radius: 8px;
     padding: 15px;
     width: 220px;
+    background-color: rgb(201, 206, 214);
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s; /* Geçiş efekti */
-    background-color: white; /* Kart arka plan rengi */
+    cursor: pointer; /* Hover'da el simgesi */
 }
 
     .subcategory-card h4 {
@@ -33,6 +32,7 @@ body {
 
     .subcategory-card:hover {
         transform: scale(1.5); /* Kartı büyüt */
+        background-color: rgb(126, 128, 130); /* Hover'da arka plan rengi */
         box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2); /* Hover'da gölgeyi artır */
     }
 
@@ -42,4 +42,3 @@ body {
     font-size: 16px; /* Mesaj boyutu */
     margin-top: 20px; /* Mesaj üst boşluğu */
 }
-

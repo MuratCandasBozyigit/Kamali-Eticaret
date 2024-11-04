@@ -50,5 +50,12 @@ namespace ECOMM.Business.Concrete
         {
             return await _categoryService.GetAllAsync();
         }
+
+        public async Task<IEnumerable<Product>> GetBySubCategoryIdAsync(int subCategoryId)
+        {
+            
+            var products = await _productRepository.GetAllAsync();
+            return products.Where(p => p.Id == subCategoryId).ToList();
+        }
     }
 }

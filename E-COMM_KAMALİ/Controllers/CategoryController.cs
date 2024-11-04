@@ -1,4 +1,6 @@
 ﻿using ECOMM.Business.Abstract;
+using ECOMM.Core.ViewModels;
+using ECOMM.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -44,6 +46,29 @@ namespace E_COMM_KAMALİ.Controllers
 
             return View(category.SubCategories); // Alt kategorileri doğrudan döndür
         }
+
+        public async Task<IActionResult> Products(int subCategoryId)
+        {
+            // Seçilen alt kategori bilgilerini al
+            var subCategory = await _subCategoryService.GetByIdAsync(subCategoryId);
+            if (subCategory == null)
+            {
+                return NotFound();
+            }
+
+            // Alt kategoriye ait tüm ürünleri al
+            var products = await _productService.GetBySubCategoryIdAsync(subCategoryId);
+
+            // View'a model olarak alt kategori ve ürün listesini gönder
+            var model = new SubCategoryProductsViewModel
+            {
+                SubCategory = subCategory,
+                Products = products
+            };
+
+            return View(model);
+        }
+
 
     }
 }

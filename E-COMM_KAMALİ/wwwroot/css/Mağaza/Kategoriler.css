@@ -1,13 +1,17 @@
-﻿.category-container {
+﻿body {
+    background-color: rgb(233, 237, 245); /* Genel arka plan rengi */
+}
+
+.category-container {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center; /* Kartları ortala */
+    justify-content: center;
     gap: 20px;
     margin-top: 20px;
 }
 
 .category-card {
-    margin-top: 20px; /* Üstten boşluk */
+    margin-top: 45px;
     width: 200px;
     height: 200px;
     border: 1px solid #ccc;
@@ -20,7 +24,8 @@
     position: relative;
     overflow: hidden;
     transition: transform 0.3s, background-color 0.3s;
-    cursor: pointer; /* Kartın üzerine gelindiğinde el simgesi çıkar */
+    cursor: pointer;
+    background-color: rgb(201, 206, 214); /* Kartların farklı arka plan rengi */
 }
 
     .category-card h3 {
@@ -39,8 +44,8 @@
     }
 
     .category-card:hover {
-        transform: scale(1.75);
-        background-color: #f0f0f0;
+        transform: scale(1.35);
+        background-color: rgb(126, 128, 130);
     }
 
         .category-card:hover .description {
