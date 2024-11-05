@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECOMM.Business.Abstract
 {
-    public interface IFavouritesService //BaseMOdelden kalıtmadın
+    public interface IFavouritesService :IService<Favourites>
     {
     }
 }
