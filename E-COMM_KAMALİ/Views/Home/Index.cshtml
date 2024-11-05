@@ -108,11 +108,13 @@
                             <div class="card-body text-center">
                                 <h5 class="card-title">@product.ProductName</h5>
                                 <p class="card-text">@product.ProductPrice.ToString("C")</p>
-                                <a href="#" class="btn btn-primary">Detaylar</a>
+                                <a asp-controller="Home" asp-action="ProductDetails" class="btn btn-primary btn-hover">Detaylar</a>
+                                <a asp-controller="ShopCart" asp-action="Index" class="btn btn-primary btn-hover"><i class="fa-solid fa-cart-shopping"></i></a>
                             </div>
                         </div>
                     </div>
                 }
+
             </div>
         </div>
 
@@ -231,13 +233,6 @@
 
 
 
-
-
-
-
-
-
-
 <!-- Swiper.js ve CSS Dosyalarını Ekleyin -->
 <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
@@ -255,4 +250,3 @@
     });
 </script>
 
-<!-- Stil Bölümü -->

@@ -1,4 +1,6 @@
-﻿<style >
+﻿/*#region Bitti */
+
+
 body {
     background-color: rgb(230, 228, 223); /* Açık gri ton */
 }
@@ -163,7 +165,7 @@ body {
     background-color: #f8f9fa; /* Açık gri arka plan */
     padding: 40px 0; /* Yükseklik için padding */
     width: 100%;
-    text-decoration:none;
+    text-decoration: none;
     position: relative;
 }
 
@@ -173,6 +175,7 @@ body {
     color: #ffffff; /* Beyaz yazı rengi */
     padding: 20px 0;
 }
+
 #footer a {
     text-decoration: none; /* Alt çizgiyi kaldırır */
     color: inherit; /* Bağlantı rengini üst öğeden alır, istersen burada belirli bir renk de verebilirsin */
@@ -229,4 +232,20 @@ body {
 
 
 
-</style >
+
+
+
+/*#endregion */
+
+
+.btn-hover {
+    background-color: white; /* Normal durumdaki arka plan */
+    color: black; /* Normal durumdaki yazı rengi */
+    border: none; /* Kenar çizgisini kaldır */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Yumuşak geçiş efekti */
+}
+
+    .btn-hover:hover {
+        background-color: white; /* Hover durumunda arka plan rengi değişmesin */
+        color: black; /* Hover durumunda yazı rengi değişmesin */
+    }
