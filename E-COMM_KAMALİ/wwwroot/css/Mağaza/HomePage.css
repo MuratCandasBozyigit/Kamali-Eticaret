@@ -1,4 +1,6 @@
-﻿<style >
+﻿/*#region Bitti */
+
+
 body {
     background-color: rgb(230, 228, 223); /* Açık gri ton */
 }
@@ -163,7 +165,7 @@ body {
     background-color: #f8f9fa; /* Açık gri arka plan */
     padding: 40px 0; /* Yükseklik için padding */
     width: 100%;
-    text-decoration:none;
+    text-decoration: none;
     position: relative;
 }
 
@@ -173,6 +175,7 @@ body {
     color: #ffffff; /* Beyaz yazı rengi */
     padding: 20px 0;
 }
+
 #footer a {
     text-decoration: none; /* Alt çizgiyi kaldırır */
     color: inherit; /* Bağlantı rengini üst öğeden alır, istersen burada belirli bir renk de verebilirsin */
@@ -227,6 +230,47 @@ body {
 }
 
 
+.fa-cart-shopping {
+    width: 20px; /* Sabit ikon genişliği */
+     /* Sabit ikon yüksekliği */
+    transition: transform 0.3s ease-in-out; /* Geçiş süresini kontrol et */
+    padding: 0; /* Yanlış padding hatasını düzelttim */
+    display: inline-block; /* İkonun çevresindeki alanı düzenle */
+    align-items: center; /* Dikey olarak ortala */
+    justify-content: center;
+    vertical-align: middle; /* Dikey hizalamayı ortalar */
+}
+
+.btn-hover {
+    position: relative; /* İkonun sabit durması için */
+    display: inline-flex; /* İkonun ve metnin aynı hizada kalmasını sağla */
+    align-items: center; /* Dikey olarak ortala */
+    justify-content: center; /* Yatay olarak ortala */
+    width: auto; /* Sabit genişlik ayarı isteğe bağlı */
+    height: 50px; /* Sabit yükseklik */
+    font-size: 15px;
+    background-color: rgb(237, 233, 221); /* Normal durumdaki arka plan */
+    color: black; /* Normal durumdaki yazı rengi */
+    border: none; /* Kenar çizgisini kaldır */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Yumuşak geçiş efekti */
+}
+
+    .btn-hover:hover {
+        margin-top: 0; /* Hover durumunda margin-top kullanılmamalı */
+        font-weight: 500;
+        font-size: 20px;
+        background-color: rgb(224, 219, 202); /* Hover durumunda arka plan rengi */
+        color: black; /* Hover durumunda yazı rengi */
+    }
+
+        .btn-hover:hover .fa-cart-shopping {
+            transform: scale(1.1); /* Çok küçük bir büyüme sağla */
+        }
 
 
-</style >
+
+
+
+
+/*#endregion */
+

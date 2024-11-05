@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace ECOMM.Core.Models
 {
-    public class Favourites
+    public class Favourites:BaseModel
     {
-        public int ID { get; set; } // Favourites ID'si
+      
         public string UserId { get; set; } // Favori ekleyen kullanıcının ID'si
         public virtual User User { get; set; } // Favori ekleyen kullanıcı
 

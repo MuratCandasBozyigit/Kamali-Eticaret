@@ -86,6 +86,12 @@ namespace E_COMM_KAMALİ.Controllers
             return View(categories);
         }
 
+        public async Task<IActionResult> Products(int productId)
+        {
+            return View();
+        }
+
+
         #region s
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

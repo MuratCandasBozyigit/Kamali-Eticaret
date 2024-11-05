@@ -1,0 +1,32 @@
+﻿@model ECOMM.Web.ViewModels.SubCategoryProductsViewModel
+
+
+@{
+    ViewData["Title"] = Model.SubCategory.SubCategoryName; // Alt kategori adını başlık olarak kullan
+}
+<link rel="stylesheet" href="~/css/Mağaza/Ürünler.css" />
+
+<h1 style="text-align: center;">@Model.SubCategory.SubCategoryName</h1>
+
+@if (Model.Products != null && Model.Products.Any())
+{
+    <div class="product-container">
+        @foreach (var product in Model.Products)
+        {
+            <div class="product-card">
+                <h4>@product.ProductName</h4>
+                <p>Fiyat: @product.ProductPrice.ToString("C")</p> <!-- Fiyat formatlaması -->
+                <p>Açıklama: @product.ProductDescription</p>
+                <!-- Ürün resmi varsa göster -->
+                @if (!string.IsNullOrEmpty(product.ImagePath))
+                {
+                    <img src="@product.ImagePath" alt="@product.ProductName" class="product-image" />
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="no-products">Bu alt kategoride ürün bulunmamaktadır.</p>
+}

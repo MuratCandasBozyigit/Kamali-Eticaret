@@ -13,6 +13,8 @@ namespace ECOMM.Core.ViewModels
         public string CategoryName { get; set; }          // Ana kategori adı
         public string CategoryTag { get; set; }           // Ana kategori etiketi
         public string CategoryDescription { get; set; }   // Ana kategori açıklaması
+
+       
     }
 
 

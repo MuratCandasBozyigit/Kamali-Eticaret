@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<User> signInManager;
 
-    <ul class="navbar-nav ms-auto">
+    <ul id="loginlink" class="navbar-nav ms-auto">
     @if (signInManager.IsSignedIn(User))
     {
         <li class="nav-item">
@@ -20,3 +20,9 @@
         
     }
 </ul>
+
+<style>
+    #loginlink {
+        font-weight: 500;
+    }
+</style>
