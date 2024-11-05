@@ -91,10 +91,20 @@ namespace E_COMM_KAMALİ.Controllers
             return View();
         }
 
-        public async Task<IActionResult>ProductDetails(int productId)
+        public async Task<IActionResult> ProductDetails(int productId)
         {
-            return View();
+            var product = await _productService.GetByIdAsync(productId);
+            if (product == null)
+            {
+                return NotFound("İlgili ürün bulunamadı");
+            }
+
+            return View(product); // Burada doğru model gönderiliyor
         }
+
+
+
+
 
         #region s
 
