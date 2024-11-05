@@ -3,3 +3,17 @@
 @{
     ViewData["Title"] = "Ürün Detay";
 }
+
+<link rel="stylesheet" href="/css/Mağaza/ProductDetailPage.css">
+
+<div class="container">
+    <div class="product-card">
+        <img src="@Model.ImagePath" alt="@Model.ProductTitle" class="product-image" />
+        <div class="product-details">
+            <h2 class="product-title">@Model.ProductName</h2>
+            <p class="product-description">@Model.ProductDescription</p>
+            <p class="product-price">@Model.ProductPrice.ToString("C")</p>
+        </div>
+    </div>
+</div>
+    
