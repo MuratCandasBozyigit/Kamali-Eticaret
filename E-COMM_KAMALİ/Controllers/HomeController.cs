@@ -91,6 +91,10 @@ namespace E_COMM_KAMALİ.Controllers
             return View();
         }
 
+        public async Task<IActionResult>ProductDetails(int productId)
+        {
+            return View();
+        }
 
         #region s
 
