@@ -4,6 +4,17 @@
     /* Genel iç boşluk */
 }
 
+p.no-subcategories {
+    text-align: center;
+    font-weight: bold;
+    font-size: 90px;
+    color: rgb(35, 64, 43);
+    justify-content: center; /* Bu özellik sadece flex veya grid öğelerinde çalışır */
+    align-items: center; /* Bu özellik de flex veya grid öğelerinde çalışır */
+}
+
+
+
 .subcategory-container {
     display: flex;
     margin-top: 45px; /* Üstten boşluk */
