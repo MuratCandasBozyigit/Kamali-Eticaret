@@ -13,9 +13,16 @@ namespace ECOMM.Business.Concrete
         {
             _productRepository = productRepository;
         }
+        //public async Task<Product> GetByIdAsync(int id)
+        //{
+        //    return await _productRepository.GetByIdAsync(id).Include(p => p.Category)
+        //                .FirstOrDefaultAsync(p => p.Id == id);
+        //}
         public async Task<Product> GetByIdAsync(int id)
         {
-            return await _productRepository.GetByIdAsync(id);
+            return await _productRepository.Query()
+                                           .Include(p => p.Category)
+                                           .FirstOrDefaultAsync(p => p.Id == id);
         }
         public async Task<IEnumerable<Product>> GetPaginatedProductsAsync(int page, int pageSize)
         {

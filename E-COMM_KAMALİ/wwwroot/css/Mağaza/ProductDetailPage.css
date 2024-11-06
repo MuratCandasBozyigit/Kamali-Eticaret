@@ -1,55 +1,163 @@
-﻿html, body {
+﻿/* Genel Stiller */
+body {
+    font-family: 'Open Sans', sans-serif;
     margin: 0;
-    padding: 0;
-    background: #faf9f9;
-    font-family: 'Source Sans Pro', sans-serif;
-    font-size: 13px;
-    height: 100%;
+    background-color: rgb(250, 250, 250); /* Genel arka plan rengi */
 }
 
+/* Container */
 .container {
-    max-width: 1200px; /* Sayfa genişliği ayarlandı */
-    margin: 0 auto; /* Ortalanması için */
-    padding: 20px; /* İçerik alanına boşluk eklendi */
+    margin-top: 30px;
+    max-width: 1600px;
+    width: 100%;
+    padding: 20px;
+    background-color: rgb(250, 248, 245);
+    border: none;
+    border-radius: 0px; /* Köşeler düz */
+    box-shadow: none; /* Gölge kaldırıldı */
 }
 
-.product-card {
-    background: #fff; /* Ürün kartı arka plan rengi */
-    border: 1px solid #ddd; /* Kenarlık */
-    border-radius: 8px; /* Kenar yuvarlama */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Gölge efekti */
-    margin: 10px; /* Kartlar arası boşluk */
-    overflow: hidden; /* Taşan içerikler gizlensin */
-    transition: transform 0.3s; /* Hover efekti için geçiş */
+/* Card Layout */
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    background-color: rgb(250, 248, 245);
+    border-radius: 0px; /* Köşeler düz */
+    border: none;
+    box-shadow: none; /* Gölge kaldırıldı */
+    overflow: hidden;
 }
 
-    .product-card:hover {
-        transform: scale(1.05); /* Hoverda büyüme efekti */
+.card {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: rgb(250, 248, 245);
+    border-radius: 0px; /* Köşeler düz */
+    border: none;
+    box-shadow: none; /* Gölge kaldırıldı */
+}
+
+/* Resim Stili */
+.product-imgs {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 600px;
+    max-width: 1567px;
+    width: 100%;
+    border: none;
+    background-color: rgb(250, 248, 245);
+    border-radius: 0px; /* Köşeler düz */
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+}
+
+.img-showcase {
+    width: 100%;
+    max-height: 600px;
+    max-width: 1567px;
+    height: 100%;
+    display: flex;
+    background-color: rgb(250, 248, 245);
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 0px; /* Köşeler düz */
+}
+
+    .img-showcase img {
+        max-height: 600px;
+        max-width: 1567px;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 0px; /* Köşeler düz */
+        background-color: rgb(250, 248, 245);
     }
 
-.product-image {
-    width: 100%; /* Resim genişliği */
-    height: auto; /* Yükseklik otomatik ayarlanacak */
-}
-
-.product-details {
-    padding: 15px; /* İçerik alanına boşluk */
+/* Ürün İçeriği */
+.product-content {
+    flex: 2;
+    padding: 20px;
+    background-color: rgb(250, 248, 245);
+    border: none;
+    border-radius: 0px; /* Köşeler düz */
+    box-shadow: none; /* Gölge kaldırıldı */
 }
 
 .product-title {
-    font-size: 16px; /* Başlık boyutu */
-    font-weight: bold; /* Kalın yazı */
-    margin: 0 0 10px 0; /* Alt boşluk */
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: #333;
 }
 
-.product-description {
-    font-size: 14px; /* Açıklama boyutu */
-    color: #666; /* Açıklama rengi */
-    margin-bottom: 10px; /* Alt boşluk */
+.product-link {
+    font-size: 1rem;
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: inline-block;
+}
+
+.product-rating i {
+    color: #ffc107;
+    margin-right: 5px;
 }
 
 .product-price {
-    font-size: 14px; /* Fiyat boyutu */
-    color: #2c3e50; /* Fiyat rengi */
-    font-weight: bold; /* Kalın yazı */
+    font-size: 1.75rem;
+    margin: 20px 0;
+    color: #333;
 }
+
+.product-detail h2 {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    color: #555;
+}
+
+.product-detail ul {
+    padding: 0;
+    list-style: none;
+}
+
+.product-detail li {
+    margin-bottom: 10px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+    .product-detail li span {
+        font-weight: 600;
+        color: #444;
+    }
+
+/* Buton Stilleri */
+.purchase-info .btn {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #333;
+    padding: 10px 25px;
+    border-radius: 0px; /* Köşeler düz */
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: none; /* Gölge kaldırıldı */
+}
+
+    .purchase-info .btn:hover {
+        background-color: #007bff;
+        transform: translateY(-3px);
+    }
+
+    .purchase-info .btn i {
+        font-size: 1.2rem;
+    }
