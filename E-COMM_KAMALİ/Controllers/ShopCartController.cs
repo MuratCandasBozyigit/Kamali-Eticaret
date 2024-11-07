@@ -1,5 +1,7 @@
 ﻿using ECOMM.Business.Abstract;
 using Microsoft.AspNetCore.Mvc;
+using ECOMM.Core.ViewModels;
+using System.Threading.Tasks; // Task kullanmak için gerekli
 
 namespace E_COMM_KAMALİ.Controllers
 {
@@ -9,11 +11,41 @@ namespace E_COMM_KAMALİ.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IProductService _productService;
         private readonly ISubCategoryService _subCategoryService;
-
+        private readonly ISessionService _sessionService;
+        public ShopCartController(IOrderService orderService, ICategoryService categoryService, IProductService productService, ISubCategoryService subCategoryService, ISessionService sessionService)
+        {
+            _orderService = orderService;
+            _categoryService = categoryService;
+            _productService = productService;
+            _subCategoryService = subCategoryService;
+            _sessionService = sessionService;
+        }
 
         public IActionResult Index()
         {
-            return View();
+            var cartItems = _sessionService.GetCartItems(); // Oturumdan sepet öğelerini al
+            return View(cartItems); // Sepet sayfasına gönder
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(int productId, int quantity)
+        {
+            var product = await _productService.GetByIdAsync(productId); // Ürünü al
+            if (product != null)
+            {
+                var cartItem = new CartItemViewModel
+                {
+                    ProductId = product.Id,
+                    ProductName = product.ProductName,
+                    ImagePath = product.ImagePath,
+                    Price = product.ProductPrice,
+                    Quantity = quantity
+                };
+
+                _sessionService.AddToCart(cartItem); // Sepete ekle
+            }
+
+            return RedirectToAction("Index", "ShopCart"); // Sepet sayfasına yönlendir
         }
     }
 }

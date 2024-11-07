@@ -55,6 +55,15 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.BusinessDI();
 builder.Services.RepositoryDI();
 
+// Oturum (Session) yapılandırması
+builder.Services.AddDistributedMemoryCache(); // Oturum verilerini saklamak için bellek önbelleği ekleyin
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Oturum zaman aşımını ayarlayın
+    options.Cookie.HttpOnly = true; // Çerezlerin sadece HTTP üzerinden erişilebilir olmasını sağlayın
+    options.Cookie.IsEssential = true; // Çerezlerin gerekli olduğunu belirtin
+});
+
 var app = builder.Build();
 
 // Hata ayıklama için geliştirici modunda olduğundan emin ol
@@ -76,6 +85,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSession(); // Oturum middleware'ini ekleyin
+
 // Yönlendirme ayarları
 app.MapControllerRoute(
     name: "PostDetail",
@@ -93,5 +104,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"
 );
+
 //app.MapRazorPages();
 app.Run();
