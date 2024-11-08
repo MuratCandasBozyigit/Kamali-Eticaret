@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /E-COMM_KAMALİ/appsettings.json
+/ECOMM.Models/ViewModels/PostDetailViewModel.cs
