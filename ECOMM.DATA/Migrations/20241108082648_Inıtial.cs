@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ECOMM.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init01 : Migration
+    public partial class Inıtial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -209,13 +209,19 @@ namespace ECOMM.Data.Migrations
                 name: "Favourites",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    GuidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateDeleted = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Favourites", x => x.ID);
+                    table.PrimaryKey("PK_Favourites", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Favourites_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -321,7 +327,7 @@ namespace ECOMM.Data.Migrations
                     AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateCommented = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PostId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ProductId = table.Column<int>(type: "int", nullable: true),
                     GuidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -339,28 +345,33 @@ namespace ECOMM.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_Products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_Comments_Products_PostId",
+                        column: x => x.PostId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Comments_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
                 name: "FavouritesProduct",
                 columns: table => new
                 {
-                    FavouritedByID = table.Column<int>(type: "int", nullable: false),
+                    FavouritedById = table.Column<int>(type: "int", nullable: false),
                     ProductsId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FavouritesProduct", x => new { x.FavouritedByID, x.ProductsId });
+                    table.PrimaryKey("PK_FavouritesProduct", x => new { x.FavouritedById, x.ProductsId });
                     table.ForeignKey(
-                        name: "FK_FavouritesProduct_Favourites_FavouritedByID",
-                        column: x => x.FavouritedByID,
+                        name: "FK_FavouritesProduct_Favourites_FavouritedById",
+                        column: x => x.FavouritedById,
                         principalTable: "Favourites",
-                        principalColumn: "ID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_FavouritesProduct_Products_ProductsId",
@@ -445,6 +456,11 @@ namespace ECOMM.Data.Migrations
                 name: "IX_Comments_AuthorId",
                 table: "Comments",
                 column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_PostId",
+                table: "Comments",
+                column: "PostId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Comments_ProductId",

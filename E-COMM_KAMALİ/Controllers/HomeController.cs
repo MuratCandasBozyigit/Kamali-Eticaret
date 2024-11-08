@@ -5,13 +5,13 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Http; // Eklenmeli
 using Microsoft.EntityFrameworkCore;
 using ECOMM.Core.ViewModels;
-public static class HttpRequestExtensions
-{
-    public static bool IsAjaxRequest(this HttpRequest request)
-    {
-        return request.Headers["X-Requested-With"] == "XMLHttpRequest";
-    }
-}
+//public static class HttpRequestExtensions
+//{
+//    public static bool IsAjaxRequest(this HttpRequest request)
+//    {
+//        return request.Headers["X-Requested-With"] == "XMLHttpRequest";
+//    }
+//}
 
 namespace E_COMM_KAMALİ.Controllers
 {
@@ -63,11 +63,7 @@ namespace E_COMM_KAMALİ.Controllers
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = Math.Ceiling((double)products.Count() / pageSize);
 
-                // Eğer AJAX isteği ise, yalnızca ürün listesini döndür
-                if (Request.IsAjaxRequest())
-                {
-                    return PartialView("_ProductListPartial", paginatedProducts);
-                }
+
 
                 // Tam sayfa görünüm döndür
                 return View(viewModel);

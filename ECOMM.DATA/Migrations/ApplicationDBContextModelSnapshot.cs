@@ -22,49 +22,6 @@ namespace ECOMM.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Category", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("DateCreated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DateDeleted")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("DateUpdated")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("GuidId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("ParentCategoryDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ParentCategoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ParentCategoryTag")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Categories");
-                });
-
             modelBuilder.Entity("Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -104,12 +61,14 @@ namespace ECOMM.Data.Migrations
                     b.Property<int>("PostId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("PostId");
 
                     b.HasIndex("ProductId");
 
@@ -166,19 +125,80 @@ namespace ECOMM.Data.Migrations
                     b.ToTable("ApplicationUserRoles");
                 });
 
-            modelBuilder.Entity("ECOMM.Core.Models.Favourites", b =>
+            modelBuilder.Entity("ECOMM.Core.Models.Category", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GuidId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ParentCategoryDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParentCategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ParentCategoryTag")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ECOMM.Core.Models.Favourites", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateCreated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DateDeleted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("GuidId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
@@ -442,13 +462,13 @@ namespace ECOMM.Data.Migrations
 
             modelBuilder.Entity("FavouritesProduct", b =>
                 {
-                    b.Property<int>("FavouritedByID")
+                    b.Property<int>("FavouritedById")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductsId")
                         .HasColumnType("int");
 
-                    b.HasKey("FavouritedByID", "ProductsId");
+                    b.HasKey("FavouritedById", "ProductsId");
 
                     b.HasIndex("ProductsId");
 
@@ -570,10 +590,14 @@ namespace ECOMM.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("ECOMM.Core.Models.Product", "Product")
-                        .WithMany("Comments")
-                        .HasForeignKey("ProductId")
+                        .WithMany()
+                        .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ECOMM.Core.Models.Product", null)
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Author");
 
@@ -638,7 +662,7 @@ namespace ECOMM.Data.Migrations
 
             modelBuilder.Entity("ECOMM.Core.Models.Product", b =>
                 {
-                    b.HasOne("Category", "Category")
+                    b.HasOne("ECOMM.Core.Models.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -649,7 +673,7 @@ namespace ECOMM.Data.Migrations
 
             modelBuilder.Entity("ECOMM.Core.Models.SubCategory", b =>
                 {
-                    b.HasOne("Category", "Category")
+                    b.HasOne("ECOMM.Core.Models.Category", "Category")
                         .WithMany("SubCategories")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -662,7 +686,7 @@ namespace ECOMM.Data.Migrations
                 {
                     b.HasOne("ECOMM.Core.Models.Favourites", null)
                         .WithMany()
-                        .HasForeignKey("FavouritedByID")
+                        .HasForeignKey("FavouritedById")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -724,14 +748,14 @@ namespace ECOMM.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Category", b =>
-                {
-                    b.Navigation("SubCategories");
-                });
-
             modelBuilder.Entity("ECOMM.Core.Models.ApplicationRole", b =>
                 {
                     b.Navigation("UserRoles");
+                });
+
+            modelBuilder.Entity("ECOMM.Core.Models.Category", b =>
+                {
+                    b.Navigation("SubCategories");
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Orders", b =>
