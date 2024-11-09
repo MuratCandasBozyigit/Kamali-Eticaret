@@ -41,7 +41,6 @@
                     <div class="product-detail">
                         <h2>About this item:</h2>
                         <p>@Model.ProductDescription</p>
-
                     </div>
                     <div class="purchase-info">
                         @*   <button type="button" class="btn">Add to Cart <i class="fas fa-shopping-cart"></i></button> *@
@@ -61,15 +60,13 @@
                     </div>
 
                 </div>
-
-             @*    <div class="product-fav">
-                    <form asp-controller="Favourites" asp-action="AddToFavourites" method="post">
-                        <input type="hidden" name="productId" value="@Model.Id" />
-                        <button type="submit" class="btn btn-primary btn-hover">
-                            <i class="fa-regular fa-heart"></i></a> Favoriler
-                        </button>
-                    </form>
+               @*  <div class="product-details">
+                    <div class="product-description">
+                        <h2>About this item:</h2>
+                        <p>@Model.ProductDescription</p>
+                    </div>
                 </div> *@
+             
             </div>
         </div>
     </div>
