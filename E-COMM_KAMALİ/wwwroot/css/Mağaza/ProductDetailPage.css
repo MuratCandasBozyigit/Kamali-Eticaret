@@ -151,7 +151,7 @@ body {
     font-weight: 500;
 }
 
-.product-detail ul {
+.product-router ul {
     padding: 0;
     font-weight: 700;
     margin-bottom: 20px;
@@ -159,7 +159,7 @@ body {
     color: rgb(28, 28, 27);
 }
 
-.product-detail li {
+.product-router li {
     margin-bottom: 20px;
     font-size: 1rem;
     font-weight: 700;
@@ -168,7 +168,7 @@ body {
     color: rgb(28, 28, 27);
 }
 
-    .product-detail li span {
+    .product-router li span {
         font-weight: 600;
         color: rgb(28, 28, 27);
         margin-bottom: 20px;
@@ -203,6 +203,28 @@ body {
         margin-left: 5px;
         font-size: 1.5rem;
     }
+
+.purchase-info .form-control {
+    color: black;
+    text-align: center;
+    margin-top: 5px; /* Yukarıda biraz daha boşluk ekledim */
+    margin-bottom: 5px; /* Aşağıda biraz daha boşluk ekledim */
+    margin-left: 10px; /* Sol tarafta biraz daha boşluk ekledim */
+    border-color: black; /* Koyu sınır rengi */
+    border: 1px solid; /* Sınır kalınlığını belirledim */
+    font-size: 14px; /* Küçük yazı tipi yerine daha okunabilir bir boyut */
+    padding: 8px 10px; /* İç paddingi biraz daha arttırdım */
+    border-radius: 5px; /* Yuvarlak köşeler için */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Sınır rengi ve gölge efekti için geçiş ekledim */
+}
+
+    .purchase-info .form-control:focus {
+        outline: none; /* Odaklandığında kutunun etrafında bir hat çizilmesini engeller */
+        border-color: #007bff; /* Odaklandığında kutunun kenarını maviye çevirir */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Mavi ışıltılı gölge efekti */
+    }
+
+
 
 
 /*#endregion */
