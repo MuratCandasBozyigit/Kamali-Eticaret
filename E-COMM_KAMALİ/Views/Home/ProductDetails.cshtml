@@ -41,7 +41,15 @@
                         </ul>
                     </div>
                     <div class="purchase-info">
-                        <button type="button" class="btn">Add to Cart <i class="fas fa-shopping-cart"></i></button>
+
+                        <!-- Sepete Ekle Butonu -->
+                        <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
+                            <input type="hidden" name="productId" value="@Model.Id" />
+                            <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 60px; display: inline-block;" />
+                            <button type="submit" class="btn btn-primary btn-hover">
+                                <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

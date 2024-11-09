@@ -1,4 +1,6 @@
-﻿/* Genel Stiller */
+﻿/*#region KART CSS */
+
+/* Genel Stiller */
 body {
     font-family: 'Open Sans', sans-serif;
     margin: 0;
@@ -95,7 +97,7 @@ body {
     margin-bottom: 10px;
     display: inline-block;
     transition: transform 0.5s ease-in, color 0.5s ease-in;
-   /* Sol üst köşeden büyüme */
+    /* Sol üst köşeden büyüme */
 }
 
     .product-link:hover {
@@ -115,10 +117,9 @@ body {
 .product-price {
     margin-top: 12px;
     font-size: 1.75rem;
-    font-weight:700;
+    font-weight: 700;
     margin: 20px 0;
     color: black;
- 
 }
 
 .product-detail h2 {
@@ -128,6 +129,7 @@ body {
     margin-bottom: 15px;
     color: rgb(28, 28, 27);
 }
+
 .product-detail {
     max-height: 150px; /* Başlangıçta metni kısıtla */
     overflow: hidden; /* Taşan metni gizle */
@@ -154,7 +156,6 @@ body {
     font-weight: 700;
     margin-bottom: 20px;
     list-style: none;
-    
     color: rgb(28, 28, 27);
 }
 
@@ -178,7 +179,8 @@ body {
 .purchase-info .btn {
     margin-top: 50px;
     background-color: #333;
-    color: #fff;text-align: right;
+    color: #fff;
+    text-align: right;
     border: 1px solid #333;
     padding: 10px 25px;
     border-radius: 0px; /* Köşeler düz */
@@ -186,7 +188,6 @@ body {
     display: flex;
     justify-content: flex-end;
     gap: 5px;
-    
     transition: background-color 0.3s, transform 0.2s;
     box-shadow: none; /* Gölge kaldırıldı */
 }
@@ -199,6 +200,33 @@ body {
     }
 
     .purchase-info .btn i {
-        margin-left:5px;
+        margin-left: 5px;
         font-size: 1.5rem;
     }
+
+
+/*#endregion */
+
+
+
+/*#region ÜrünListesiCSS */
+
+
+
+/*#endregion */
+
+
+
+
+
+/*#region YorumlarCss */
+
+
+
+/*#endregion */
+
+/*#region EkstraÜrünDetayCss */
+
+
+
+/*#endregion */
