@@ -1,20 +1,13 @@
-﻿<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ürün Detay Sayfası</title>
+﻿
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
     <link rel="stylesheet" href="/css/Mağaza/ProductDetailPage.css">
-</head>
-<body>
     <div class="container">
         <div class="card-wrapper">
             <div class="card">
                 <div class="product-imgs">
                     <div class="img-display">
                         <div class="img-showcase">
-                            <img src="@Model.ImagePath" alt="Product image" />
+                            <img src="@Model.Product.ImageUrl" alt="Product image" />
                         </div>
                     </div>
                 </div>
@@ -34,8 +27,8 @@
                     </div>
                     <div class="product-router">
                         <ul>
-                            <li>Kategori: <span>@Model.Category.ParentCategoryName</span></li>
-                            <li>Alt Kategori: <span>@Model.Category.ParentCategoryTag</span></li>
+                            <li>Kategori: <span>@Model.Product.Category.ParentCategoryName</span></li>
+                            <li>Alt Kategori: <span>@Model.Product.Category.ParentCategoryTag</span></li>
                         </ul>
                     </div>
                     <div class="product-detail">
@@ -43,14 +36,13 @@
                         <p>@Model.ProductDescription</p>
                     </div>
                     <div class="purchase-info">
-                        @*   <button type="button" class="btn">Add to Cart <i class="fas fa-shopping-cart"></i></button> *@
                         <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
                             <input type="hidden" name="productId" value="@Model.Id" />
                             <input type="number" name="quantity" value="1" min="1" class="form-control mt-4" style="width: 60px; display: inline-block;" />
                             <button type="submit" class="btn btn-primary btn-hover">
                                 <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                             </button>
-                        </form> 
+                        </form>
                         <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
                             <input type="hidden" name="productId" value="@Model.Id" />
                             <button type="submit" class="btn btn-primary btn-hover">
@@ -58,18 +50,11 @@
                             </button>
                         </form>
                     </div>
-
                 </div>
-               @*  <div class="product-details">
-                    <div class="product-description">
-                        <h2>About this item:</h2>
-                        <p>@Model.ProductDescription</p>
-                    </div>
-                </div> *@
-             
             </div>
         </div>
     </div>
+    @section Scripts{
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const productDetails = document.querySelectorAll('.product-detail');
@@ -104,5 +89,6 @@
             });
         });
     </script>
-</body>
-</html>
+
+    }
+   

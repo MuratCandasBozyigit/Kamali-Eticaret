@@ -87,16 +87,51 @@ namespace E_COMM_KAMALİ.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ProductDetails(int productId)
+        public async Task<IActionResult> ProductDetails(int productId, int categoryId)
         {
+            var category = await _productService.GetByCategoryIdAsync(categoryId);
+            var categoryRelatedProducts = category.Select(product => new ProductViewModel
+            {
+                ProductId = product.Id,
+                ProductName = product.ProductName,
+                Price = product.ProductPrice,
+                ImageUrl = product.ImagePath,
+                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok"
+            }).ToList();
+
+            var comments = await _commentService.GetAllAsync();
+            var commentsWithAuthors = comments.Select(c => new CommentViewModel
+            {
+                Content = c.Content,
+                Author = c.Author?.UserName ?? "Bilinmiyor",
+                DateCommented = c.DateCommented
+            }).ToList();
+
             var product = await _productService.GetByIdAsync(productId);
             if (product == null)
             {
                 return NotFound("İlgili ürün bulunamadı");
             }
 
-            return View(product); // Burada doğru model gönderiliyor
+            var productViewModel = new ProductViewModel
+            {
+                ProductId = product.Id,
+                ProductName = product.ProductName,
+                Price = product.ProductPrice,
+                ImageUrl = product.ImagePath,
+                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok"
+            };
+
+            var viewModel = new ProductDetailPageViewModel
+            {
+                Product = productViewModel,
+                RelatedProducts = categoryRelatedProducts,
+                Comments = commentsWithAuthors
+            };
+
+            return View(viewModel);
         }
+
 
 
 

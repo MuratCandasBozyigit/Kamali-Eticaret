@@ -9,5 +9,6 @@ namespace ECOMM.Core.Models
         public string ParentCategoryDescription { get; set; }
 
         public virtual ICollection<SubCategory> SubCategories { get; set; } = new List<SubCategory>();
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
