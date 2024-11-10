@@ -5,13 +5,13 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Http; // Eklenmeli
 using Microsoft.EntityFrameworkCore;
 using ECOMM.Core.ViewModels;
-public static class HttpRequestExtensions
-{
-    public static bool IsAjaxRequest(this HttpRequest request)
-    {
-        return request.Headers["X-Requested-With"] == "XMLHttpRequest";
-    }
-}
+//public static class HttpRequestExtensions
+//{
+//    public static bool IsAjaxRequest(this HttpRequest request)
+//    {
+//        return request.Headers["X-Requested-With"] == "XMLHttpRequest";
+//    }
+//}
 
 namespace E_COMM_KAMALİ.Controllers
 {
@@ -63,11 +63,7 @@ namespace E_COMM_KAMALİ.Controllers
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = Math.Ceiling((double)products.Count() / pageSize);
 
-                // Eğer AJAX isteği ise, yalnızca ürün listesini döndür
-                if (Request.IsAjaxRequest())
-                {
-                    return PartialView("_ProductListPartial", paginatedProducts);
-                }
+
 
                 // Tam sayfa görünüm döndür
                 return View(viewModel);
@@ -91,16 +87,53 @@ namespace E_COMM_KAMALİ.Controllers
             return View();
         }
 
-        public async Task<IActionResult> ProductDetails(int productId)
+        public async Task<IActionResult> ProductDetails(int productId, int categoryId)
         {
+            var category = await _productService.GetByCategoryIdAsync(categoryId);
+            var categoryRelatedProducts = category.Select(product => new ProductViewModel
+            {
+                ProductId = product.Id,
+                ProductName = product.ProductName,
+                Price = product.ProductPrice,
+                ImageUrl = product.ImagePath,
+                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok"
+            }).ToList();
+
+            var comments = await _commentService.GetAllAsync();
+            var commentsWithAuthors = comments.Select(c => new CommentViewModel
+            {
+                Content = c.Content,
+                Author = c.Author?.UserName ?? "Bilinmiyor",
+                DateCommented = c.DateCommented
+            }).ToList();
+
             var product = await _productService.GetByIdAsync(productId);
             if (product == null)
             {
                 return NotFound("İlgili ürün bulunamadı");
             }
 
-            return View(product); // Burada doğru model gönderiliyor
+            var productViewModel = new ProductViewModel
+            {
+                ProductId = product.Id,
+                ProductName = product.ProductName,
+                ProductTitle = product.ProductTitle,
+                Price = product.ProductPrice,
+                ImageUrl = product.ImagePath,
+                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
+                ProductDescription = product.ProductDescription
+            };
+
+            var viewModel = new ProductDetailPageViewModel
+            {
+                Product = productViewModel,
+                RelatedProducts = categoryRelatedProducts,
+                Comments = commentsWithAuthors
+            };
+
+            return View(viewModel);
         }
+
 
 
 

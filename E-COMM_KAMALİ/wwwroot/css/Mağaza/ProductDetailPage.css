@@ -1,0 +1,254 @@
+﻿/*#region KART CSS */
+
+/* Genel Stiller */
+body {
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    background-color: rgb(216, 224, 227); /* Genel arka plan rengi */
+}
+
+/* Container */
+.container {
+    margin-top: 30px;
+    max-width: 1600px;
+    width: 100%;
+    padding: 20px;
+    border-radius: 0px; /* Köşeler düz */
+    box-shadow: none; /* Gölge kaldırıldı */
+}
+
+/* Card Layout */
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 50px;
+    border-radius: 0px; /* Köşeler düz */
+    border: none;
+    box-shadow: none; /* Gölge kaldırıldı */
+}
+
+.card {
+    border: unset black solid;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: rgb(240, 247, 247);
+    border-radius: 0px; /* Köşeler düz */
+    padding-top: 40px;
+    padding-bottom: 40px;
+    padding-right: 20px;
+    padding-left: 20px;
+    box-shadow: none; /* Gölge kaldırıldı */
+}
+/* Resim Stili */
+.product-imgs {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(250, 248, 245);
+    border-radius: 0; /* Köşeler düz */
+    margin-left: 35px;
+    margin-right: 50px;
+    overflow: hidden; /* Taşmayı önlemek için */
+}
+
+.img-showcase {
+    width: 100%; /* Kapsayıcı genişliği */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(250, 248, 245);
+}
+
+    .img-showcase img {
+        width: 650px; /* Sabit genişlik */
+        height: 650px; /* Sabit yükseklik */
+        object-fit: cover; /* Resmi kapsayıcı boyuta göre kırpmak için */
+        border-radius: 0; /* Köşeler düz */
+    }
+
+
+/* Ürün İçeriği */
+.product-content {
+    margin-left: 50px;
+    flex: 2;
+    padding: 20px;
+    background-color: rgb(240, 247, 247);
+    border-radius: 0px; /* Köşeler düz */
+    box-shadow: none; /* Gölge kaldırıldı */
+}
+
+.product-title {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: rgb(10, 10, 10);
+}
+
+.product-link {
+    margin-top: 12px;
+    font-weight: 500;
+    font-size: 1.5rem;
+    color: #007bff;
+    text-decoration: none;
+    margin-bottom: 10px;
+    display: inline-block;
+    transition: transform 0.5s ease-in, color 0.5s ease-in;
+    /* Sol üst köşeden büyüme */
+}
+
+    .product-link:hover {
+        transform: scale(1.25); /* Hafif büyütme efekti */
+        color: darkblue;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+
+.product-rating i {
+    color: #ffc107;
+    margin-top: 12px;
+    margin-right: 5px;
+}
+
+.product-price {
+    margin-top: 12px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    margin: 20px 0;
+    color: black;
+}
+
+.product-detail h2 {
+    margin-top: 15px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 15px;
+    color: rgb(28, 28, 27);
+}
+
+.product-detail {
+    max-height: 150px; /* Başlangıçta metni kısıtla */
+    overflow: hidden; /* Taşan metni gizle */
+    white-space: normal; /* Alt satırlara geçişi sağla */
+    word-wrap: break-word;
+    transition: max-height 0.3s ease; /* Kelimelerin düzgün bir şekilde alt satıra geçmesini sağlar */
+}
+
+    .product-detail.expand {
+        max-height: 1000px; /* Devamını Oku butonuna tıklandığında metni tam göster */
+    }
+
+.read-more {
+    display: block;
+    margin-top: 10px;
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 500;
+}
+
+.product-router ul {
+    padding: 0;
+    font-weight: 700;
+    margin-bottom: 20px;
+    list-style: none;
+    color: rgb(28, 28, 27);
+}
+
+.product-router li {
+    margin-bottom: 20px;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.5;
+    margin-top: 15px;
+    color: rgb(28, 28, 27);
+}
+
+    .product-router li span {
+        font-weight: 600;
+        color: rgb(28, 28, 27);
+        margin-bottom: 20px;
+        color: #444;
+    }
+
+/* Buton Stilleri */
+.purchase-info .btn {
+    margin-top: 50px;
+    background-color: #333;
+    color: #fff;
+    text-align: right;
+    border: 1px solid #333;
+    padding: 10px 25px;
+    border-radius: 0px; /* Köşeler düz */
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+    transition: background-color 0.3s, transform 0.2s;
+    box-shadow: none; /* Gölge kaldırıldı */
+}
+
+    .purchase-info .btn:hover {
+        background-color: revert;
+        color: revert;
+        transform: scale(1.5);
+        transform: translateY(-3px);
+    }
+
+    .purchase-info .btn i {
+        margin-left: 5px;
+        font-size: 1.5rem;
+    }
+
+.purchase-info .form-control {
+    color: black;
+    text-align: center;
+    margin-top: 5px; /* Yukarıda biraz daha boşluk ekledim */
+    margin-bottom: 5px; /* Aşağıda biraz daha boşluk ekledim */
+    margin-left: 10px; /* Sol tarafta biraz daha boşluk ekledim */
+    border-color: black; /* Koyu sınır rengi */
+    border: 1px solid; /* Sınır kalınlığını belirledim */
+    font-size: 14px; /* Küçük yazı tipi yerine daha okunabilir bir boyut */
+    padding: 8px 10px; /* İç paddingi biraz daha arttırdım */
+    border-radius: 5px; /* Yuvarlak köşeler için */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Sınır rengi ve gölge efekti için geçiş ekledim */
+}
+
+    .purchase-info .form-control:focus {
+        outline: none; /* Odaklandığında kutunun etrafında bir hat çizilmesini engeller */
+        border-color: #007bff; /* Odaklandığında kutunun kenarını maviye çevirir */
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Mavi ışıltılı gölge efekti */
+    }
+
+
+
+
+/*#endregion */
+
+
+
+/*#region ÜrünListesiCSS */
+
+
+
+/*#endregion */
+
+
+
+
+
+/*#region YorumlarCss */
+
+
+
+/*#endregion */
+
+/*#region EkstraÜrünDetayCss */
+
+
+
+/*#endregion */

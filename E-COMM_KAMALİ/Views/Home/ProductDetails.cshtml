@@ -1,5 +1,116 @@
-﻿@model IEnumerable<ECOMM.Core.Models.Product>
-
+﻿@model ECOMM.Core.ViewModels.ProductDetailPageViewModel
 @{
-    ViewData["Title"] = "Ürün Detay";
+    ViewData["Title"] = "Ürün Detayı";
+}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
+<link rel="stylesheet" href="/css/Mağaza/ProductDetailPage.css">
+
+<div class="container">
+    <div class="card-wrapper">
+        <div class="card">
+            <div class="product-imgs">
+                <div class="img-display">
+                    <div class="img-showcase">
+                        <img src="@Model.Product.ImageUrl" alt="Product image" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-content">
+                <!-- Ürün Başlığı -->
+                <h2 class="product-title">@Model.Product.ProductTitle</h2>
+
+                <!-- Mağazaya Git Linki -->
+                <a asp-controller="Home" asp-action="Index" class="product-link">Visit store</a>
+
+                <!-- Ürün Değerlendirmesi -->
+             @*    <div class="product-rating">
+                    @for (int i = 0; i < 5; i++)
+                    {
+                        <i class="fas fa-star @((i < Model.Product.Rating) ? "filled" : "")"></i>
+                    }
+                </div> *@
+
+                <!-- Ürün Fiyatı -->
+                <div class="product-price">
+                    <p class="new-price">Price: <span>@Model.Product.Price.ToString("C")</span></p>
+                </div>
+
+                <div class="product-router">
+                    <ul>
+                        <li>Kategori: <span>@Model.Product.Category?.ParentCategoryName ?? "Kategori Yok"</span></li>
+                        <li>Alt Kategori: <span>@Model.Product.Category?.ParentCategoryTag ?? "Alt Kategori Yok"</span></li>
+                    </ul>
+                </div>
+
+
+
+                <!-- Ürün Detayı -->
+                <div class="product-detail">
+                    <h2>Özellikler:</h2>
+                    <p>@Model.Product.ProductDescription ?? "Açıklama mevcut değil."</p>
+
+                </div>
+
+                <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
+                <div class="purchase-info">
+                    <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                        <input type="number" name="quantity" value="1" min="1" class="form-control mt-4" style="width: 60px; display: inline-block;" />
+                        <button type="submit" class="btn btn-primary btn-hover">
+                            <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                        </button>
+                    </form>
+                    <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
+                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                        <button type="submit" class="btn btn-primary btn-hover">
+                            <i class="fa-regular fa-heart"></i> Favoriler
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productDetails = document.querySelectorAll('.product-detail');
+
+            productDetails.forEach(detail => {
+                const originalText = detail.innerHTML;
+                const truncatedText = originalText.substring(0, 150) + '...'; // Başlangıçta kısaltılmış metin
+
+                if (originalText.length > 150) {
+                    detail.innerHTML = truncatedText; // Kısaltılmış metni göster
+
+                    const readMoreBtn = document.createElement('span');
+                    readMoreBtn.className = 'read-more';
+                    readMoreBtn.textContent = 'Devamını Oku'; // Buton metni
+
+                    detail.appendChild(readMoreBtn); // Butonu metnin sonuna ekle
+
+                    readMoreBtn.addEventListener('click', () => {
+                        if (detail.classList.contains('expand')) {
+                            detail.classList.remove('expand'); // Kapat durumunda metni kısalt
+                            detail.innerHTML = truncatedText; // Kısaltılmış metni göster
+                            detail.appendChild(readMoreBtn); // Butonu tekrar ekle
+                            readMoreBtn.textContent = 'Devamını Oku';
+                        } else {
+                            detail.classList.add('expand'); // Devamını Oku açıldığında metni genişlet
+                            detail.innerHTML = originalText; // Tam metni göster
+                            detail.appendChild(readMoreBtn); // Butonu tekrar ekle
+                            readMoreBtn.textContent = 'Kapat';
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 }

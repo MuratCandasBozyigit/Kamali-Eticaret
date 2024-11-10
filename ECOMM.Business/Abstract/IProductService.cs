@@ -13,6 +13,7 @@ namespace ECOMM.Business.Abstract
         
             Task<IEnumerable<Product>> GetPaginatedProductsAsync(int page, int pageSize);
         Task<IEnumerable<Product>> GetBySubCategoryIdAsync(int subCategoryId);
+        Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId);
 
     }
 }
