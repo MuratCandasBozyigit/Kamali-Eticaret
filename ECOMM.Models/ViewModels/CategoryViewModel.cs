@@ -11,6 +11,10 @@ namespace ECOMM.Core.ViewModels
     {
         public int CategoryId { get; set; }
         public string CategoryName { get; set; }
+        public string ParentCategoryName { get; set; }
+        public string ParentCategoryTag { get; set; }  // Add this line
+        public string ParentCategoryDescription { get; set; }  // Add if needed
         public List<ProductViewModel> Products { get; set; }
     }
+
 }

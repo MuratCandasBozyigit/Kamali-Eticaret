@@ -119,7 +119,8 @@ namespace E_COMM_KAMALİ.Controllers
                 ProductName = product.ProductName,
                 Price = product.ProductPrice,
                 ImageUrl = product.ImagePath,
-                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok"
+                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
+                ProductDescription = product.ProductDescription
             };
 
             var viewModel = new ProductDetailPageViewModel
