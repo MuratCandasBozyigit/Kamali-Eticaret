@@ -8,6 +8,6 @@ public class Comment : BaseModel
     public User Author { get; set; }
     public DateTime DateCommented { get; set; } = DateTime.Now;
 
-    public int PostId { get; set; }
+    public int ProductId { get; set; }
     public Product Product { get; set; }
 }

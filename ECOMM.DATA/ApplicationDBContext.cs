@@ -42,7 +42,7 @@ namespace ECOMM.Data
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.Product)
                 .WithMany() // Eğer Product ile Comment arasında bir koleksiyon ilişkisi yoksa
-                .HasForeignKey(c => c.PostId);
+                .HasForeignKey(c => c.ProductId);
             modelBuilder.Entity<ApplicationUserRole>()
                 .HasKey(aur => new { aur.UserId, aur.RoleId });
 

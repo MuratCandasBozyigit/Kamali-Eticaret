@@ -68,10 +68,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         [HttpPost("AddAsync")]
         public async Task<IActionResult> AddAsync([FromBody] Category category)
         {
-            if (category == null || !ModelState.IsValid)
-            {
-                return BadRequest("Geçersiz Kategori Verisi.");
-            }
+         
 
             try
             {

@@ -115,7 +115,7 @@ namespace ECOMM.Data.Shared.Concrete
         // Örnek olarak eklenmiş bir özel metod (Post ID'ye göre yorumları getirir):
         public async Task<IEnumerable<Comment>> GetCommentsByPostIdAsync(int postId)
         {
-            return await _context.Comments.Where(c => c.PostId == postId).ToListAsync();
+            return await _context.Comments.Where(c => c.ProductId == postId).ToListAsync();
         }
     }
 }
