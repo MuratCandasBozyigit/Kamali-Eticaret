@@ -326,8 +326,8 @@ namespace ECOMM.Data.Migrations
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateCommented = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PostId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: true),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    ProductId1 = table.Column<int>(type: "int", nullable: true),
                     GuidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -345,14 +345,14 @@ namespace ECOMM.Data.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_Products_PostId",
-                        column: x => x.PostId,
+                        name: "FK_Comments_Products_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comments_Products_ProductId",
-                        column: x => x.ProductId,
+                        name: "FK_Comments_Products_ProductId1",
+                        column: x => x.ProductId1,
                         principalTable: "Products",
                         principalColumn: "Id");
                 });
@@ -458,14 +458,14 @@ namespace ECOMM.Data.Migrations
                 column: "AuthorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_PostId",
-                table: "Comments",
-                column: "PostId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Comments_ProductId",
                 table: "Comments",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Comments_ProductId1",
+                table: "Comments",
+                column: "ProductId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Favourites_UserId",

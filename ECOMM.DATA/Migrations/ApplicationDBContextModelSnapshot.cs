@@ -58,19 +58,19 @@ namespace ECOMM.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PostId")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId")
+                    b.Property<int?>("ProductId1")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("PostId");
-
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("ProductId1");
 
                     b.ToTable("Comments");
                 });
@@ -591,13 +591,13 @@ namespace ECOMM.Data.Migrations
 
                     b.HasOne("ECOMM.Core.Models.Product", "Product")
                         .WithMany()
-                        .HasForeignKey("PostId")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ECOMM.Core.Models.Product", null)
                         .WithMany("Comments")
-                        .HasForeignKey("ProductId");
+                        .HasForeignKey("ProductId1");
 
                     b.Navigation("Author");
 
@@ -663,7 +663,7 @@ namespace ECOMM.Data.Migrations
             modelBuilder.Entity("ECOMM.Core.Models.Product", b =>
                 {
                     b.HasOne("ECOMM.Core.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -755,6 +755,8 @@ namespace ECOMM.Data.Migrations
 
             modelBuilder.Entity("ECOMM.Core.Models.Category", b =>
                 {
+                    b.Navigation("Products");
+
                     b.Navigation("SubCategories");
                 });
 
