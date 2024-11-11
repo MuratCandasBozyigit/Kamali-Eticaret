@@ -1,5 +1,69 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<ECOMM.Core.ViewModels.CartItemViewModel> // Sepet öğeleri listesi
 @{
+    ViewData["Title"] = "Favoriler";
 }
+<section class="pb-4">
+    <div class="border rounded-5">
+        <section class="w-100 px-3 py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-xl-11">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-normal mb-0">Favoriler</h3>
+                    </div>
+
+                    @foreach (var item in Model) // Sepet öğelerini döngü ile göster
+                    {
+                        <div class="card rounded-3 mb-4">
+                            <div class="card-body p-4">
+                                <div class="row d-flex justify-content-between align-items-center">
+                                    <div class="col-md-2 col-lg-2 col-xl-2">
+                                        <img src="@item.ImagePath" class="img-fluid rounded-3" alt="@item.ProductName">
+                                    </div>
+                                    <div class="col-md-3 col-lg-3 col-xl-3">
+                                        <p class="lead fw-normal mb-2">@item.ProductName</p>
+                                        <p><span class="text-muted">Miktar: </span>@item.Quantity</p>
+                                    </div>
+                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                        <h5 class="mb-0">@item.Price.ToString("C")</h5>
+                                    </div>
+@* 
+                                    <!-- Sepete Ekle Butonu -->
+                                    @if (item.Product != null)
+                                    {
+                                        <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
+                                            <input type="hidden" name="productId" value="@item.Product.Id" />
+                                            <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 60px; display: inline-block;" />
+                                            <button type="submit" class="btn btn-primary btn-hover">
+                                                <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                                            </button>
+                                        </form>
+                                    }
+                                    else
+                                    {
+                                        <p class="text-danger">Ürün bilgisi eksik.</p>
+                                    } *@
+
+                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                                        <a href="@Url.Action("RemoveFromCart", "ShopCart", new { productId = item.ProductId })" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+
+                    @* <div class="card mb-4">
+                    <div class="card-body p-4 d-flex flex-row">
+                    <div class="form-outline flex-fill">
+                    <input type="text" id="form1" class="form-control form-control-lg">
+                    <label class="form-label" for="form1" style="margin-left: 0px;">İndirim kodu</label>
+                    </div>
+                    <button type="button" class="btn btn-outline-warning btn-lg ms-3">Uygula</button>
+                    </div>
+                    </div> *@
+
+                </div>
+            </div>
+        </section>
+    </div>
+</section>
