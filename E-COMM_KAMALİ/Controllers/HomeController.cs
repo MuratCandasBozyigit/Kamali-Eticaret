@@ -5,6 +5,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Http; // Eklenmeli
 using Microsoft.EntityFrameworkCore;
 using ECOMM.Core.ViewModels;
+using ECOMM.Core.Models;
 //public static class HttpRequestExtensions
 //{
 //    public static bool IsAjaxRequest(this HttpRequest request)
@@ -74,6 +75,36 @@ namespace E_COMM_KAMALİ.Controllers
                 return StatusCode(500, "Ürünler yüklenirken bir hata oluştu.");
             }
         }
+        public async Task<IActionResult> Products(int productId, int categoryId)
+        {
+            try
+            {
+                var products = await _productService.GetAllAsync();
+                if (products == null || !products.Any())
+                {
+                    return View(new List<ProductViewModel>()); // Boş bir liste döndür
+                }
+
+                // Product nesnelerini ProductViewModel'e dönüştür
+                var productViewModels = products.Select(product => new ProductViewModel
+                {
+                    ProductId = product.Id,
+                    ProductName = product.ProductName,
+                    Price = product.ProductPrice,
+                    ImageUrl = product.ImagePath,
+                    CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
+                    ProductDescription = product.ProductDescription // Eğer Product modelinde bu özellik varsa
+                }).ToList();
+
+                return View(productViewModels);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Ürünler yüklenirken hata oluştu.");
+                return StatusCode(500, "Ürünler yüklenirken bir hata oluştu.");
+            }
+        }
+
 
         public async Task<IActionResult> GetAllCategories()
         {
@@ -82,10 +113,6 @@ namespace E_COMM_KAMALİ.Controllers
             return View(categories);
         }
 
-        public async Task<IActionResult> Products(int productId)
-        {
-            return View();
-        }
 
         public async Task<IActionResult> ProductDetails(int productId, int categoryId)
         {
