@@ -31,7 +31,7 @@ namespace E_COMM_KAMALİ.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int productId, int quantity)
+        public async Task<IActionResult> AddToFavourites(int productId, int quantity)
         {
             var product = await productService.GetByIdAsync(productId); // Ürünü al
             if (product != null)
@@ -45,7 +45,7 @@ namespace E_COMM_KAMALİ.Controllers
                     Quantity = quantity
                 };
 
-                _sessionService.AddToCart(cartItem); // Sepete ekle
+                _sessionService.AddToFavourites(cartItem); // Sepete ekle
             }
 
             return RedirectToAction("Index", "Favourites"); // Sepet sayfasına yönlendir

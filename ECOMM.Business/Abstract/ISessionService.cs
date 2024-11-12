@@ -7,6 +7,11 @@ namespace ECOMM.Business.Abstract
         List<CartItemViewModel> GetCartItems(); // Oturumdan sepet öğelerini al
         void AddToCart(CartItemViewModel item); // Sepete ürün ekle
         void RemoveFromCart(int productId); // Sepetten ürün kaldır
-        void ClearCart(); // Sepeti temizle
+        void ClearCart(); // Sepeti
+                          // 
+        List<CartItemViewModel> GetFavouritesItems(); // Oturumdan sepet öğelerini al
+        void AddToFavourites(CartItemViewModel item); // Sepete ürün ekle
+        void RemoveFromFavourites(int productId); // Sepetten ürün kaldır
+        void ClearFavourites(); // Sepeti temizle
     }
 }
