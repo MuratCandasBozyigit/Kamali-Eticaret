@@ -62,7 +62,7 @@
                             <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                         </button>
                     </form>
-                    <form asp-controller="Favourites" asp-action="AddToCart" class="fav-btn" method="post">
+                    <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
                         <input type="hidden" name="productId" value="@Model.Product.ProductId" />
                         <button type="submit" class="btn btn-primary btn-hover">
                             <i class="fa-regular fa-heart"></i> Favoriler
