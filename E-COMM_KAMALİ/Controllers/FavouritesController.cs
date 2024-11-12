@@ -1,37 +1,42 @@
-﻿using ECOMM.Business.Abstract;
-using ECOMM.Business.Concrete;
-using ECOMM.Core.ViewModels;
+﻿using ECOMM.Core.ViewModels;
+using ECOMM.Business.Abstract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace E_COMM_KAMALİ.Controllers
 {
     public class FavouritesController : Controller
     {
-        //  private readonly IFavouritesService favouritesService;
         private readonly IUserService userService;
-    private readonly IProductService productService;
+        private readonly IProductService productService;
         private readonly ICategoryService categoryService;
         private readonly ISubCategoryService subCategoryService;
         private readonly ISessionService _sessionService;
-        public FavouritesController(IUserService userService, IProductService productService, ISubCategoryService subCategoryService, ICategoryService categoryService, IFavouritesService favouritesService, ISessionService sessionService)
+
+        // FavouritesService artık kullanılmıyor. Bu, favori işlemlerini session ile yönetiyoruz.
+        public FavouritesController(
+            IUserService userService,
+            IProductService productService,
+            ISubCategoryService subCategoryService,
+            ICategoryService categoryService,
+            ISessionService sessionService)
         {
             this.userService = userService;
             this.productService = productService;
             this.subCategoryService = subCategoryService;
             this.categoryService = categoryService;
             _sessionService = sessionService;
-            //  this.favouritesService = favouritesService;
         }
 
-
+        // Favori ürünler listesi
         public IActionResult Index()
         {
-            var cartItems = _sessionService.GetCartItems(); // Oturumdan sepet öğelerini al
-            return View(cartItems); // Sepet sayfasına gönder
+            var favouritesItems = _sessionService.GetFavouritesItems(); // Oturumdan favori öğelerini al
+            return View(favouritesItems); // Favori sayfasına gönder
         }
 
+        // Favorilere ürün ekle
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int productId, int quantity)
+        public async Task<IActionResult> AddToFavourites(int productId, int quantity)
         {
             var product = await productService.GetByIdAsync(productId); // Ürünü al
             if (product != null)
@@ -42,13 +47,29 @@ namespace E_COMM_KAMALİ.Controllers
                     ProductName = product.ProductName,
                     ImagePath = product.ImagePath,
                     Price = product.ProductPrice,
-                    Quantity = quantity
+                    Quantity = quantity // Eğer Quantity gerekli değilse bu satırı kaldırabilirsin
                 };
 
-                _sessionService.AddToCart(cartItem); // Sepete ekle
+                _sessionService.AddToFavourites(cartItem); // Favorilere ekle
             }
 
-            return RedirectToAction("Index", "Favourites"); // Sepet sayfasına yönlendir
+            return RedirectToAction("Index", "Favourites"); // Favori sayfasına yönlendir
+        }
+
+        // Favoriden ürün sil
+        [HttpPost]
+        public IActionResult RemoveFromFavourites(int productId)
+        {
+            _sessionService.RemoveFromFavourites(productId); // Favorilerden ürünü kaldır
+            return RedirectToAction("Index", "Favourites"); // Favori sayfasına yönlendir
+        }
+
+        // Favorileri temizle
+        [HttpPost]
+        public IActionResult ClearFavourites()
+        {
+            _sessionService.ClearFavourites(); // Tüm favorileri temizle
+            return RedirectToAction("Index", "Favourites"); // Favori sayfasına yönlendir
         }
     }
 }

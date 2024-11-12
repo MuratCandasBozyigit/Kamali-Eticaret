@@ -1,4 +1,5 @@
-﻿@model List<ECOMM.Core.ViewModels.CartItemViewModel> // Sepet öğeleri listesi
+﻿@model List<ECOMM.Core.ViewModels.CartItemViewModel> // Favori ürünlerinin listesi
+
 @{
     ViewData["Title"] = "Favoriler";
 }
@@ -11,7 +12,7 @@
                         <h3 class="fw-normal mb-0">Favoriler</h3>
                     </div>
 
-                    @foreach (var item in Model) // Sepet öğelerini döngü ile göster
+                    @foreach (var item in Model) // Favori ürünlerini döngü ile göster
                     {
                         <div class="card rounded-3 mb-4">
                             <div class="card-body p-4">
@@ -26,42 +27,30 @@
                                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                         <h5 class="mb-0">@item.Price.ToString("C")</h5>
                                     </div>
-@* 
-                                    <!-- Sepete Ekle Butonu -->
-                                    @if (item.Product != null)
-                                    {
-                                        <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
-                                            <input type="hidden" name="productId" value="@item.Product.Id" />
-                                            <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 60px; display: inline-block;" />
-                                            <button type="submit" class="btn btn-primary btn-hover">
-                                                <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+
+                                    <div class="col-md-2 col-lg-2 col-xl-2 text-end">
+                                        <!-- Sepete ekle butonu -->
+                                        <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-inline-block">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <input type="hidden" name="quantity" value="@item.Quantity" />
+                                            <button type="submit" class="btn btn-warning btn-hover">
+                                                <i class="fas fa-cart-plus"></i>
                                             </button>
                                         </form>
-                                    }
-                                    else
-                                    {
-                                        <p class="text-danger">Ürün bilgisi eksik.</p>
-                                    } *@
+                                        <form asp-controller="Favourites" asp-action="RemoveFromFavourites" method="post" class="d-inline-block">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <input type="hidden" name="quantity" value="@item.Quantity" />
+                                            <button type="submit" class="btn btn-danger btn-hover">
+                                                <i class="fas fa-trash fa-lg  btn-danger btn-hover"></i>
+                                            </button>
+                                        </form>
 
-                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                        <a href="@Url.Action("RemoveFromCart", "ShopCart", new { productId = item.ProductId })" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                      
                                     </div>
                                 </div>
                             </div>
                         </div>
                     }
-
-
-                    @* <div class="card mb-4">
-                    <div class="card-body p-4 d-flex flex-row">
-                    <div class="form-outline flex-fill">
-                    <input type="text" id="form1" class="form-control form-control-lg">
-                    <label class="form-label" for="form1" style="margin-left: 0px;">İndirim kodu</label>
-                    </div>
-                    <button type="button" class="btn btn-outline-warning btn-lg ms-3">Uygula</button>
-                    </div>
-                    </div> *@
-
                 </div>
             </div>
         </section>

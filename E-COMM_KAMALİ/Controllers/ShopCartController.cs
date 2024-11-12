@@ -1,7 +1,7 @@
 ﻿using ECOMM.Business.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using ECOMM.Core.ViewModels;
-using System.Threading.Tasks; // Task kullanmak için gerekli
+using System.Threading.Tasks;
 
 namespace E_COMM_KAMALİ.Controllers
 {
@@ -12,6 +12,7 @@ namespace E_COMM_KAMALİ.Controllers
         private readonly IProductService _productService;
         private readonly ISubCategoryService _subCategoryService;
         private readonly ISessionService _sessionService;
+
         public ShopCartController(IOrderService orderService, ICategoryService categoryService, IProductService productService, ISubCategoryService subCategoryService, ISessionService sessionService)
         {
             _orderService = orderService;
@@ -45,6 +46,20 @@ namespace E_COMM_KAMALİ.Controllers
                 _sessionService.AddToCart(cartItem); // Sepete ekle
             }
 
+            return RedirectToAction("Index", "ShopCart"); // Sepet sayfasına yönlendir
+        }
+
+        [HttpPost]
+        public IActionResult RemoveFromCart(int productId)
+        {
+            _sessionService.RemoveFromCart(productId); // Sepetten ürünü kaldır
+            return RedirectToAction("Index", "ShopCart"); // Sepet sayfasına yönlendir
+        }
+
+        [HttpPost]
+        public IActionResult ClearCart()
+        {
+            _sessionService.ClearCart(); // Sepeti temizle
             return RedirectToAction("Index", "ShopCart"); // Sepet sayfasına yönlendir
         }
     }
