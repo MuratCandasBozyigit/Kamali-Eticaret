@@ -27,6 +27,12 @@
                                         <h5 class="mb-0">@item.Price.ToString("C")</h5>
                                     </div>
                                     <div class="col-md-2 col-lg-2 col-xl-2 text-end">
+                                        <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn d-inline-block" method="post">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <button type="submit" class="btn btn-warning btn-hover">
+                                                <i class="fa-regular fa-heart"></i> 
+                                            </button>
+                                        </form>
                                         <form asp-controller="ShopCart" asp-action="RemoveFromCart" method="post" class="d-inline-block">
                                             <input type="hidden" name="productId" value="@item.ProductId" />
                                             <input type="hidden" name="quantity" value="@item.Quantity" />
