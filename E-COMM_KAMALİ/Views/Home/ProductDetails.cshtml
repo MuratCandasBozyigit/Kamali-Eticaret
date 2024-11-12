@@ -39,19 +39,30 @@
 
                 <div class="product-router">
                     <ul>
-                        <li>Kategori: <span>@Model.Product.Category?.ParentCategoryName ?? "Kategori Yok"</span></li>
-                        <li>Alt Kategori: <span>@Model.Product.Category?.ParentCategoryTag ?? "Alt Kategori Yok"</span></li>
+                        <li>
+                            Kategori:
+                            <span>
+                                @(string.IsNullOrWhiteSpace(Model.Product.Category?.ParentCategoryName) ? "Kategori Yok" : Model.Product.Category.ParentCategoryName)
+                            </span>
+                        </li>
+                        <li>
+                            Alt Kategori:
+                            <span>
+                                @(string.IsNullOrWhiteSpace(Model.Product.Category?.ParentCategoryTag) ? "Alt Kategori Yok" : Model.Product.Category.ParentCategoryTag)
+                            </span>
+                        </li>
                     </ul>
                 </div>
+
 
 
 
                 <!-- Ürün Detayı -->
                 <div class="product-detail">
                     <h2>Özellikler:</h2>
-                    <p>@Model.Product.ProductDescription ?? "Açıklama mevcut değil."</p>
-
+                    <p>@(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)</p>
                 </div>
+
 
                 <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
                 <div class="purchase-info">
