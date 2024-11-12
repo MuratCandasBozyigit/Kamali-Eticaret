@@ -26,11 +26,19 @@
                                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                         <h5 class="mb-0">@item.Price.ToString("C")</h5>
                                     </div>
-                                    <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                        <a href="@Url.Action("RemoveFromCart", "ShopCart", new { productId = item.ProductId })" class="text-danger"><i class="fas fa-trash fa-lg"></i></a>
+                                    <div class="col-md-2 col-lg-2 col-xl-2 text-end">
+                                        <form asp-controller="ShopCart" asp-action="RemoveFromCart" method="post" class="d-inline-block">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <input type="hidden" name="quantity" value="@item.Quantity" />
+                                            <button type="submit" class="btn btn-danger btn-hover">
+                                                <i class="fas fa-trash fa-lg  btn-danger btn-hover"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
+
                             </div>
+
                         </div>
                     }
 
