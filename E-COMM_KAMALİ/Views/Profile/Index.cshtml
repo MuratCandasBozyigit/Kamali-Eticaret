@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model ECOMM.Core.ViewModels.ProfileViewModel
+
 @{
+    ViewData["Title"] = "Profil";
 }
+
+<h2>Profil Sayfası</h2>
+
+<div>
+    <h3>Hesap Bilgileriniz</h3>
+    <table class="table">
+        <tr>
+            <th>Kullanıcı Adı</th>
+            <td>@Model.UserName</td>
+        </tr>
+        <tr>
+            <th>E-posta</th>
+            <td>@Model.Email</td>
+        </tr>
+        <tr>
+            <th>Ad Soyad</th>
+            <td>@Model.FullName</td>
+        </tr>
+        <tr>
+            <th>Telefon Numarası</th>
+            <td>@Model.PhoneNumber</td>
+        </tr>
+    </table>
+</div>
+
+<hr>
+
+<!-- Profil güncelleme ve çıkış yapma butonları -->
+<div>
+    <form asp-controller="Profile" asp-action="EditProfile" method="post">
+        <button type="submit" class="btn btn-primary">Profil Bilgilerini Düzenle</button>
+    </form>
+    <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Çıkış Yap</a>
+</div>
