@@ -21,10 +21,10 @@
             <th>Ad Soyad</th>
             <td>@Model.FullName</td>
         </tr>
-        <tr>
+     @*    <tr>
             <th>Telefon Numarası</th>
             <td>@Model.PhoneNumber</td>
-        </tr>
+        </tr> *@
     </table>
 </div>
 
@@ -32,7 +32,7 @@
 
 <!-- Profil güncelleme ve çıkış yapma butonları -->
 <div>
-    <form asp-controller="Profile" asp-action="EditProfile" method="post">
+    <form asp-controller="Profile" asp-action="Edit" method="get">
         <button type="submit" class="btn btn-primary">Profil Bilgilerini Düzenle</button>
     </form>
     <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Çıkış Yap</a>
