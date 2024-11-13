@@ -21,19 +21,113 @@
             <th>Ad Soyad</th>
             <td>@Model.FullName</td>
         </tr>
-     @*    <tr>
-            <th>Telefon Numarası</th>
-            <td>@Model.PhoneNumber</td>
-        </tr> *@
     </table>
 </div>
 
-<hr>
+<br/>
 
-<!-- Profil güncelleme ve çıkış yapma butonları -->
+<!-- Profil güncelleme butonu -->
 <div>
-    <form asp-controller="Profile" asp-action="Edit" method="get">
-        <button type="submit" class="btn btn-primary">Profil Bilgilerini Düzenle</button>
-    </form>
+    <button id="openEditProfileModal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Profil Bilgilerini Düzenle</button>
     <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Çıkış Yap</a>
 </div>
+
+<!-- Profil Düzenleme Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editProfileModalLabel">Profil Bilgilerini Düzenle</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label for="UserName">Kullanıcı Adı</label>
+                        <input type="text" class="form-control" id="UserName" name="UserName" value="@Model.UserName" />
+                    </div>
+                    <div class="form-group">
+                        <label for="Email">E-posta</label>
+                        <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" />
+                    </div>
+                    <div class="form-group">
+                        <label for="FullName">Ad Soyad</label>
+                        <input type="text" class="form-control" id="FullName" name="FullName" value="@Model.FullName" />
+                    </div>
+                    <br/>
+
+                 
+
+                    <button type="submit" class="btn btn-primary">Profil Bilgilerini Güncelle</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#editProfileForm").submit(function (event) {
+                event.preventDefault(); // Formun normal submit olmasını engelle
+
+                // Form verilerini topla
+                var formData = {
+                    UserName: $("#UserName").val(),
+                    Email: $("#Email").val(),
+                    FullName: $("#FullName").val(),
+                };
+
+                // AJAX ile veriyi gönder
+                $.ajax({
+                    url: '@Url.Action("Edit", "Profile")', // Controller ve action URL
+                    method: 'POST', // POST isteği
+                    data: formData, // Form verisi
+                    success: function (response) {
+                        if (response.success) {
+                            // SweetAlert2 ile başarı mesajı göster
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Profil başarıyla güncellendi!',
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+
+                            // Modal'ı kapat
+                            $('#editProfileModal').modal('hide'); // Modal'ı Bootstrap 5 ile kapat
+
+                            // Güncellenen verileri sayfada da göster
+                            $("td:contains('Kullanıcı Adı')").next().text(response.updatedUserName);
+                            $("td:contains('E-posta')").next().text(response.updatedEmail);
+
+                            // Sayfayı yeniden yükle (refresh)
+                            setTimeout(function () {
+                                location.reload();  // Sayfayı yeniden yükler
+                            }, 1600); // 1.6 saniye sonra sayfayı yeniler
+                        } else {
+                            // SweetAlert2 ile hata mesajı göster
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Profil güncellenirken bir hata oluştu.',
+                                text: 'Lütfen tekrar deneyin.',
+                                showConfirmButton: true
+                            });
+                        }
+                    },
+                    error: function () {
+                        // AJAX hata durumunda
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Bir hata oluştu!',
+                            text: 'Profil güncellenirken bir hata meydana geldi.',
+                            showConfirmButton: true
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

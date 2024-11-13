@@ -46,26 +46,26 @@ public class ProfileController : Controller
     }
 
 
-    [HttpGet("Edit")]
-    public async Task<IActionResult> Edit()
-    {
-        var user = await _userManager.GetUserAsync(User); // Giriş yapmış kullanıcıyı al
-        if (user == null)
-        {
-            return RedirectToAction("Login", "Account"); // Eğer kullanıcı yoksa login sayfasına yönlendir
-        }
+    //[HttpGet("Edit")]
+    //public async Task<IActionResult> Edit()
+    //{
+    //    var user = await _userManager.GetUserAsync(User); // Giriş yapmış kullanıcıyı al
+    //    if (user == null)
+    //    {
+    //        return RedirectToAction("Login", "Account"); // Eğer kullanıcı yoksa login sayfasına yönlendir
+    //    }
 
-        var model = new EditProfileViewModel
-        {
-            UserName = user.UserName,
-            Email = user.Email,
-            FullName = user.FullName // FullName bilgisini de alıyoruz
-        };
+    //    var model = new EditProfileViewModel
+    //    {
+    //        UserName = user.UserName,
+    //        Email = user.Email,
+    //        FullName = user.FullName // FullName bilgisini de alıyoruz
+    //    };
 
-        return View(model); // EditProfile.cshtml sayfasını yükle
-    }
-    [HttpPost("Edit")]
-    public async Task<IActionResult> Edit(EditProfileViewModel model)
+    //    return View(model); // EditProfile.cshtml sayfasını yükle
+    //}
+    [HttpPost]
+    public async Task<IActionResult> Edit(ProfileViewModel model)
     {
         if (ModelState.IsValid)
         {
@@ -79,16 +79,21 @@ public class ProfileController : Controller
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    return Json(new { success = true });
+                    return Json(new
+                    {
+                        success = true,
+                        updatedUserName = user.UserName,
+                        updatedEmail = user.Email,
+                        updatedFullName = user.FullName
+                    });
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Profil güncellenirken bir hata oluştu.");
+                    return Json(new { success = false });
                 }
             }
         }
 
-        // Eğer hata varsa, hata mesajı döndür
         return Json(new { success = false });
     }
 
