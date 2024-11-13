@@ -56,7 +56,7 @@ public class ProfileController : Controller
             var user = await _userManager.GetUserAsync(User);
             if (user != null)
             {
-                user.UserName = model.UserName;
+              
                 user.Email = model.Email;
                 user.FullName = model.FullName;
 
@@ -66,7 +66,7 @@ public class ProfileController : Controller
                     return Json(new
                     {
                         success = true,
-                        updatedUserName = user.UserName,
+                      
                         updatedEmail = user.Email,
                         updatedFullName = user.FullName
                     });

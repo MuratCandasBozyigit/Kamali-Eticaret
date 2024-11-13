@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ECOMM.Core.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,8 @@ namespace ECOMM.Core.ViewModels
         public string ProductDescription { get; set; }
         // Kategoriyi ProductViewModel içinde detaylı almak için Category nesnesi ekleyelim
         public CategoryViewModel Category { get; set; }  // Burada Category'yi bir nesne olarak ekliyoruz
+
+    
     }
 
 }
