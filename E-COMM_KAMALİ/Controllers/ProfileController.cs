@@ -37,7 +37,7 @@ public class ProfileController : Controller
             UserName = user.UserName,
             Email = user.Email,
             FullName = user.FullName, // Eğer user modelinizde varsa
-            PhoneNumber = user.PhoneNumber, // Eğer telefon numarası varsa
+         
             // Diğer alanları da buraya ekleyebilirsiniz
         };
 
@@ -46,8 +46,26 @@ public class ProfileController : Controller
     }
 
 
-    [HttpPost("EditProfile")]
-    public async Task<IActionResult> EditProfile(EditProfileViewModel model)
+    [HttpGet("Edit")]
+    public async Task<IActionResult> Edit()
+    {
+        var user = await _userManager.GetUserAsync(User); // Giriş yapmış kullanıcıyı al
+        if (user == null)
+        {
+            return RedirectToAction("Login", "Account"); // Eğer kullanıcı yoksa login sayfasına yönlendir
+        }
+
+        var model = new EditProfileViewModel
+        {
+            UserName = user.UserName,
+            Email = user.Email,
+            FullName = user.FullName // FullName bilgisini de alıyoruz
+        };
+
+        return View(model); // EditProfile.cshtml sayfasını yükle
+    }
+    [HttpPost("Edit")]
+    public async Task<IActionResult> Edit(EditProfileViewModel model)
     {
         if (ModelState.IsValid)
         {
@@ -57,12 +75,11 @@ public class ProfileController : Controller
                 user.UserName = model.UserName;
                 user.Email = model.Email;
                 user.FullName = model.FullName;
-                user.PhoneNumber = model.PhoneNumber;
 
                 var result = await _userManager.UpdateAsync(user);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index"); // Profil sayfasına yönlendir
+                    return Json(new { success = true });
                 }
                 else
                 {
@@ -70,8 +87,11 @@ public class ProfileController : Controller
                 }
             }
         }
-        return View(model); // Eğer hata varsa formu tekrar göster
+
+        // Eğer hata varsa, hata mesajı döndür
+        return Json(new { success = false });
     }
+
 
 
 }
