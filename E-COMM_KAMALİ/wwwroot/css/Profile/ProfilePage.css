@@ -1,0 +1,40 @@
+﻿body {
+    background-color: #f8f9fa;
+    font-family: 'Arial', sans-serif;
+}
+
+h2, h3 {
+    text-align: center;
+    color: #343a40;
+}
+
+.table {
+    width: 80%;
+    margin: auto;
+    border: 1px solid #dee2e6;
+}
+
+    .table th {
+        background-color: #6c757d;
+        color: #fff;
+        padding: 10px;
+        text-align: left;
+    }
+
+    .table td {
+        background-color: #ffffff;
+        color: #333;
+        padding: 10px;
+    }
+
+button {
+    margin: 10px;
+}
+
+.modal-header, .modal-footer {
+    background-color: #f1f1f1;
+}
+
+.form-group label {
+    font-weight: bold;
+}

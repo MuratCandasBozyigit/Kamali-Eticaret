@@ -15,5 +15,7 @@ namespace ECOMM.Core.Models
 
         public bool IsAdmin { get; set; } = false;
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = new List<ApplicationUserRole>();
+
+        public List<Orders> UserOrders { get; set; } = new List<Orders>();
     }
 }
