@@ -46,24 +46,7 @@ public class ProfileController : Controller
     }
 
 
-    //[HttpGet("Edit")]
-    //public async Task<IActionResult> Edit()
-    //{
-    //    var user = await _userManager.GetUserAsync(User); // Giriş yapmış kullanıcıyı al
-    //    if (user == null)
-    //    {
-    //        return RedirectToAction("Login", "Account"); // Eğer kullanıcı yoksa login sayfasına yönlendir
-    //    }
-
-    //    var model = new EditProfileViewModel
-    //    {
-    //        UserName = user.UserName,
-    //        Email = user.Email,
-    //        FullName = user.FullName // FullName bilgisini de alıyoruz
-    //    };
-
-    //    return View(model); // EditProfile.cshtml sayfasını yükle
-    //}
+ 
     [HttpPost]
     public async Task<IActionResult> Edit(ProfileViewModel model)
     {
