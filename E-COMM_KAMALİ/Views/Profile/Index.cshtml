@@ -4,33 +4,73 @@
     ViewData["Title"] = "Profil";
 }
 
-<h2>Profil Sayfası</h2>
+<link href="/css/Profile/ProfilePage.css" rel="stylesheet" />
 
-<div>
-    <h3>Hesap Bilgileriniz</h3>
-    <table class="table">
-        <tr>
-            <th>Kullanıcı Adı</th>
-            <td>@Model.UserName</td>
-        </tr>
-        <tr>
-            <th>E-posta</th>
-            <td>@Model.Email</td>
-        </tr>
-        <tr>
-            <th>Ad Soyad</th>
-            <td>@Model.FullName</td>
-        </tr>
-    </table>
-</div>
+<section style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+    <h1 style="margin-top: 40px; font-weight: 600; text-align: center;">Profil Sayfası</h1>
 
-<br/>
+    <div style="margin-top: 20px; width: 100%;">
+        <h2 style="font-weight: 600; margin-bottom: 25px; text-align: center;">Hesap Bilgileriniz</h2>
+        <table class="table">
+            <tr>
+                <th>E-posta</th>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <th>Ad Soyad</th>
+                <td>@Model.FullName</td>
+            </tr>
+        </table>
+    </div>
 
-<!-- Profil güncelleme butonu -->
-<div>
-    <button id="openEditProfileModal" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editProfileModal">Profil Bilgilerini Düzenle</button>
-    <a href="@Url.Action("Logout", "Account")" class="btn btn-danger">Çıkış Yap</a>
-</div>
+    <br />
+
+    <!-- Profil güncelleme butonu -->
+    <div style="font-weight: 600; text-align: center;">
+        <button id="openEditProfileModal" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+            <i class="fa-solid fa-user-pen"></i> Profil Bilgilerini Düzenle
+        </button>
+
+        <a href="@Url.Action("Logout", "Account")" class="btn btn-light" style="border: solid 2px black;">
+            <i class="fa-solid fa-door-open"></i> Çıkış Yap
+        </a>
+    </div>
+
+    <!-- Siparişler Bölümü -->
+    <div style="margin-top: 30px; width: 100%;">
+        <h2 style="font-weight: bolder; text-align: center;">Siparişler</h2>
+        @if (Model.UserOrders != null && Model.UserOrders.Any())
+        {
+            <div style="display: flex; justify-content: center;">
+                <table class="table table-bordered mt-3" style="width: auto;">
+                    <thead>
+                        <tr>
+                            <th>Sipariş ID</th>
+                            <th>Sipariş Tarihi</th>
+                            <th>Toplam Tutar</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model.UserOrders)
+                        {
+                            <tr>
+                                <td>@order.OrderId</td>
+                                <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                                <td>@order.TotalAmount.ToString("C")</td>
+                                <td>@order.Status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p style="margin-top: 40px; font-weight: 600; text-align: center;">Henüz siparişiniz bulunmamaktadır.</p>
+        }
+    </div>
+</section>
 
 <!-- Profil Düzenleme Modal -->
 <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">

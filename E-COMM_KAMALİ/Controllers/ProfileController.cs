@@ -34,10 +34,11 @@ public class ProfileController : Controller
         // User bilgilerini ViewModel'e dönüştür
         var viewModel = new ProfileViewModel
         {
-            UserName = user.UserName,
+           // UserName = user.UserName,
             Email = user.Email,
-            FullName = user.FullName, // Eğer user modelinizde varsa
-         
+            FullName = user.FullName,
+            UserOrders = user.UserOrders
+
             // Diğer alanları da buraya ekleyebilirsiniz
         };
 
@@ -83,3 +84,4 @@ public class ProfileController : Controller
 
 
 }
+
