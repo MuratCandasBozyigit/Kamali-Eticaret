@@ -29,9 +29,23 @@
                             <h5 class="card-title">@product.ProductName</h5>
                             <p class="card-text text-muted">@product.CategoryName</p>
                             <p class="card-text"><strong>Fiyat:</strong> @product.Price.ToString("C")</p>
+                            <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary btn-hover mb-4 mt-3">Detaylar</a>
                         </div>
                         <div class="card-footer">
-                            <a href="/Products/Details/@product.ProductId" class="btn">Detaylar</a>
+                        
+                            <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
+                                <input type="hidden" name="productId" value="@product.ProductId" />
+                                <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 60px; display: inline-block;" />
+                                <button type="submit" class="btn btn-primary btn-hover">
+                                    <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                                </button>
+                            </form>
+                            <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
+                                <input type="hidden" name="productId" value="@product.ProductId" />
+                                <button type="submit" class="btn btn-primary btn-hover">
+                                    <i class="fa-regular fa-heart"></i> Favoriler
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>
