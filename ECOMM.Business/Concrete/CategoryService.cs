@@ -4,16 +4,18 @@ using ECOMM.Core.Models;
 using ECOMM.Business.Abstract;
 using ECOMM.Data.Shared.Abstract;
 using Microsoft.EntityFrameworkCore;
+using ECOMM.Core.ViewModels;
 
 namespace ECOMM.Business.Concrete
 {
     public class CategoryService : Service<Category>, ICategoryService
     {
         private readonly IRepository<Category> _categoryRepository;
-
-        public CategoryService(IRepository<Category> categoryRepository) : base(categoryRepository)
+        private readonly IProductService _productService;
+        public CategoryService(IRepository<Category> categoryRepository, IProductService productService) : base(categoryRepository)
         {
             _categoryRepository = categoryRepository;
+            _productService = productService;
         }
 
         #region Kategori İşlemleri
@@ -55,6 +57,28 @@ namespace ECOMM.Business.Concrete
                             .FirstOrDefaultAsync(c => c.Id == id); // İlk bulduğu kaydı getir
         }
 
+        public async Task<CategoryViewModel> GetCategoryWithProductsAsync(int categoryId)
+        {
+            // Kategori ve bu kategoriye ait ürünleri alacak kodlar
+            var category = await _categoryRepository.GetCategoryByIdAsync(categoryId);
+            var products = await _productService.GetProductsByCategoryIdAsync(categoryId);
+
+            var categoryViewModel = new CategoryViewModel
+            {
+                CategoryId = category.Id,
+                CategoryName = category.ParentCategoryName,
+                Products = products.Select(p => new ProductViewModel
+                {
+                    ProductId = p.ProductId,
+                    ProductName = p.ProductName,
+                    ProductDescription = p.ProductDescription,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl
+                }).ToList()
+            };
+
+            return categoryViewModel;
+        }
         #endregion
     }
 }

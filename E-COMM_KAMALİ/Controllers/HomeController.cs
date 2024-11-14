@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http; // Eklenmeli
 using Microsoft.EntityFrameworkCore;
 using ECOMM.Core.ViewModels;
 using ECOMM.Core.Models;
+using ECOMM.Business.Concrete;
 //public static class HttpRequestExtensions
 //{
 //    public static bool IsAjaxRequest(this HttpRequest request)
@@ -23,10 +24,11 @@ namespace E_COMM_KAMALİ.Controllers
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
         // private readonly IFavouritesService _favouritesService;
+        private readonly ICategoryService categoryService;
         private readonly ICommentService _commentService;
         private readonly IUserService _userService;
 
-        public HomeController(ILogger<HomeController> logger, IProductService productService, IOrderService orderService, /*IFavouritesService favouritesService,*/ ICommentService commentService, IUserService userService)
+        public HomeController(ILogger<HomeController> logger, IProductService productService, IOrderService orderService, /*IFavouritesService favouritesService,*/ ICommentService commentService, IUserService userService, ICategoryService categoryService)
         {
             _logger = logger;
             _productService = productService;
@@ -34,6 +36,7 @@ namespace E_COMM_KAMALİ.Controllers
             //  _favouritesService = favouritesService;
             _commentService = commentService;
             _userService = userService;
+            this.categoryService = categoryService;
         }
         #endregion
 
@@ -79,6 +82,7 @@ namespace E_COMM_KAMALİ.Controllers
         {
             try
             {
+
                 var products = await _productService.GetAllAsync();
                 if (products == null || !products.Any())
                 {
@@ -105,6 +109,16 @@ namespace E_COMM_KAMALİ.Controllers
             }
         }
 
+        public async Task<IActionResult> ProductsByCategory(int categoryId)
+        {
+            var category = await categoryService.GetCategoryWithProductsAsync(categoryId); // Kategoriyi ve ilgili ürünleri alıyoruz
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            return View(category); // CategoryViewModel ile gelen kategori ve ürünleri view'a gönderiyoruz
+        }
 
         public async Task<IActionResult> GetAllCategories()
         {

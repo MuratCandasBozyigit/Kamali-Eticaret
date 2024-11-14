@@ -117,5 +117,10 @@ namespace ECOMM.Data.Shared.Concrete
         {
             return await _context.Comments.Where(c => c.ProductId == postId).ToListAsync();
         }
+
+        public async Task<Category> GetCategoryByIdAsync(int categoryId)
+        {
+            return await _context.Categories.FindAsync(categoryId); // Kategoriyi ID'ye göre buluyoruz
+        }
     }
 }

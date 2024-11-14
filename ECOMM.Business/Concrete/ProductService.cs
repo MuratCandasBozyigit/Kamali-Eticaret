@@ -2,6 +2,7 @@
 using ECOMM.Business.Abstract;
 using ECOMM.Data.Shared.Abstract;
 using Microsoft.EntityFrameworkCore;
+using ECOMM.Core.ViewModels;
 
 namespace ECOMM.Business.Concrete
 {
@@ -64,6 +65,26 @@ namespace ECOMM.Business.Concrete
             var products = await _productRepository.GetAllAsync();
             return products.Where(p => p.Id == subCategoryId).ToList();
         }
+        public async Task<List<ProductViewModel>> GetProductsByCategoryIdAsync(int categoryId)
+        {
+            // Kategorisine göre ürünleri alıyoruz
+            var products = await _productRepository.GetAllAsync(); // Asenkron olarak tüm ürünleri alıyoruz
+
+            var filteredProducts = products
+                .Where(p => p.CategoryId == categoryId) // Kategorisine göre filtreliyoruz
+                .Select(p => new ProductViewModel // ProductViewModel'e dönüştürüyoruz
+                {
+                    ProductId = p.Id,
+                    ProductName = p.ProductName,
+                    ProductDescription = p.ProductDescription,
+                    Price = p.ProductPrice,
+                    ImageUrl = p.ImagePath
+                })
+                .ToList(); // Listeye çeviriyoruz (asenkron olmadan)
+
+            return filteredProducts; // Filtrelenmiş ürünleri döndürüyoruz
+        }
+
 
         public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId)
         {

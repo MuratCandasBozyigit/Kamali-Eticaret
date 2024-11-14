@@ -1,4 +1,5 @@
 ﻿using ECOMM.Core.Models;
+using ECOMM.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace ECOMM.Business.Abstract
             Task<IEnumerable<Product>> GetPaginatedProductsAsync(int page, int pageSize);
         Task<IEnumerable<Product>> GetBySubCategoryIdAsync(int subCategoryId);
         Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId);
+        Task<List<ProductViewModel>> GetProductsByCategoryIdAsync(int categoryId);
 
     }
 }
