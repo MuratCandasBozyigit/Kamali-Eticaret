@@ -29,20 +29,21 @@
                             <h5 class="card-title">@product.ProductName</h5>
                             <p class="card-text text-muted">@product.CategoryName</p>
                             <p class="card-text"><strong>Fiyat:</strong> @product.Price.ToString("C")</p>
-                            <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary btn-hover mb-4 mt-3">Detaylar</a>
+                            <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-details ">Detaylar</a>
                         </div>
                         <div class="card-footer">
-                        
                             <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
-                                <input type="number" name="quantity" value="1" min="1" class="form-control mb-2" style="width: 60px; display: inline-block;" />
-                                <button type="submit" class="btn btn-primary btn-hover">
+                              @*   <input type="number" name="quantity" value="1" min="1" class="form-control mb-2 " style="width: 60px; display: inline-block;" /> *@
+                                <button type="submit" class="btn  btn-light btn-add-to-cart">
                                     <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                                 </button>
                             </form>
+
+                          <br />
                             <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
-                                <button type="submit" class="btn btn-primary btn-hover">
+                                <button type="submit" class="btn btn-favourite btn-light">
                                     <i class="fa-regular fa-heart"></i> Favoriler
                                 </button>
                             </form>
@@ -67,77 +68,101 @@
 </div>
 
 @section Css {
- <style>
-    /* Tüm sayfanın arka plan rengi */
-    body {
-        background-color: rgb(230, 228, 223); /* Açık gri ton */
-    }
-
-    /* Ürün kartları düzeni */
-    .product-card {
-        width: 100%; /* Kart genişliği %100 */
-        max-width: 300px; /* Maksimum genişlik */
-        margin: 15px auto; /* Otomatik yatay ortalama ve dikeyde boşluk */
-        border: 1px solid #ddd; /* Hafif sınır */
-        border-radius: 8px; /* Yuvarlatılmış köşeler */
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
-        transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover efekti */
-    }
-
-    /* Hover durumunda büyüme efekti */
-    .product-card:hover {
-        transform: scale(1.05); /* Büyütme */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Gölgeyi artırma */
-    }
-
-    /* Ürün görselinin düzeni */
-    .product-image {
-        width: 100%; /* Görselin genişliği kartla aynı */
-        height: 200px; /* Sabit yükseklik */
-        object-fit: cover; /* Resmi kutuya sığdırma */
-        object-position: center; /* Resmin ortalanması */
-    }
-
-    /* Ürün kartı içeriği */
-    .card-body {
-        padding: 15px;
-        display: flex;
-        flex-direction: column; /* İçeriği dikey düzenle */
-        justify-content: space-between; /* İçeriği eşit aralıkla yerleştir */
-    }
-
-    /* Ürün ismi ve fiyatı */
-    .card-title {
-        font-size: 1.2rem; /* Başlık boyutu */
-        font-weight: bold;
-        color: #333;
-    }
-
-    .card-text {
-        color: #666;
-    }
-
-    /* Detaylar butonunun düzeni */
-    .card-footer {
-        padding: 10px;
-        background-color: transparent;
-        text-align: center;
-    }
-
-    .card-footer .btn {
-        background-color: #007bff; /* Butonun rengi */
-        color: #fff;
-        border: none;
-        width: 100%;
-        padding: 10px;
-        font-size: 1rem;
-        border-radius: 5px;
-    }
-
-    .card-footer .btn:hover {
-            background-color: #0056b3; /* Hover rengini koyulaştır */
+    <style>
+        /* Tüm sayfanın arka plan rengi */
+        body {
+            background-color: rgb(230, 228, 223); /* Açık gri ton */
         }
 
+        /* Ürün kartları düzeni */
+        .product-card {
+            width: 100%; /* Kart genişliği %100 */
+            max-width: 300px; /* Maksimum genişlik */
+            margin: 15px auto; /* Otomatik yatay ortalama ve dikeyde boşluk */
+            border: 1px solid #ddd; /* Hafif sınır */
+            border-radius: 8px; /* Yuvarlatılmış köşeler */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge efekti */
+            transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hover efekti */
+        }
+
+            /* Hover durumunda büyüme efekti */
+            .product-card:hover {
+                transform: scale(1.05); /* Büyütme */
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Gölgeyi artırma */
+            }
+
+        /* Ürün görselinin düzeni */
+        .product-image {
+            width: 100%; /* Görselin genişliği kartla aynı */
+            height: 200px; /* Sabit yükseklik */
+            object-fit: cover; /* Resmi kutuya sığdırma */
+            object-position: center; /* Resmin ortalanması */
+        }
+
+        /* Ürün kartı içeriği */
+        .card-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column; /* İçeriği dikey düzenle */
+            justify-content: space-between; /* İçeriği eşit aralıkla yerleştir */
+        }
+
+        /* Ürün ismi ve fiyatı */
+        .card-title {
+            font-size: 1.2rem; /* Başlık boyutu */
+            font-weight: bold;
+            color: black;
+            margin-bottom: 10px;
+        }
+
+        .card-text {
+            color: black;
+        }
+
+        /* Detaylar butonunun düzeni */
+        .card-footer {
+            padding: 10px;
+            background-color: transparent;
+            text-align: center;
+         
+        }
+
+            .card-footer .btn {
+                /* Butonun rengi */
+                background-color: #343a40;
+                color: white;
+                border: 1px solid black;
+                width: 100%;
+                padding: 10px;
+                font-size: 1rem;
+                border-radius: 5px;
+                transition: all 0.4s ease;
+            }
+
+
+                .card-footer .btn:hover {
+                    color: black;
+                    background-color: white;
+                    border: 1px solid black;
+                }
+
+        .card-body .btn{
+            background-color: #343a40;
+            color: white;
+            border: 1px solid black;
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: all 0.4s ease;
+          
+        }
+
+        .card-body .btn:hover{
+            color: black;
+            background-color: white;
+            border: 1px solid black;
+        }
         /* Ürünlerin bulunduğu sayfa düzeni */
         .container {
             max-width: 1200px; /* Maksimum genişlik */
@@ -148,8 +173,8 @@
         .row {
             display: flex;
             flex-wrap: wrap;
-            justify-content:center;
-          /*   justify-content: space-between; */
+            justify-content: center;
+            /*   justify-content: space-between; */
         }
 
         .col-md-3 {
@@ -159,17 +184,22 @@
         }
 
         /* Media queries için düzeltme */
-       .media (max-width: 768px) {
-            .col-md-3 {
-                max-width: 48%; /* Daha küçük ekranlarda %48 genişlik */
-            }
+        .media (max-width: 768px) {
+            .col-md-3
+
+        {
+            max-width: 48%; /* Daha küçük ekranlarda %48 genişlik */
+        }
+
         }
 
         .media (max-width: 480px) {
-            .col-md-3 {
-                max-width: 100%; /* Çok küçük ekranlarda kartlar alt alta sıralansın */
-            }
+            .col-md-3
+
+        {
+            max-width: 100%; /* Çok küçük ekranlarda kartlar alt alta sıralansın */
         }
 
+        }
     </style>
 }
