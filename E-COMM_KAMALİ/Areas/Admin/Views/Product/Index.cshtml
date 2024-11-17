@@ -1,4 +1,4 @@
-﻿@model ECOMM.Web.Areas.Admin.Controllers.ProductController.HomeViewModel
+﻿@model ECOMM.Core.ViewModels.HomeViewModel
 
 @{
     ViewData["Title"] = "Ürün Listesi";
@@ -27,23 +27,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var product in Model.Products)
-                {
-                    <tr id="product-@product.Id">
-                        <td>
-                            <img src="@Url.Content(product.ImagePath ?? "~/images/default.jpg")" alt="Ürün Resmi" width="50">
-                        </td>
-                        <td>@product.ProductTitle</td>
-                        <td>@product.ProductDescription</td>
-                        <td>@product.ProductPrice.ToString("C")</td>
-                        <td>@product.Category?.ParentCategoryName</td>
-                        <td>
-                            <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning">Düzenle</a>
-                            <button class="btn btn-danger deleteProduct" data-id="@product.Id">Sil</button>
-
-                        </td>
-                    </tr>
-                }
+                <!-- DataTables AJAX ile verileri buraya yükleyecek -->
             </tbody>
         </table>
     </div>
@@ -54,11 +38,55 @@
 }
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script>
         $(document).ready(function () {
+            $('#tblProducts').DataTable({
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    url: '/Admin/Product/GetAll',
+                    type: 'GET',
+                    data: function (d) {
+                        d.page = Math.ceil(d.start / d.length) + 1; // Sayfa numarasını ayarla
+                    }
+                },
+                columns: [
+                    {
+                        data: 'imagePath', render: function (data) {
+                            return '<img src="' + data + '" alt="Ürün Resmi" width="50">';
+                        }
+                    },
+                    { data: 'productTitle' },
+                    { data: 'productDescription' },
+                    {
+                        data: 'productPrice', render: function (data) {
+                            return data.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' });
+                        }
+                    },
+                    { data: 'category.parentCategoryName' },
+                    {
+                        data: 'id', render: function (data) {
+                            return '<a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="' + data + '" class=" btn btn-sm btn-warning">Düzenle</a>' +
+                                '<button class="btn btn-danger deleteProduct" data-id="' + data + '">Sil</button>';
+                        }
+                    }
+                ],
+                language: {
+                    url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/tr.json"
+                },
+                pageLength: 10,
+                lengthMenu: [10, 25, 50, 100],
+                order: [[1, "asc"]],
+                responsive: true
+            });
+
             // Silme butonuna tıklandığında AJAX ile silme işlemi
             $('#tblProducts').on('click', '.deleteProduct', function () {
-                var id = $(this).data('id'); // data-id'den ID'yi alıyoruz
+                var id = $(this).data('id');
 
                 // Swal ile onay penceresi
                 Swal.fire({
@@ -73,11 +101,10 @@
                     if (result.isConfirmed) {
                         // AJAX ile silme işlemi
                         $.ajax({
-                            type: "DELETE",  // Silme işlemi için HTTP metodunu DELETE olarak ayarlıyoruz
-                            url: "/Admin/Product/DeleteAsync/" + id, // Silme URL'si
+                            type: "DELETE",
+                            url: "/Admin/Product/DeleteAsync/" + id,
                             success: function () {
-                                // Başarılı olursa, tabloyu yeniden yükle (veya satırı kaldır)
-                                $('#product-' + id).remove();  // Silinen öğeyi sayfadan kaldırma
+                                $('#tblProducts').DataTable().ajax.reload();
                                 Swal.fire('Silindi!', 'Ürün başarıyla silindi.', 'success');
                             },
                             error: function () {

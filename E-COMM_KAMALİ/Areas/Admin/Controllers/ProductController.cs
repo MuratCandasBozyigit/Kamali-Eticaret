@@ -1,8 +1,12 @@
 ﻿using ECOMM.Business.Abstract;
+using ECOMM.Business.Concrete;
 using ECOMM.Core.Models;
 using ECOMM.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ECOMM.Web.Areas.Admin.Controllers
 {
@@ -10,33 +14,28 @@ namespace ECOMM.Web.Areas.Admin.Controllers
     [Route("Admin/[controller]")]
     public class ProductController : Controller
     {
-        #region Servisler 
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-       
 
         public ProductController(IProductService productService, ICategoryService categoryService)
         {
             _productService = productService;
             _categoryService = categoryService;
-       
         }
 
-        #endregion
-
+        // Ürün Listesi
+        [HttpGet]
         public async Task<IActionResult> Index(int page = 1)
         {
             const int pageSize = 6; // Sayfada gösterilecek ürün sayısı
             var allProducts = await _productService.GetAllAsync(); // Tüm ürünleri yükle
-
-            // Eğer allProducts IEnumerable olarak geliyorsa, Count'lamadan önce ToList() ile listeye çeviriyoruz
-            var productList = allProducts.ToList(); // Sayfada işlem yapabilmek için listeye çevir
+            var productList = allProducts.ToList(); // Listeye çevir
             var totalCount = productList.Count; // Toplam ürün sayısı
 
             // Mevcut sayfaya göre ürünleri al
             var products = productList
-                .Skip((page - 1) * pageSize) // Geçerli sayfayı atla
-                .Take(pageSize) // Belirli sayıda ürün al
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToList();
 
             var categories = await _categoryService.GetAllAsync(); // Kategorileri de yükle
@@ -46,46 +45,56 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 TotalCount = totalCount,
                 CurrentPage = page,
                 PageSize = pageSize,
-                Categories = categories.ToList() // Kategorileri listeye çevir
+                Categories = categories.ToList()
             };
 
             return View(model);
         }
 
-
-        public class HomeViewModel
-        {
-            public List<Product> Products { get; set; }
-            public List<Category> Categories { get; set; }
-            public int TotalCount { get; set; }
-            public int PageSize { get; set; } = 6; // Sayfada gösterilecek ürün sayısı
-            public int CurrentPage { get; set; } = 1; // Mevcut sayfa
-            public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
-        }
-
-        #region Tamamlandı 
-
+        // Ürünleri Getir (AJAX)
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            _productService.GetAllAsync();
-            return Ok();
+            var products = await _productService.GetAllAsync(); // Tüm ürünleri al
+            var productList = products.ToList(); // Listeye çevir
+            var categories = await _categoryService.GetAllAsync(); // Tüm kategorileri al
+
+            var result = new
+            {
+                data = productList.Select(p => new
+                {
+                    p.Id,
+                    p.ProductTitle,
+                    p.ProductDescription,
+                    p.ProductPrice,
+                    p.ImagePath,
+                    category = new
+                    {
+                        parentCategoryName = categories.FirstOrDefault(c => c.Id == p.CategoryId)?.ParentCategoryName
+                    }
+                }),
+                recordsTotal = productList.Count,
+                recordsFiltered = productList.Count
+            };
+
+            return Json(result);
         }
 
+        // Ürün Ekle
         [HttpGet("Create")]
         public async Task<IActionResult> Create()
         {
-            var categories = await _categoryService.GetAllAsync(); // Asenkron olarak bekle
+            var categories = await _categoryService.GetAllAsync();
             var viewModel = new HomeViewModel
             {
-                Categories = categories.ToList() // Kategorileri listeye çevir
+                Categories = categories.ToList()
             };
 
             return View(viewModel);
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromForm] Product Product, IFormFile image)
+        public async Task<IActionResult> Create([FromForm] Product product, IFormFile image)
         {
             if (image != null && image.Length > 0)
             {
@@ -94,16 +103,17 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
-                    await image.CopyToAsync(stream); // Asenkron kopyalama
+                    await image.CopyToAsync(stream);
                 }
 
-                Product.ImagePath = "/images/" + fileName;
+                product.ImagePath = "/images/" + fileName;
             }
 
-            await _productService.AddAsync(Product); // Asenkron olarak ekle
-            return RedirectToAction("Index"); // Başarılı ekleme sonrası Index'e yönlendir
+            await _productService.AddAsync(product);
+            return RedirectToAction("Index");
         }
 
+        // Ürün Sil
         [HttpDelete("DeleteAsync/{id}")]
         public async Task<IActionResult> DeleteAsync(int id)
         {
@@ -127,24 +137,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-        [HttpGet("GetById{id}")]
-        public IActionResult GetById(int id)
-        {
-            if (id == 0)
-            {
-                return BadRequest("Geçerli ıd yok ");
-            }
-            try
-            {
-                var Product = _productService.GetByIdAsync(id);
-                return Ok(Product);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message + "sea sorun getbyıd");
-            }
-        }
-
+        // Ürün Düzenle
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
@@ -163,12 +156,12 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductDescription = product.ProductDescription,
                 ProductPrice = (decimal)product.ProductPrice,
                 ImagePath = product.ImagePath,
-                CategoryId = product.Category?.Id ?? 0, // CategoryId ayarla
+                CategoryId = product.Category?.Id ?? 0,
                 Categories = categories.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.ParentCategoryName
-                }).ToList() // Buraya ToList ekliyoruz
+                }).ToList()
             };
 
             return View(viewModel);
@@ -183,13 +176,11 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Yalnızca gerekli bilgileri güncelle
             productToUpdate.ProductTitle = viewModel.ProductTitle;
             productToUpdate.ProductDescription = viewModel.ProductDescription;
             productToUpdate.ProductPrice = viewModel.ProductPrice;
-            productToUpdate.CategoryId = viewModel.CategoryId; // Ana kategoriyi güncelle
+            productToUpdate.CategoryId = viewModel.CategoryId;
 
-            // Resim güncelleme işlemi
             if (image != null && image.Length > 0)
             {
                 var fileName = Path.GetFileName(image.FileName);
@@ -200,169 +191,11 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                     await image.CopyToAsync(stream);
                 }
 
-                productToUpdate.ImagePath = "/images/" + fileName; // Resim yolunu güncelle
+                productToUpdate.ImagePath = "/images/" + fileName;
             }
 
-            await _productService.UpdateAsync(productToUpdate); // Ürünü güncelle
-            return RedirectToAction("Index"); // Başarılı güncelleme sonrası Index'e yönlendir
+            await _productService.UpdateAsync(productToUpdate);
+            return RedirectToAction("Index");
         }
-
-
-
-        #endregion
-
     }
 }
-
-
-
-
-
-
-
-#region YORUMSATIRLARISSSS
-
-//ASIL EDİT BU
-//[HttpGet]
-//public IActionResult Edit()
-//{
-//    return View();
-//}
-//[HttpProduct]
-//public IActionResult Edit([FromBody] Product Product)
-//{
-//    if (Product == null)
-//    {
-//        return BadRequest("Product nesnesi null.");
-//    }
-
-//    if (!ModelState.IsValid)
-//    {
-//        return BadRequest("Product model doğrulama hatası.");
-//    }
-
-//    try
-//    {
-//        // Eğer 'GetAll' metodunun doğru bir kullanımı değilse, uygun metodu çağırmalısınız.
-//        var Products = _productService.GetAll(); // Eğer 'Product' ile filtreleme yapılacaksa uygun metodu çağırmalısınız
-//        return Ok(Products);
-//    }
-//    catch (Exception ex)
-//    {
-//        // Özel hata mesajları veya loglama
-//        return StatusCode(500, $"Sunucu hatası: {ex.Message}");
-//    }
-//}
-
-
-//[HttpGet]
-//public IActionResult Edit()
-//{
-//    return View();
-//}
-//[HttpProduct]
-//public IActionResult Edit([FromBody] Product Product)
-//{
-//    if (Product == null)
-//    {
-//        return BadRequest("Product nesnesi null.");
-//    }
-
-//    if (!ModelState.IsValid)
-//    {
-//        return BadRequest("Product model doğrulama hatası.");
-//    }
-
-//    try
-//    {
-//        // Eğer 'GetAll' metodunun doğru bir kullanımı değilse, uygun metodu çağırmalısınız.
-//        var Products = _productService.GetAll(); // Eğer 'Product' ile filtreleme yapılacaksa uygun metodu çağırmalısınız
-//        return Ok(Products);
-//    }
-//    catch (Exception ex)
-//    {
-//        // Özel hata mesajları veya loglama
-//        return StatusCode(500, $"Sunucu hatası: {ex.Message}");
-//    }
-//}
-
-
-
-//public IActionResult Create(Product Product, IFormFile image)
-//{
-//    if (ModelState.IsValid)
-//    {
-//        if (image != null && image.Length > 0)
-//        {
-//            var fileName = Path.GetFileName(image.FileName);
-//            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-//            using (var stream = new FileStream(filePath, FileMode.Create))
-//            {
-//                image.CopyTo(stream);
-//            }
-
-//            Product.ImagePath = "~/images/" + fileName;
-//        }
-
-//        _productService.Add(Product);
-//        return RedirectToAction("Index");
-//    }
-
-//    return View(Product);
-//}
-
-
-
-
-
-
-
-
-
-//[HttpGet("{id}")]
-//public IActionResult Edit(int id)
-//{
-//    var Product = _productService.GetById(id);
-//    if (Product == null)
-//    {
-//        return NotFound();
-//    }
-
-//    var categories = _categoryService.GetAll();
-//    var viewModel = new ProductEditViewModel
-//    {
-//        Product = Product,
-//        Categories = categories
-//    };
-
-//    return View(viewModel);
-//}
-
-//[HttpProduct]
-//public IActionResult Edit(ProductEditViewModel viewModel, IFormFile image)
-//{
-//    if (!ModelState.IsValid)
-//    {
-//        viewModel.Categories = _categoryService.GetAll(); // Kategorileri yeniden yükle
-//        return View(viewModel);
-//    }
-
-//    if (image != null && image.Length > 0)
-//    {
-//        var fileName = Path.GetFileName(image.FileName);
-//        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-//        using (var stream = new FileStream(filePath, FileMode.Create))
-//        {
-//            image.CopyTo(stream);
-//        }
-
-//        viewModel.Product.ImagePath = "/images/" + fileName;
-//    }
-
-//    _productService.Update(viewModel.Product); // Update metodunu çağırdığınızdan emin olun
-//    return RedirectToAction("Index");
-//}
-
-#endregion
