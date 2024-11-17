@@ -74,7 +74,9 @@
                         <td>@product.ProductPrice.ToString("C")</td>
                         <td>@product.Category?.ParentCategoryName</td>
                         <td>
-                            <button class="btn btn-sm btn-warning editProduct" data-id="@product.Id">Düzenle</button>
+                            <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning">Düzenle</a>
+
+
                             <button class="btn btn-sm btn-danger deleteProduct" data-id="@product.Id">Sil</button>
                         </td>
                     </tr>
