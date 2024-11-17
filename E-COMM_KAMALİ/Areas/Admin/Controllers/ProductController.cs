@@ -127,9 +127,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-
-
-
         [HttpGet("GetById{id}")]
         public IActionResult GetById(int id)
         {
