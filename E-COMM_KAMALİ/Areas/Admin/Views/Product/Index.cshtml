@@ -6,7 +6,6 @@
 
 <h2>Ürün Listesi</h2>
 
-
 <div class="mt-4" style="text-align:right;">
     <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-primary ti-plus">Ekle</a>
 </div>
@@ -16,7 +15,7 @@
         <h5 class="mb-0"><box-icon name="box" color="dark" size="sm" animation="tada"></box-icon> Ürünler</h5>
     </div>
     <div class="card-body">
-        <table id="productTable" class="table  table-hover">
+        <table id="tblProducts" class="table table-hover">
             <thead>
                 <tr>
                     <th>Resim</th>
@@ -40,7 +39,8 @@
                         <td>@product.Category?.ParentCategoryName</td>
                         <td>
                             <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning">Düzenle</a>
-                            <button class="btn btn-sm btn-danger deleteProduct" data-id="@product.Id">Sil</button>
+                            <button class="btn btn-danger deleteProduct" data-id="@product.Id">Sil</button>
+
                         </td>
                     </tr>
                 }
@@ -54,31 +54,16 @@
 }
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-
     <script>
         $(document).ready(function () {
-            $('#productTable').DataTable({
-                language: {
-                    url: "//cdn.datatables.net/plug-ins/1.11.5/i18n/Turkish.json"
-                },
-                paging: true,
-                searching: true,
-                ordering: true,
-                info: true,
-                lengthChange: true
-            });
+            // Silme butonuna tıklandığında AJAX ile silme işlemi
+            $('#tblProducts').on('click', '.deleteProduct', function () {
+                var id = $(this).data('id'); // data-id'den ID'yi alıyoruz
 
-          
-          
-
-            // Ürün silme
-            $('#productTable').on('click', '.deleteProduct', function () {
-                var id = $(this).data('id');
+                // Swal ile onay penceresi
                 Swal.fire({
                     title: 'Emin misiniz?',
-                    text: "Bu ürün kalıcı olarak silinecek!",
+                    text: "Bu Ürün kalıcı olarak silinecek!",
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
@@ -86,11 +71,13 @@
                     confirmButtonText: 'Evet, sil!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        // AJAX ile silme işlemi
                         $.ajax({
-                            type: "DELETE",
-                            url: "/Admin/Product/Delete/" + id,
+                            type: "DELETE",  // Silme işlemi için HTTP metodunu DELETE olarak ayarlıyoruz
+                            url: "/Admin/Product/DeleteAsync/" + id, // Silme URL'si
                             success: function () {
-                                $('#product-' + id).remove();
+                                // Başarılı olursa, tabloyu yeniden yükle (veya satırı kaldır)
+                                $('#product-' + id).remove();  // Silinen öğeyi sayfadan kaldırma
                                 Swal.fire('Silindi!', 'Ürün başarıyla silindi.', 'success');
                             },
                             error: function () {

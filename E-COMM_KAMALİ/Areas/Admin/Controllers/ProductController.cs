@@ -71,6 +71,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             _productService.GetAllAsync();
             return Ok();
         }
+
         [HttpGet("Create")]
         public async Task<IActionResult> Create()
         {
@@ -103,24 +104,31 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             return RedirectToAction("Index"); // Başarılı ekleme sonrası Index'e yönlendir
         }
 
-
-        [HttpDelete("Delete/{id}")]
-        public IActionResult Delete(int id)
+        [HttpDelete("DeleteAsync/{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            if (id == 0) 
+            if (id <= 0)
             {
-                return BadRequest("Invalid Id Format");
+                return BadRequest("Geçersiz Ürün Id'si.");
             }
 
-            var Product = _productService.GetByIdAsync(id);
-            if (Product == null)
+            try
             {
-                return NotFound("Product Not Found");
+                var result = await _productService.DeleteAsync(id);
+                if (!result)
+                {
+                    return NotFound("Ürün bulunamadı.");
+                }
+                return Ok();
             }
-
-            _productService.DeleteAsync(id);
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server Hatası Ürün Silinemedi: {ex.Message}");
+            }
         }
+
+
+
 
         [HttpGet("GetById{id}")]
         public IActionResult GetById(int id)
@@ -168,7 +176,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
             return View(viewModel);
         }
-
 
         [HttpPost("Edit/{id}")]
         public async Task<IActionResult> Edit(ProductEditViewModel viewModel, IFormFile image)
