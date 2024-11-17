@@ -115,26 +115,7 @@
                 $('#modal').modal('show');
             });
 
-            // Ürün düzenleme
-            $('#productTable').on('click', '.editProduct', function () {
-                var id = $(this).data('id');
-                $.ajax({
-                    url: "/Admin/Product/GetById/" + id,
-                    success: function (res) {
-                        $('#productTitle').val(res.productTitle);
-                        $('#productDescription').val(res.productDescription);
-                        $('#productPrice').val(res.productPrice);
-                        $('#productCategory').val(res.categoryId);
-                        $('#productId').val(res.id);
-                    },
-                    error: function () {
-                        Swal.fire('Hata', 'Ürün verisi yüklenirken bir sorun oluştu.', 'error');
-                    }
-                });
-                $('#modProductTitle').text('Ürün Düzenle');
-                $('#btnSave').text('Güncelle');
-                $('#modal').modal('show');
-            });
+          
 
             // Ürün silme
             $('#productTable').on('click', '.deleteProduct', function () {
