@@ -51,17 +51,23 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-        // Ürünleri Getir (AJAX)
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(int page = 1, int pageSize = 10)
         {
-            var products = await _productService.GetAllAsync(); // Tüm ürünleri al
-            var productList = products.ToList(); // Listeye çevir
+            var allProducts = await _productService.GetAllAsync(); // Tüm ürünleri al
+            var totalCount = allProducts.Count(); // Toplam ürün sayısını al
+
+            // Sayfa numarasına göre ürünleri al
+            var products = allProducts
+                .Skip((page - 1) * pageSize) // Geçerli sayfayı atla
+                .Take(pageSize) // Belirli sayıda ürün al
+                .ToList();
+
             var categories = await _categoryService.GetAllAsync(); // Tüm kategorileri al
 
             var result = new
             {
-                data = productList.Select(p => new
+                data = products.Select(p => new
                 {
                     p.Id,
                     p.ProductTitle,
@@ -73,8 +79,8 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                         parentCategoryName = categories.FirstOrDefault(c => c.Id == p.CategoryId)?.ParentCategoryName
                     }
                 }),
-                recordsTotal = productList.Count,
-                recordsFiltered = productList.Count
+                recordsTotal = totalCount, // Toplam kayıt sayısı
+                recordsFiltered = totalCount // Filtrelenmiş kayıt sayısı (şu anda filtreleme yok)
             };
 
             return Json(result);

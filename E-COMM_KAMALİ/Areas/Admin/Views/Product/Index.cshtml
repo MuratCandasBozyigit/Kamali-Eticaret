@@ -51,7 +51,8 @@
                     url: '/Admin/Product/GetAll',
                     type: 'GET',
                     data: function (d) {
-                        d.page = Math.ceil(d.start / d.length) + 1; // Sayfa numarasını ayarla
+                        // Sayfa numarasını ayarla
+                        d.page = Math.ceil(d.start / d.length) + 1;
                     }
                 },
                 columns: [
@@ -78,12 +79,11 @@
                 language: {
                     url: "https://cdn.datatables.net/plug-ins/1.11.5/i18n/tr.json"
                 },
-                pageLength: 10,
-                lengthMenu: [10, 25, 50, 100],
-                order: [[1, "asc"]],
-                responsive: true
+                pageLength: 10, // Varsayılan sayfa boyutu
+                lengthMenu: [10, 25, 50, 100], // Kullanıcıya sunulacak seçenekler
+                order: [[1, "asc"]], // Varsayılan sıralama
+                responsive: true // Cihazdan bağımsız görünüm
             });
-
             // Silme butonuna tıklandığında AJAX ile silme işlemi
             $('#tblProducts').on('click', '.deleteProduct', function () {
                 var id = $(this).data('id');
