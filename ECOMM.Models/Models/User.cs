@@ -11,11 +11,14 @@ namespace ECOMM.Core.Models
     {
 
         public string  FullName { get; set; }
-        public string ShippingCity { get; set; }
-        public ShippingAddress ShippingAddress { get; set; }
         public bool IsAdmin { get; set; } = false;
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = new List<ApplicationUserRole>();
-
         public List<Orders> UserOrders { get; set; } = new List<Orders>();
+
+
+
+
+        public string ShippingCity { get; set; }
+        public ShippingInfo ShippingInfo { get; set; }
     }
 }
