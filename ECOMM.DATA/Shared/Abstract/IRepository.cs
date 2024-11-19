@@ -23,7 +23,7 @@ namespace ECOMM.Data.Shared.Abstract
         Task SaveAsync(); // Değişiklikleri kaydeder
         Task<IEnumerable<T>> GetAllIncluding(params Expression<Func<T, object>>[] includeProperties);
         Task<Category> GetCategoryByIdAsync(int categoryId);
-        //Task<Orders> CreateOrderAsync(Orders order, User user);
+        Task<Orders> CreateOrderAsync(Orders order, User user);
         //Task<T> CreateAsync<T>(T entity, object relatedEntity) where T : BaseModel;
     }
 }

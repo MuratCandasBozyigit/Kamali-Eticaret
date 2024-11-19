@@ -123,17 +123,17 @@ namespace ECOMM.Data.Shared.Concrete
             return await _context.Categories.FindAsync(categoryId); // Kategoriyi ID'ye göre buluyoruz
         }
 
-        //public async Task<Orders> CreateOrderAsync(Orders order, User user)
-        //{
-        //    // Kullanıcıyla ilişkilendirme (örnek)
-        //    order.UserId = user.Id; // UserId ilişkilendirildi
-        //    order.OrderDate = DateTime.UtcNow; // Sipariş tarihi atanıyor
+        public async Task<Orders> CreateOrderAsync(Orders order, User user)
+        {
+            // Kullanıcıyla ilişkilendirme (örnek)
+            order.UserId = user.Id; // UserId ilişkilendirildi
+            order.OrderDate = DateTime.UtcNow; // Sipariş tarihi atanıyor
 
-        //    var result = await _context.Set<Orders>().AddAsync(order);
-        //    await _context.SaveChangesAsync();
+            var result = await _context.Set<Orders>().AddAsync(order);
+            await _context.SaveChangesAsync();
 
-        //    return result.Entity; // Kaydedilen sipariş döndürülüyor
-        //}
+            return result.Entity; // Kaydedilen sipariş döndürülüyor
+        }
 
     }
 }
