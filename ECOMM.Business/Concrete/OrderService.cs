@@ -52,10 +52,28 @@ namespace ECOMM.Business.Concrete
 
         public async Task<IEnumerable<Orders>> GetOrdersByUserIdAsync(string userId)
         {
-            // Kullanıcıya ait siparişleri almak için repository'den filtreleme yapmalısınız.
-            // Burada örnek bir filtreleme yapıyoruz. Gerçek uygulamanızda kendi veri erişim mantığınıza göre düzenleyin.
-            var orders = await GetAllAsync();
-            return orders.Where(o => o.UserId == userId); // Kullanıcı kimliğine göre filtrele
+            //// Kullanıcıya ait siparişleri almak için repository'den filtreleme yapmalısınız.
+            //// Burada örnek bir filtreleme yapıyoruz. Gerçek uygulamanızda kendi veri erişim mantığınıza göre düzenleyin.
+            //var orders = await GetAllAsync();
+            //return orders.Where(o => o.UserId == userId); // Kullanıcı kimliğine göre filtrele
+            return await _orderRepository.GetAllAsync(o => o.UserId == userId);
+
         }
+
+        public async Task<Orders> GetOrderByIdAsync(int orderId)
+        {
+            return await _orderRepository.GetByIdAsync(orderId);
+        }
+
+        public async Task<Orders> CreateOrderAsync(Orders order, User user)
+        {
+            // Sipariş ve kullanıcıyı ilişkilendir
+            order.UserId = user.Id;
+            order.OrderDate = DateTime.UtcNow; // Sipariş tarihini güncel olarak ayarla
+
+            return await _orderRepository.CreateOrderAsync(order, user); // Repository üzerinden kaydet
+        }
+
+
     }
 }
