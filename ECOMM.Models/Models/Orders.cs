@@ -1,51 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+using ECOMM.Core.Enums;
 
 namespace ECOMM.Core.Models
 {
-    public enum OrderStatus
-    {
-        Pending,
-        Shipped,
-        Delivered,
-        Canceled
-    }
-
-    public enum PaymentMethodEnum
-    {
-        CreditCard,
-        BankTransfer,
-        CashOnDelivery
-    }
+  
 
     public class Orders : BaseModel
     {
-        public int OrderId { get; set; } // Sipariş Kimliği
+        public int OrderId { get; set; }
 
         [Required]
-        public string UserId { get; set; } // Kullanıcı kimliği (User sınıfındaki Id ile uyumlu)
+        public string UserId { get; set; }
+        public User User { get; set; }
 
-        public User User { get; set; } // Kullanıcı nesnesi
+        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
-        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>(); // Siparişin içindeki ürünler
-        public DateTime OrderDate { get; set; } // Sipariş tarihi
+        [Required]
+        public DateTime OrderDate { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Toplam tutar 0'dan büyük olmalıdır.")]
-        public decimal TotalAmount { get; set; } // Toplam tutar
+        [Range(0.01, double.MaxValue, ErrorMessage = "Total amount must be greater than 0.")]
+        public decimal TotalAmount { get; set; }
 
         [Required]
         [EnumDataType(typeof(OrderStatus))]
-        public OrderStatus Status { get; set; } // Sipariş durumu (örn. 'Pending', 'Shipped', 'Delivered')
+        public OrderStatus Status { get; set; }
 
-        [Required]
-        [StringLength(500)]
-        public string ShippingAddress { get; set; } // Gönderim adresi
-
-        [Required]
-        [EnumDataType(typeof(PaymentMethodEnum))]
-        public PaymentMethodEnum PaymentMethod { get; set; } // Ödeme yöntemi (örneğin 'Credit Card', 'PayPal' vb.)
+        public ShippingInfo ShippingInfo { get; set; } // ShippingInfo ile birebir ilişki
+        public PaymentInfo PaymentInfo { get; set; } // PaymentInfo ile birebir ilişki
     }
 }

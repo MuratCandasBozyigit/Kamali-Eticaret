@@ -11,8 +11,8 @@ namespace ECOMM.Core.Models
     {
 
         public string  FullName { get; set; }
-
-
+        public string ShippingCity { get; set; }
+        public ShippingAddress ShippingAddress { get; set; }
         public bool IsAdmin { get; set; } = false;
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = new List<ApplicationUserRole>();
 

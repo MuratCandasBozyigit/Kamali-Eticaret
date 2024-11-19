@@ -1,21 +1,20 @@
-﻿using ECOMM.Core.Models;
-using ECOMM.Core.ViewModels;
-namespace
-    ECOMM.Core.ViewModels
-    {
-public class PaymentViewModel
+﻿using System.Collections.Generic;
+using ECOMM.Core.Enums;
+
+namespace ECOMM.Core.ViewModels
 {
-    public string UserId { get; set; }
-    public string UserName { get; set; }
-    public string Email { get; set; }
+    public class PaymentViewModel
+    {
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string ShippingCity { get; set; }
+        public List<CartItemViewModel> CartItems { get; set; }
+        public decimal TotalAmount { get; set; }
+        public string PaymentMethod { get; set; }
+        public string ShippingAddress { get; set; }
+        public string ShippingPostalCode { get; set; }
+        public string UserId { get; set; }
+    }
 
-    public string ShippingAddress { get; set; }
-    public string City { get; set; }
-    public string PostalCode { get; set; }
 
-    public PaymentMethodEnum PaymentMethod { get; set; }
-
-    public List<CartItemViewModel> CartItems { get; set; } = new List<CartItemViewModel>();
-    public decimal TotalAmount { get; set; }
-}
 }
