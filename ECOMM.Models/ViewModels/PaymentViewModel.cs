@@ -1,6 +1,8 @@
 ﻿using ECOMM.Core.Models;
 using ECOMM.Core.ViewModels;
-
+namespace
+    ECOMM.Core.ViewModels
+    {
 public class PaymentViewModel
 {
     public string UserId { get; set; }
@@ -15,4 +17,5 @@ public class PaymentViewModel
 
     public List<CartItemViewModel> CartItems { get; set; } = new List<CartItemViewModel>();
     public decimal TotalAmount { get; set; }
+}
 }

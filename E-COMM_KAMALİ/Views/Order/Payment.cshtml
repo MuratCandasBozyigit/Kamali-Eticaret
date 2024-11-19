@@ -1,0 +1,61 @@
+﻿@model ECOMM.Core.ViewModels.PaymentViewModel
+
+@{
+    ViewData["Title"] = "Ödeme";
+}
+
+<h2>Ödeme</h2>
+
+@if (Model.CartItems != null && Model.CartItems.Any())
+{
+    <h3>Sepetiniz</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ürün Adı</th>
+                <th>Fiyat</th>
+                <th>Adet</th>
+                <th>Toplam</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Price.ToString("C")</td>
+                    <td>@item.Quantity</td>
+                    <td>@(item.Price * item.Quantity).ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h4>Toplam Tutar: @Model.TotalAmount.ToString("C")</h4>
+
+    <form asp-action="ProcessPayment" method="post">
+        <input type="hidden" asp-for="UserId" value="@Model.UserId" />
+        <div class="form-group">
+            <label for="ShippingAddress">Teslimat Adresi</label>
+            <input type="text" asp-for="ShippingAddress" class="form-control" required />
+            <span asp-validation-for="ShippingAddress" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label for="PaymentMethod">Ödeme Yöntemi</label>
+            <select asp-for="PaymentMethod" class="form-control" required>
+                <option value="">Seçiniz</option>
+                <option value="Kredi Kartı">Kredi Kartı</option>
+                <option value="Havale">Havale</option>
+                <option value="Kapıda Ödeme">Kapıda Ödeme</option>
+            </select>
+            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Ödeme Yap" class="btn btn-primary" />
+        </div>
+    </form>
+}
+else
+{
+    <p>Sepetiniz boş.</p>
+}
