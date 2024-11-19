@@ -23,8 +23,9 @@ namespace ECOMM.Core.Models
         [Required]
         public string Country { get; set; }
 
+        // Regular expression for ZipCode (Country-specific)
         [Required]
-        [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid Zip Code format.")]
+        [RegularExpression(@"^\d{5}(-\d{4})?$", ErrorMessage = "Invalid Zip Code format.")] // US example
         public string ZipCode { get; set; }
 
         [Required]

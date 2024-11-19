@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using ECOMM.Core.Enums;
 
 namespace ECOMM.Core.Models
 {
@@ -21,5 +22,8 @@ namespace ECOMM.Core.Models
         public decimal Amount { get; set; } // Amount paid
 
         public string TransactionId { get; set; } // Payment gateway transaction ID
+
+        public PaymentMethodEnum PaymentMethodEnum { get; set; } // Enum türünde
+        public PaymentStatus PaymentStatusEnum { get; set; } // Enum türünde
     }
 }

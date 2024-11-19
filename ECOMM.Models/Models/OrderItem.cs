@@ -24,6 +24,12 @@ namespace ECOMM.Core.Models
 
         // Total cost for this item (Quantity * Price)
         [Column(TypeName = "decimal(18,2)")]
-        public decimal TotalPrice => Quantity * Price;
+        public decimal TotalPrice { get; set; }
+
+        // Veritabanına kaydetmeden önce hesaplanmasını sağlamak
+        public void CalculateTotalPrice()
+        {
+            TotalPrice = Quantity * Price;
+        }
     }
 }
