@@ -1,24 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECOMM.Core.Models
 {
-    public class Orders : BaseModel
+    public enum OrderStatus
     {
-        public int OrderId { get; set; }
+        Pending,
+        Shipped,
+        Delivered,
+        Canceled
+    }
 
-        public string UserId { get; set; } // User sınıfındaki Id ile uyumlu hale getirildi
+    public enum PaymentMethodEnum
+    {
+        CreditCard,
+        BankTransfer,
+        CashOnDelivery
+    }
+
+    public class Order : BaseModel
+    {
+        public int OrderId { get; set; } // Sipariş Kimliği
+
+        [Required]
+        public string UserId { get; set; } // Kullanıcı kimliği (User sınıfındaki Id ile uyumlu)
+
         public User User { get; set; } // Kullanıcı nesnesi
 
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>(); // Siparişin içindeki ürünler
         public DateTime OrderDate { get; set; } // Sipariş tarihi
 
         [Column(TypeName = "decimal(18,2)")]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Toplam tutar 0'dan büyük olmalıdır.")]
         public decimal TotalAmount { get; set; } // Toplam tutar
 
-        public string Status { get; set; } // Sipariş durumu (örn. 'Pending', 'Shipped', 'Delivered')
+        [Required]
+        [EnumDataType(typeof(OrderStatus))]
+        public OrderStatus Status { get; set; } // Sipariş durumu (örn. 'Pending', 'Shipped', 'Delivered')
+
+        [Required]
+        [StringLength(500)]
         public string ShippingAddress { get; set; } // Gönderim adresi
-        public string PaymentMethod { get; set; } // Ödeme yöntemi
+
+        [Required]
+        [EnumDataType(typeof(PaymentMethodEnum))]
+        public PaymentMethodEnum PaymentMethod { get; set; } // Ödeme yöntemi (örneğin 'Credit Card', 'PayPal' vb.)
     }
 }
