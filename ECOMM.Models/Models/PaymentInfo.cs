@@ -1,28 +1,25 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using ECOMM.Core.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECOMM.Core.Models
 {
     public class PaymentInfo
     {
-        public int Id { get; set; }
+        public int PaymentInfoId { get; set; }
+
+        [Required]
         public int OrderId { get; set; }
         public Orders Order { get; set; }
 
         [Required]
-        [EnumDataType(typeof(PaymentMethodEnum))]
-        public PaymentMethodEnum PaymentMethod { get; set; }
-
-        [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Amount paid must be greater than 0.")]
-        public decimal AmountPaid { get; set; }
+        public string PaymentMethod { get; set; } // E.g., Credit Card, PayPal, etc.
 
         [Required]
-        public DateTime PaymentDate { get; set; }
+        public string PaymentStatus { get; set; } // E.g., Pending, Completed, Failed
 
-        public string PaymentStatus { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Amount { get; set; } // Amount paid
+
+        public string TransactionId { get; set; } // Payment gateway transaction ID
     }
-
-
 }
