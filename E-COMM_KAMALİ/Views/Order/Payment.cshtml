@@ -1,61 +1,302 @@
 ﻿@model ECOMM.Core.ViewModels.PaymentViewModel
 
-@{
-    ViewData["Title"] = "Ödeme";
-}
+<!-- ============================================================== -->
+<!-- Start right Content here -->
+<!-- ============================================================== -->
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid">
 
-<h2>Ödeme</h2>
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <h4 class="mb-0">Checkout</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li class="breadcrumb-item"><a href="javascript: void(0);">Ecommerce</a></li>
+                                <li class="breadcrumb-item active">Checkout</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
 
-@if (Model.CartItems != null && Model.CartItems.Any())
-{
-    <h3>Sepetiniz</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ürün Adı</th>
-                <th>Fiyat</th>
-                <th>Adet</th>
-                <th>Toplam</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.CartItems)
-            {
-                <tr>
-                    <td>@item.ProductName</td>
-                    <td>@item.Price.ToString("C")</td>
-                    <td>@item.Quantity</td>
-                    <td>@(item.Price * item.Quantity).ToString("C")</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+            <div class="row">
+                <div class="col-xl-8">
+                    <div class="custom-accordion">
 
-    <h4>Toplam Tutar: @Model.TotalAmount.ToString("C")</h4>
+                        <!-- Billing Info -->
+                        <div class="card">
+                            <a href="#checkout-billinginfo-collapse" class="text-reset" data-bs-toggle="collapse">
+                                <div class="p-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-3">
+                                            <i class="uil uil-receipt text-primary h2"></i>
+                                        </div>
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <h5 class="font-size-16 mb-1">Billing Info</h5>
+                                            <p class="text-muted text-truncate mb-0">Sed ut perspiciatis unde omnis iste</p>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div id="checkout-billinginfo-collapse" class="collapse show">
+                                <div class="p-4 border-top">
+                                    <form asp-action="ProcessPayment" method="post">
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="billing-name">Name</label>
+                                               @*      <input type="text" class="form-control" id="billing-name" placeholder="Enter name" asp-for="Name" required /> *@
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="billing-email-address">Email Address</label>
+                                                    <input type="email" class="form-control" id="billing-email-address" placeholder="Enter email" asp-for="Email" required />
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="billing-phone">Phone</label>@* 
+                                                    <input type="text" class="form-control" id="billing-phone" placeholder="Enter Phone no." asp-for="Phone" required /> *@
+                                                </div>
+                                            </div>
+                                        </div>
 
-    <form asp-action="ProcessPayment" method="post">
-        <input type="hidden" asp-for="UserId" value="@Model.UserId" />
-        <div class="form-group">
-            <label for="ShippingAddress">Teslimat Adresi</label>
-            <input type="text" asp-for="ShippingAddress" class="form-control" required />
-            <span asp-validation-for="ShippingAddress" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label for="PaymentMethod">Ödeme Yöntemi</label>
-            <select asp-for="PaymentMethod" class="form-control" required>
-                <option value="">Seçiniz</option>
-                <option value="Kredi Kartı">Kredi Kartı</option>
-                <option value="Havale">Havale</option>
-                <option value="Kapıda Ödeme">Kapıda Ödeme</option>
-            </select>
-            <span asp-validation-for="PaymentMethod" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <input type="submit" value="Ödeme Yap" class="btn btn-primary" />
-        </div>
-    </form>
-}
-else
-{
-    <p>Sepetiniz boş.</p>
-}
+                                        <div class="mb-4">
+                                            <label class="form-label" for="billing-address">Address</label>
+                                            <textarea class="form-control" id="billing-address" rows="3" placeholder="Enter full address" asp-for="ShippingAddress" required></textarea>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-lg-4">
+                                                <div class="mb-4">
+                                                    <label class="form-label">Country</label>
+                                                   @*  <select class="form-control form-select" asp-for="Country" required>
+                                                        <option value="0">Select Country</option>
+                                                        <!-- Ülke seçeneklerini burada listeleyebilirsiniz -->
+                                                        <option value="TR">Turkey</option>
+                                                        <option value="US">United States</option>
+                                                        <!-- Diğer ülkeleri ekleyin -->
+                                                    </select> *@
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4">
+                                                <div class="mb-4">
+                                                    <label class="form-label" for="billing-city">City</label>
+                                                    <input type="text" class="form-control" id="billing-city" placeholder="Enter City" asp-for="City" required />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-4">
+                                                <div class="mb-0">
+                                                    <label class="form-label" for="zip-code">Zip / Postal code</label>
+                                                @*     <input type="text" class="form-control" id="zip-code" placeholder="Enter Postal code" asp-for="ZipCode" required /> *@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Info -->
+                        <div class="card">
+                            <a href="#checkout-shippinginfo-collapse" class="collapsed text-reset" data-bs-toggle="collapse">
+                                <div class="p-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-3">
+                                            <i class="uil uil-truck text-primary h2"></i>
+                                        </div>
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <h5 class="font-size-16 mb-1">Shipping Info</h5>
+                                            <p class="text-muted text-truncate mb-0">Neque porro quisquam est</p>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div id="checkout-shippinginfo-collapse" class="collapse">
+                                <div class="p-4 border-top">
+                                    <h5 class="font-size-14 mb-3">Shipping Info</h5>
+                                    <div class="row">
+                                        <div class="col-lg-4 col-sm-6">
+                                            <div class="card border rounded active shipping-address">
+                                                <div class="card-body">
+                                                    <h5 class="font-size-14 mb-4">Address 1</h5>
+                                                    <h5 class="font-size-14">@Model.UserName</h5>
+                                                    <p class="mb-1">@Model.ShippingAddress</p>
+                                                   @*  <p class="mb-0">@Model.Phone</p> *@
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Payment Info -->
+                        <div class="card">
+                            <a href="#checkout-paymentinfo-collapse" class="collapsed text-reset" data-bs-toggle="collapse">
+                                <div class="p-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0 me-3">
+                                            <i class="uil uil-bill text-primary h2"></i>
+                                        </div>
+                                        <div class="flex-grow-1 overflow-hidden">
+                                            <h5 class="font-size-16 mb-1">Payment Info</h5>
+                                            <p class="text-muted text-truncate mb-0">Duis arcu tortor, suscipit eget</p>
+                                        </div>
+                                        <div class="flex-shrink-0">
+                                            <i class="mdi mdi-chevron-up accor-down-icon font-size-24"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                            <div id="checkout-paymentinfo-collapse" class="collapse">
+                                <div class="p-4 border-top">
+                                    <div>
+                                        <h5 class="font-size-14 mb-3">Payment method :</h5>
+                                        <div class="row">
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div>
+                                                    <label class="card-radio-label">
+                                                        <input type="radio" name="pay-method" id="pay-methodoption1" class="card-radio-input" asp-for="PaymentMethod" value="Kredi Kartı" required />
+                                                        <span class="card-radio text-center text-truncate">
+                                                            <i class="uil uil-postcard d-block h2 mb-3"></i>
+                                                            Credit / Debit Card
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div>
+                                                    <label class="card-radio-label">
+                                                        <input type="radio" name="pay-method" id="pay-methodoption2" class="card-radio-input" asp-for="PaymentMethod" value="Havale" />
+                                                        <span class="card-radio text-center text-truncate">
+                                                            <i class="uil uil-paypal d-block h2 mb-3"></i>
+                                                            Paypal
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-sm-6">
+                                                <div>
+                                                    <label class="card-radio-label">
+                                                        <input type="radio" name="pay-method" id="pay-methodoption3" class="card-radio-input" asp-for="PaymentMethod" value="Kapıda Ödeme" checked />
+                                                        <span class="card-radio text-center text-truncate">
+                                                            <i class="uil uil-money-bill d-block h2 mb-3"></i>
+                                                            Cash on Delivery
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row my-4">
+                        <div class="col">
+                            <a href="ecommerce-products.html" class="btn btn-link text-muted">
+                                <i class="uil uil-arrow-left me-1"></i> Continue Shopping
+                            </a>
+                        </div> <!-- end col -->
+                        <div class="col">
+                            <div class="text-end mt-2 mt-sm-0">
+                                <input type="submit" value="Ödeme Yap" class="btn btn-success" />
+                            </div>
+                        </div> <!-- end col -->
+                    </div> <!-- end row-->
+                </div>
+                <div class="col-xl-4">
+                    <div class="card checkout-order-summary">
+                        <div class="card-body">
+                            <div class="p-3 bg-light mb-4">
+                                <h5 class="font-size-16 mb-0">Order Summary <span class="float-end ms-2">#MN0124</span></h5>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-centered mb-0 table-nowrap">
+                                    <thead>
+                                        <tr>
+                                            <th class="border-top-0" style="width: 110px;" scope="col">Product</th>
+                                            <th class="border-top-0" scope="col">Product Desc</th>
+                                            <th class="border-top-0" scope="col">Price</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.CartItems)
+                                        {
+                                            <tr>
+                                                <th scope="row"><img src="assets/images/product/@item.ImagePath" alt="product-img" title="product-img" class="avatar-md"></th>
+                                                <td>
+                                                    <h5 class="font-size-14 text-truncate"><a href="ecommerce-product-detail.html" class="text-reset ">@item.ProductName</a></h5>
+                                                    <p class="text-muted mb-0">@item.Price.ToString("C") x @item.Quantity</p>
+                                                </td>
+                                                <td>@(item.Price * item.Quantity).ToString("C")</td>
+                                            </tr>
+                                        }
+                                        <tr>
+                                            <td colspan="2">
+                                                <h5 class="font-size-14 m-0">Sub Total :</h5>
+                                            </td>
+                                            <td>
+                                                @Model.TotalAmount.ToString("C")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <h5 class="font-size-14 m-0">Discount :</h5>
+                                            </td>
+                                            <td>
+                                            @*     - @Model.Discount.ToString("C") *@
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <h5 class="font-size-14 m-0">Shipping Charge :</h5>
+                                            </td>
+                                            <td>
+                                              @*   @Model.ShippingCharge.ToString("C") *@
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <h5 class="font-size-14 m-0">Estimated Tax :</h5>
+                                            </td>
+                                            <td>
+                                           @*      @Model.EstimatedTax.ToString("C") *@
+                                            </td>
+                                        </tr>
+                                        <tr class="bg-light">
+                                            <td colspan="2">
+                                                <h5 class="font-size-14 m-0">Total:</h5>
+                                            </td>
+                                            <td>
+                                            @*     @Model.FinalAmount.ToString("C") *@
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div> <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+</div>
