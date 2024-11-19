@@ -1,7 +1,9 @@
-﻿@model List<ECOMM.Core.ViewModels.CartItemViewModel> // Sepet öğeleri listesi
+﻿@model ECOMM.Core.ViewModels.CartViewModel
+
 @{
     ViewData["Title"] = "Sepet";
 }
+
 <section class="pb-4">
     <div class="border rounded-5">
         <section class="w-100 px-3 py-5">
@@ -11,58 +13,56 @@
                         <h3 class="fw-normal mb-0">Sepetim</h3>
                     </div>
 
-                    @foreach (var item in Model) // Sepet öğelerini döngü ile göster
+                    @if (Model.CartItems.Any())
                     {
-                        <div class="card rounded-3 mb-4">
-                            <div class="card-body p-4">
-                                <div class="row d-flex justify-content-between align-items-center">
-                                    <div class="col-md-2 col-lg-2 col-xl-2">
-                                        <img src="@item.ImagePath" class="img-fluid rounded-3" alt="@item.ProductName">
-                                    </div>
-                                    <div class="col-md-3 col-lg-3 col-xl-3">
-                                        <p class="lead fw-normal mb-2">@item.ProductName</p>
-                                        <p><span class="text-muted">Miktar: </span>@item.Quantity</p>
-                                    </div>
-                                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                        <h5 class="mb-0">@item.Price.ToString("C")</h5>
-                                    </div>
-                                    <div class="col-md-2 col-lg-2 col-xl-2 text-end">
-                                        <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn d-inline-block" method="post">
-                                            <input type="hidden" name="productId" value="@item.ProductId" />
-                                            <button type="submit" class="btn btn-warning btn-hover">
-                                                <i class="fa-regular fa-heart"></i> 
-                                            </button>
-                                        </form>
-                                        <form asp-controller="ShopCart" asp-action="RemoveFromCart" method="post" class="d-inline-block">
-                                            <input type="hidden" name="productId" value="@item.ProductId" />
-                                            <input type="hidden" name="quantity" value="@item.Quantity" />
-                                            <button type="submit" class="btn btn-danger btn-hover">
-                                                <i class="fas fa-trash fa-lg  btn-danger btn-hover"></i>
-                                            </button>
-                                        </form>
+                        @foreach (var item in Model.CartItems)
+                        {
+                            <div class="card rounded-3 mb-4">
+                                <div class="card-body p-4">
+                                    <div class="row d-flex justify-content-between align-items-center">
+                                        <div class="col-md-2 col-lg-2 col-xl-2">
+                                            <img src="@item.ImagePath" class="img-fluid rounded-3" alt="@item.ProductName">
+                                        </div>
+                                        <div class="col-md-3 col-lg-3 col-xl-3">
+                                            <p class="lead fw-normal mb-2">@item.ProductName</p>
+                                            <p><span class="text-muted">Miktar: </span>@item.Quantity</p>
+                                        </div>
+                                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                            <h5 class="mb-0">@item.Price.ToString("C")</h5>
+                                        </div>
+                                        <div class="col-md-2 col-lg-2 col-xl-2 text-end">
+                                            <form asp-controller="ShopCart" asp-action="RemoveFromCart" method="post" class="d-inline-block">
+                                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                                <button type="submit" class="btn btn-danger btn-hover">
+                                                    <i class="fas fa-trash fa-lg"></i> Sil
+                                                </button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
-
                             </div>
-
-                        </div>
+                        }
+                    }
+                    else
+                    {
+                        <p>Sepetinizde ürün bulunmamaktadır.</p>
                     }
 
-                    @* <div class="card mb-4">
-                        <div class="card-body p-4 d-flex flex-row">
-                            <div class="form-outline flex-fill">
-                                <input type="text" id="form1" class="form-control form-control-lg">
-                                <label class="form-label" for="form1" style="margin-left: 0px;">İndirim kodu</label>
-                            </div>
-                            <button type="button" class="btn btn-outline-warning btn-lg ms-3">Uygula</button>
+                    <div class="card mb-4">
+                        <div class="card-body p-4 d-flex flex-row justify-content-between">
+                            <h5 class="mb-0">Toplam: @Model.TotalPrice.ToString("C")</h5>
+                            <form asp-controller="ShopCart" asp-action="ClearCart" method="post">
+                                <button type="submit" class="btn btn-danger btn-lg">Sepeti Temizle</button>
+                            </form>
                         </div>
-                    </div> *@
+                    </div>
+
                     <div class="card">
                         <div class="card-body p-6">
                             <div class="d-flex justify-content-end">
                                 <form asp-controller="Order" asp-action="Payment" method="get">
                                     <!-- Kullanıcı ID'sini saklayan gizli input -->
-                                   @*  <input type="hidden" name="UserId" value="@Model.UserId" /> <!-- Düzeltilmiş name --> *@
+                                    <input type="hidden" name="UserId" value="@Model.UserId" />
                                     <button style="font-weight:600;" type="submit" class="btn btn-warning btn-lg">Ödeme Yap</button>
                                 </form>
                             </div>
@@ -74,7 +74,7 @@
                             transition: background-color 0.7s, transform 0.5s;
                         }
 
-                            .btn-lg:hover { /* * karakteri kaldırıldı */
+                            .btn-lg:hover {
                                 font-size: 20px;
                                 background-color: rgb(237, 190, 19);
                             }
@@ -84,4 +84,3 @@
         </section>
     </div>
 </section>
-
