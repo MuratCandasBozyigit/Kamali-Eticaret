@@ -11,8 +11,9 @@ using ECOMM.Business.Concrete;   // UserService'in bulunduğu namespace
 
 namespace ECOMM.Business.Abstract
 {
-    public interface IUserService 
+    public interface IUserService
     {
+        Task<User> GetByIdAsync(string userId);
         Task<List<User>> GetAllUsersAsync();
         Task<User> DeleteUserAsync(string userId);
         Task<User> UpdateUserAsync(User user);

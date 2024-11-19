@@ -46,5 +46,10 @@ namespace ECOMM.Business.Concrete
             }
             return null;
         }
+
+        public async Task<User> GetByIdAsync(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId);
+        }
     }
 }

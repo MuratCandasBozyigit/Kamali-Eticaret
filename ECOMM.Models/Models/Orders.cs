@@ -20,7 +20,7 @@ namespace ECOMM.Core.Models
         CashOnDelivery
     }
 
-    public class Order : BaseModel
+    public class Orders : BaseModel
     {
         public int OrderId { get; set; } // Sipariş Kimliği
 
