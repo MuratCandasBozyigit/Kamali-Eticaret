@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ECOMM.Core.ViewModels;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace E_COMM_KAMALİ.Controllers
 {
@@ -25,8 +26,18 @@ namespace E_COMM_KAMALİ.Controllers
         public IActionResult Index()
         {
             var cartItems = _sessionService.GetCartItems(); // Oturumdan sepet öğelerini al
-            return View(cartItems); // Sepet sayfasına gönder
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Kullanıcı ID'si alınır
+
+            var model = new CartViewModel
+            {
+                UserId = userId,
+                CartItems = cartItems
+            };
+
+            return View(model); // Sepet sayfasına gönder
         }
+
+
 
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, int quantity)
