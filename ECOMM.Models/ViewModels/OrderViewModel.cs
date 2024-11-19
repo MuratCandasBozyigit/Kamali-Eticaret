@@ -8,7 +8,7 @@ namespace ECOMM.Core.ViewModels
 {
     public class OrderViewModel
     {
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public decimal TotalAmount { get; set; }
         public List<CartItemViewModel> CartItems { get; set; }  // Sepet öğeleri
     }
