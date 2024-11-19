@@ -1,19 +1,22 @@
-﻿using ECOMM.Business.Abstract;
-using ECOMM.Core.Models;
+﻿using ECOMM.Core.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using ECOMM.Business.Abstract;
 
 namespace ECOMM.Business.Concrete
 {
     public class UserService : IUserService
     {
         private readonly UserManager<User> _userManager;
+        private readonly IOrderService _orderService; // Injecting IOrderService to handle orders
 
-        public UserService(UserManager<User> userManager)
+        public UserService(UserManager<User> userManager, IOrderService orderService)
         {
             _userManager = userManager;
+            _orderService = orderService;
         }
 
         public async Task<User> DeleteUserAsync(string userId)
@@ -25,11 +28,6 @@ namespace ECOMM.Business.Concrete
                 return user;
             }
             return null;
-        }
-
-        public async Task<List<User>> GetAllUsersAsync()
-        {
-            return await _userManager.Users.ToListAsync();
         }
 
         public async Task<User> UpdateUserAsync(User user)
@@ -51,5 +49,12 @@ namespace ECOMM.Business.Concrete
         {
             return await _userManager.FindByIdAsync(userId);
         }
+
+        public async Task<List<User>> GetAllUsersAsync()
+        {
+            return await _userManager.Users.ToListAsync();
+        }
+
+    
     }
 }
