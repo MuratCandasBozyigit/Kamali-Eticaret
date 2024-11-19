@@ -14,6 +14,7 @@ namespace ECOMM.Core.ViewModels
         public string ShippingAddress { get; set; }
         public string ShippingPostalCode { get; set; }
         public string UserId { get; set; }
+        public string OrderId { get; set; }
     }
 
 

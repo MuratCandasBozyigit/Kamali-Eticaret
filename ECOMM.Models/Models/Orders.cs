@@ -37,6 +37,9 @@ namespace ECOMM.Core.Models
         // Payment information (payment method, transaction ID, etc.)
         public PaymentInfo PaymentInfo { get; set; }
 
+        public string PaymentMethod { get; set; }  // Ödeme yöntemi
+        public string PaymentStatus { get; set; }
+
         // Additional order-related fields (like coupon codes, notes, etc.)
         public string CouponCode { get; set; }
         public string Notes { get; set; }
