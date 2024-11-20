@@ -33,6 +33,8 @@ namespace ECOMM.Core.Models
 
         // Shipping information (address, etc.)
         public ShippingInfo ShippingInfo { get; set; }
+        public string ShippingCity { get; set; }
+        public string ShippingAddress { get; set; }
 
         // Payment information (payment method, transaction ID, etc.)
         public PaymentInfo PaymentInfo { get; set; }

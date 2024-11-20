@@ -1,0 +1,97 @@
+﻿@model ECOMM.Core.ViewModels.PaymentViewModel
+
+@{
+    ViewData["Title"] = "Ödeme Yap";
+}
+
+<section class="pb-4">
+    <div class="border rounded-5">
+        <section class="w-100 px-3 py-5">
+            <div class="row d-flex justify-content-center">
+                <div class="col-xl-11">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="fw-normal mb-0">Ödeme Bilgileri</h3>
+                    </div>
+
+                    @if (TempData["Error"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @TempData["Error"]
+                        </div>
+                    }
+
+                    <form asp-controller="Order" asp-action="ProcessPayment" method="post">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="UserName" class="form-label">Ad Soyad</label>
+                                <input type="text" class="form-control" id="UserName" name="UserName" value="@Model.UserName" readonly />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="Email" class="form-label">E-posta</label>
+                                <input type="email" class="form-control" id="Email" name="Email" value="@Model.Email" readonly />
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label for="PhoneNumber" class="form-label">Telefon</label>
+                                <input type="text" class="form-control" id="PhoneNumber" name="PhoneNumber" value="@Model.Phone" readonly />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="ShippingAddress" class="form-label">Teslimat Adresi</label>
+                                <input type="text" class="form-control" id="ShippingAddress" name="ShippingAddress" value="@Model.ShippingAddress" />
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <label for="ShippingCity" class="form-label">Şehir</label>
+                                <input type="text" class="form-control" id="ShippingCity" name="ShippingCity" value="@Model.ShippingCity" />
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="PaymentMethod" class="form-label">Ödeme Yöntemi</label>
+                                <select class="form-control" id="PaymentMethod" name="PaymentMethod">
+                                    <option value="Kredi Kartı">Kredi Kartı</option>
+                                    <option value="Kapıda Ödeme">Kapıda Ödeme</option>
+                                    <option value="Havale">Havale</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <h5 class="mb-4">Sepetinizdeki Ürünler</h5>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Ürün Adı</th>
+                                        <th>Miktar</th>
+                                        <th>Fiyat</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.CartItems)
+                                    {
+                                        <tr>
+                                            <td>@item.ProductName</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.Price.ToString("C")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <h4>Toplam: @Model.TotalPrice.ToString("C")</h4>
+                            <button type="submit" class="btn btn-warning btn-lg" style="font-weight:600;">Ödeme Yap</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+</section>

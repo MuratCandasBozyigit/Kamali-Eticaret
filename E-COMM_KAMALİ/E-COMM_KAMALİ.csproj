@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Order\Checkout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Order\Checkout.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Shared\_ShopLayout.cshtml" />
     <_ContentIncludedByDefault Remove="wwwroot\css\Login\ChangePassword.css" />
     <_ContentIncludedByDefault Remove="wwwroot\css\Mağaza\HomePage.css" />
@@ -87,6 +92,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="Views\Order\Checkout.cshtml" />
     <None Include="wwwroot\assets\css\app-rtl.min.css.map" />
     <None Include="wwwroot\assets\css\app.min.css.map" />
     <None Include="wwwroot\assets\css\bootstrap-rtl.min.css.map" />
@@ -1226,6 +1232,10 @@
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Views\Shared\_ShopLayout.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Order\Checkout.cshtml" />
   </ItemGroup>
 
 </Project>

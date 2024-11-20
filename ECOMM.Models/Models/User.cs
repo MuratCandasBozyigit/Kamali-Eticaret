@@ -18,7 +18,9 @@ namespace ECOMM.Core.Models
 
 
 
-        public string ShippingCity { get; set; }
+        public string? City { get; set; }
         public ShippingInfo ShippingInfo { get; set; }
+        public int? ShippingInfoId { get; set; }
+        public string? Adress { get; set; }
     }
 }

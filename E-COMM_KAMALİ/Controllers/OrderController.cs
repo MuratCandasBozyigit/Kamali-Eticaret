@@ -1,188 +1,184 @@
-﻿using ECOMM.Business.Abstract;
-using ECOMM.Core.Models;
-using ECOMM.Core.ViewModels;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+using ECOMM.Core.ViewModels;
+using ECOMM.Core.Models;
+using ECOMM.Business.Abstract;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace ECOMM.Web.Controllers
 {
+    // [Authorize]
     public class OrderController : Controller
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderService _orderRepository;
         private readonly ISessionService _sessionService;
-        private readonly IProductService _productService;
-        private readonly IUserService _userService;
+        private readonly IUserService _userRepository;
 
-        public OrderController(IOrderService orderService, ISessionService sessionService, IProductService productService, IUserService userService)
+        public OrderController(IOrderService orderRepository, IUserService userRepository, ISessionService sessionService)
         {
-            _orderService = orderService;
-            _sessionService = sessionService;
-            _productService = productService;
-            _userService = userService;
+            _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository), "OrderRepository is null. Please ensure it is registered in the DI container.");
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository), "User Repository is null. Please ensure it is registered in the DI container.");
+            _sessionService = sessionService ?? throw new ArgumentNullException(nameof(sessionService), "SessionService is null. Please ensure it is registered in the DI container.");
         }
 
-        // Ödeme sayfası (checkout)
-        public IActionResult Checkout()
+        // GET: Checkout
+        // GET: Checkout
+        [HttpGet("Checkout")]
+        public async Task<IActionResult> Checkout()
         {
-            var cartItems = _sessionService.GetCartItems(); // Sepetteki ürünleri al
-            var totalAmount = CalculateTotalAmount(cartItems); // Toplam tutarı hesapla
-
-            var checkoutViewModel = new CheckoutViewModel
+            try
             {
-                CartItems = cartItems,
-                TotalAmount = totalAmount,
-                User = _userService.GetByIdAsync(User.Identity.Name).Result // Kullanıcı bilgilerini al
-            };
+                var userId = User.Identity?.Name;
 
-            return View(checkoutViewModel); // Checkout sayfasını kullanıcıya göster
-        }
+                if (string.IsNullOrEmpty(userId))
+                {
+                    TempData["Error"] = "Oturum açılmamış. Lütfen giriş yapınız.";
+                    return RedirectToAction("Login", "Account");
+                }
 
-        // Sipariş oluşturma
-        [HttpPost]
-        public async Task<IActionResult> PlaceOrder(OrderViewModel orderViewModel)
-        {
-            if (ModelState.IsValid)
-            {
-                // Sepet öğelerini al
-                var cartItems = _sessionService.GetCartItems();
-
-                // Kullanıcı bilgilerini al
-                var user = await _userService.GetByIdAsync(orderViewModel.UserId);
-
+                var user = await _userRepository.GetByIdAsync(userId);
                 if (user == null)
                 {
-                    ModelState.AddModelError("", "Kullanıcı bulunamadı.");
-                    return RedirectToAction("Checkout");
+                    TempData["Error"] = "Kullanıcı bilgileri bulunamadı. Lütfen destek ekibiyle iletişime geçiniz.";
+                    return RedirectToAction("Index", "ShopCart");
                 }
 
-                // Siparişi oluştur
-                var order = new Orders
+                var cartItems = _sessionService.GetCartItems();
+                if (cartItems == null || !cartItems.Any())
                 {
-                    UserId = user.Id,
-                    OrderDate = System.DateTime.Now,
-                    TotalAmount = orderViewModel.TotalAmount,
-                    OrderItems = new List<ECOMM.Core.Models.OrderItem>() // Corrected type to model
+                    TempData["Error"] = "Sepetinizde ürün bulunmamaktadır.";
+                    return RedirectToAction("Index", "ShopCart");
+                }
+
+                var viewModel = new PaymentViewModel
+                {
+                    UserName = user.FullName ?? "Bilinmeyen Kullanıcı",
+                    Email = user.Email ?? "Email bulunamadı",
+                    Phone = user.PhoneNumber ?? "Telefon numarası belirtilmemiş",
+                    ShippingAddress = user.Adress ?? "Adres bulunamadı",
+                    ShippingCity = user.City ?? "Şehir bilgisi eksik",
+                    CartItems = cartItems.Select(item => new CartItemViewModel
+                    {
+                        ProductId = item.ProductId,
+                        ProductName = item.Product?.ProductName ?? "Ürün adı eksik",
+                        Price = item.Product?.ProductPrice ?? 0,
+                        Quantity = item.Quantity,
+                        ImagePath = item.Product?.ImagePath ?? "/images/default.png"
+                    }).ToList(),
+                    TotalAmount = cartItems.Sum(item => item.Quantity * (item.Product?.ProductPrice ?? 0)),
+                    TotalPrice = cartItems.Sum(item => item.Quantity * (item.Product?.ProductPrice ?? 0))
                 };
 
-                // Sepet öğelerini sipariş öğelerine dönüştür
-                foreach (var cartItem in cartItems)
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Bir hata oluştu: " + ex.Message;
+                Console.Error.WriteLine("Checkout Error: " + ex);
+                return RedirectToAction("Error", "Home");
+            }
+        }
+
+
+
+        // POST: ProcessPayment
+        public async Task<IActionResult> ProcessPayment(PaymentViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Gönderilen bilgilerde eksiklikler var. Lütfen tekrar kontrol edin.";
+                return View("Checkout", model);
+            }
+
+            try
+            {
+                var userId = User.Identity?.Name;
+
+                if (string.IsNullOrEmpty(userId))
                 {
-                    var product = await _productService.GetByIdAsync(cartItem.ProductId);
-                    if (product != null)
+                    TempData["Error"] = "Oturum açılmamış. Lütfen giriş yapınız.";
+                    return RedirectToAction("Login", "Account");
+                }
+
+                var isPaymentSuccessful = ProcessPaymentMethod(model.PaymentMethod);
+                if (!isPaymentSuccessful)
+                {
+                    TempData["Error"] = "Ödeme işlemi başarısız oldu. Lütfen tekrar deneyin.";
+                    return View("Checkout", model);
+                }
+
+                var order = new Orders
+                {
+                    UserId = userId,
+                    ShippingAddress = model.ShippingAddress,
+                    ShippingCity = model.ShippingCity,
+                    PaymentMethod = model.PaymentMethod,
+                    TotalAmount = model.TotalAmount,
+                    OrderDate = DateTime.Now,
+                    OrderItems = model.CartItems.Select(item => new OrderItem
                     {
-                        order.OrderItems.Add(new ECOMM.Core.Models.OrderItem // Corrected type to model
-                        {
-                            ProductId = cartItem.ProductId,
-                            Quantity = cartItem.Quantity,
-                            Price = product.ProductPrice
-                        });
-                    }
-                }
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        Price = item.Price
+                    }).ToList()
+                };
 
-                // Siparişi veritabanına ekle
-                await _orderService.AddAsync(order);
+                await _orderRepository.AddAsync(order);
+                _sessionService.ClearCart();  // Sepeti temizliyoruz
 
-                // Sipariş tamamlandıktan sonra sepeti temizle
-                _sessionService.ClearCart();
-
-                // Ödeme işlemine yönlendirme veya ödeme onay sayfası
-                return RedirectToAction("Payment", new { orderId = order.Id });
+                return RedirectToAction("OrderSummary", new { orderId = order.OrderId });
             }
-
-            // Hatalı model durumunda ödeme sayfasına geri dön
-            return RedirectToAction("Checkout");
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Sipariş işlemi sırasında bir hata oluştu: " + ex.Message;
+                return View("Checkout", model);
+            }
         }
 
-        // Ödeme sayfası
-        public IActionResult Payment(int orderId)
+        // GET: Order Summary
+        [HttpGet]
+        public async Task<IActionResult> OrderSummary(int orderId)
         {
-            var order = _orderService.GetByIdAsync(orderId).Result;
-            if (order == null)
+            try
             {
-                return RedirectToAction("Index", "Home"); // Sipariş bulunamadıysa ana sayfaya yönlendir
-            }
-
-            var paymentViewModel = new PaymentViewModel
-            {
-                OrderId = order.OrderId.ToString(), // OrderId'yi string'e dönüştürmek gerekirse
-                TotalAmount = order.TotalAmount
-            };
-
-            return View(paymentViewModel); // Ödeme sayfasını göster
-        }
-
-        // Ödeme işleme (işlem sonrasında sipariş durumu güncellenir)
-        [HttpPost]
-        public async Task<IActionResult> ProcessPayment(int orderId, string paymentMethod)
-        {
-            var order = await _orderService.GetByIdAsync(orderId);
-            if (order == null)
-            {
-                return RedirectToAction("Index", "Home"); // Sipariş bulunamadıysa ana sayfaya yönlendir
-            }
-
-            // Burada ödeme işleme mantığını entegre etmelisiniz.
-            // Ödeme başarılı ise siparişin durumunu güncelle
-            order.PaymentMethod = paymentMethod;
-            order.PaymentStatus = "Success"; // Ödeme başarılı ise statü güncellenir
-
-            // Sipariş güncellemesi
-            await _orderService.UpdateAsync(order);
-
-            // Ödeme başarıyla tamamlandığında, kullanıcının sipariş detaylarını göster
-            return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
-        }
-
-        // Sipariş onay sayfası
-        public async Task<IActionResult> OrderConfirmation(int orderId)
-        {
-            var order = await _orderService.GetByIdAsync(orderId);
-            if (order == null)
-            {
-                return RedirectToAction("Index", "Home"); // Sipariş bulunamadıysa ana sayfaya yönlendir
-            }
-
-            // OrderItem'ları ViewModel'e dönüştür
-            var orderItems = order.OrderItems.Select(item => new ECOMM.Core.ViewModels.OrderItem
-            {
-                ProductId = item.ProductId,
-                ProductName = item.Product?.ProductName, // Ürün adını alıyoruz
-                Quantity = item.Quantity,
-                Price = item.Price,
-                TotalPrice = item.Quantity * item.Price // Toplam fiyatı hesaplıyoruz
-            }).ToList();
-
-            var confirmationViewModel = new OrderConfirmationViewModel
-            {
-                OrderId = order.Id,
-                OrderDate = order.OrderDate,
-                TotalAmount = order.TotalAmount,
-                PaymentMethod = order.PaymentMethod, // Ödeme yöntemi
-                PaymentStatus = order.PaymentStatus,   // Ödeme durumu
-                OrderItems = orderItems, // Dönüştürülmüş OrderItem'lar
-            };
-
-            return View(confirmationViewModel); // Sipariş onayı sayfasını göster
-        }
-
-        #region Yardımcı Metodlar
-
-        private decimal CalculateTotalAmount(List<CartItemViewModel> cartItems)
-        {
-            decimal total = 0;
-            foreach (var item in cartItems)
-            {
-                var product = _productService.GetByIdAsync(item.ProductId).Result;
-                if (product != null)
+                var order = await _orderRepository.GetByIdAsync(orderId);
+                if (order == null)
                 {
-                    total += item.Quantity * product.ProductPrice;
+                    TempData["Error"] = "Sipariş bulunamadı. Lütfen destek ekibiyle iletişime geçiniz.";
+                    return RedirectToAction("Index", "Home");
                 }
+
+                var viewModel = new OrderSummaryViewModel
+                {
+                    OrderId = order.OrderId,
+                    OrderDate = order.OrderDate,
+                    Total = order.TotalAmount,
+                    ShippingAddress = order.ShippingInfo.ShippingAddress ?? "Adres eksik",
+                    PaymentMethod = order.PaymentMethod ?? "Bilinmeyen Ödeme Yöntemi",
+                    OrderItems = order.OrderItems.Select(item => new OrderItemViewModel
+                    {
+                        ProductName = item.Product?.ProductName ?? "Ürün adı eksik",
+                        Quantity = item.Quantity,
+                        Price = item.Price
+                    }).ToList()
+                };
+
+                return View(viewModel);
             }
-            return total;
+            catch (Exception ex)
+            {
+                TempData["Error"] = "Bir hata oluştu: " + ex.Message;
+                Console.Error.WriteLine("OrderSummary Error: " + ex);
+                return RedirectToAction("Index", "Home");
+            }
         }
 
-        #endregion
+        // Yardımcı metod: Ödeme işlemini simüle et
+        private bool ProcessPaymentMethod(string paymentMethod)
+        {
+            return !string.IsNullOrEmpty(paymentMethod) && paymentMethod != "Havale";
+        }
     }
 }

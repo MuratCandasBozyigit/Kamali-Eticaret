@@ -60,9 +60,8 @@
                     <div class="card">
                         <div class="card-body p-6">
                             <div class="d-flex justify-content-end">
-                                <form asp-controller="Order" asp-action="Payment" method="get">
-                                    <!-- Kullanıcı ID'sini saklayan gizli input -->
-                                    <input type="hidden" name="UserId" value="@Model.UserId" />
+                                <form asp-controller="Order" asp-action="Checkout" method="get">
+                                    <input type="hidden" name="User Id" value="@Model.UserId" />
                                     <button style="font-weight:600;" type="submit" class="btn btn-warning btn-lg">Ödeme Yap</button>
                                 </form>
                             </div>

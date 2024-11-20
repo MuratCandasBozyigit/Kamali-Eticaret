@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOMM.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241111104253_Initial")]
-    partial class Initial
+    [Migration("20241120110744_Denemeem")]
+    partial class Denemeem
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -229,6 +229,9 @@ namespace ECOMM.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.HasKey("OrderItemId");
 
                     b.HasIndex("OrdersId");
@@ -245,6 +248,10 @@ namespace ECOMM.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CouponCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("DateCreated")
                         .HasColumnType("datetime2");
@@ -264,6 +271,10 @@ namespace ECOMM.Data.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
@@ -274,13 +285,20 @@ namespace ECOMM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ShippingAddress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Status")
+                    b.Property<string>("ShippingCity")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalAmount")
                         .HasPrecision(18, 2)
@@ -290,11 +308,56 @@ namespace ECOMM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
+                    b.HasIndex("UserId1");
+
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ECOMM.Core.Models.PaymentInfo", b =>
+                {
+                    b.Property<int>("PaymentInfoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaymentInfoId"));
+
+                    b.Property<decimal>("Amount")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentMethodEnum")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PaymentStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PaymentStatusEnum")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TransactionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PaymentInfoId");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("PaymentInfo");
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Product", b =>
@@ -351,6 +414,57 @@ namespace ECOMM.Data.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("ECOMM.Core.Models.ShippingInfo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ShippingCity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("ShippingInfo");
+                });
+
             modelBuilder.Entity("ECOMM.Core.Models.SubCategory", b =>
                 {
                     b.Property<int>("Id")
@@ -399,6 +513,12 @@ namespace ECOMM.Data.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
+                    b.Property<string>("Adress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("City")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -443,6 +563,9 @@ namespace ECOMM.Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("ShippingInfoId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -459,6 +582,10 @@ namespace ECOMM.Data.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.HasIndex("ShippingInfoId")
+                        .IsUnique()
+                        .HasFilter("[ShippingInfoId] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -660,7 +787,22 @@ namespace ECOMM.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ECOMM.Core.Models.User", null)
+                        .WithMany("UserOrders")
+                        .HasForeignKey("UserId1");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ECOMM.Core.Models.PaymentInfo", b =>
+                {
+                    b.HasOne("ECOMM.Core.Models.Orders", "Order")
+                        .WithOne("PaymentInfo")
+                        .HasForeignKey("ECOMM.Core.Models.PaymentInfo", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Product", b =>
@@ -674,6 +816,17 @@ namespace ECOMM.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("ECOMM.Core.Models.ShippingInfo", b =>
+                {
+                    b.HasOne("ECOMM.Core.Models.Orders", "Order")
+                        .WithOne("ShippingInfo")
+                        .HasForeignKey("ECOMM.Core.Models.ShippingInfo", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
             modelBuilder.Entity("ECOMM.Core.Models.SubCategory", b =>
                 {
                     b.HasOne("ECOMM.Core.Models.Category", "Category")
@@ -683,6 +836,16 @@ namespace ECOMM.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ECOMM.Core.Models.User", b =>
+                {
+                    b.HasOne("ECOMM.Core.Models.ShippingInfo", "ShippingInfo")
+                        .WithOne()
+                        .HasForeignKey("ECOMM.Core.Models.User", "ShippingInfoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ShippingInfo");
                 });
 
             modelBuilder.Entity("FavouritesProduct", b =>
@@ -766,6 +929,12 @@ namespace ECOMM.Data.Migrations
             modelBuilder.Entity("ECOMM.Core.Models.Orders", b =>
                 {
                     b.Navigation("OrderItems");
+
+                    b.Navigation("PaymentInfo")
+                        .IsRequired();
+
+                    b.Navigation("ShippingInfo")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Product", b =>
@@ -775,6 +944,8 @@ namespace ECOMM.Data.Migrations
 
             modelBuilder.Entity("ECOMM.Core.Models.User", b =>
                 {
+                    b.Navigation("UserOrders");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618

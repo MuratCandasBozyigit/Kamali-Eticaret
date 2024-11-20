@@ -34,6 +34,12 @@ namespace E_COMM_KAMALİ.Controllers
                 CartItems = cartItems
             };
 
+            if (cartItems == null || !cartItems.Any())
+            {
+                TempData["Error"] = "Sepetinizde ürün bulunmamaktadır.";
+                return RedirectToAction("Index", "Home"); // Sepet boşsa anasayfaya yönlendir
+            }
+
             return View(model); // Sepet sayfasına gönder
         }
 

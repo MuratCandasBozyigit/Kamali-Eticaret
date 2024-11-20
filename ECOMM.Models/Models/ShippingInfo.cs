@@ -18,7 +18,11 @@ namespace ECOMM.Core.Models
         public string FullAddress { get; set; }
 
         [Required]
-        public string City { get; set; }
+        public string ShippingCity { get; set; }
+
+        [Required]
+        public string ShippingAddress { get; set; }
+
 
         [Required]
         public string Country { get; set; }

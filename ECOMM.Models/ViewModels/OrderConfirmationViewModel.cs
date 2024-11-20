@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ECOMM.Core.Models;
 
 namespace ECOMM.Core.ViewModels
 {
@@ -13,16 +12,7 @@ namespace ECOMM.Core.ViewModels
         public string PaymentStatus { get; set; }       // Ödeme durumu (örneğin: Success, Pending)
 
         // Siparişin içeriği
-        public List<OrderItem> OrderItems { get; set; } // Sipariş öğeleri
+        public List<OrderItemViewModel> OrderItems { get; set; } // Sipariş öğeleri
     }
 
-    // Sipariş öğesi
-    public class OrderItem
-    {
-        public int ProductId { get; set; }              // Ürün ID'si
-        public string ProductName { get; set; }         // Ürün adı
-        public int Quantity { get; set; }               // Adet
-        public decimal Price { get; set; }              // Ürün fiyatı
-        public decimal TotalPrice { get; set; }         // Toplam fiyat (Price * Quantity)
-    }
 }
