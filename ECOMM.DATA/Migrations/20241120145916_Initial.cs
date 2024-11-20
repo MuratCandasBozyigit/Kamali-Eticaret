@@ -258,7 +258,7 @@ namespace ECOMM.Data.Migrations
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SameAddress = table.Column<bool>(type: "bit", nullable: false),
                     SaveInfo = table.Column<bool>(type: "bit", nullable: false),
-                    PromoCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PromoCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     GuidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),

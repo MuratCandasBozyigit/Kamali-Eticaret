@@ -25,6 +25,6 @@ namespace ECOMM.Core.ViewModels
         public string Country { get; set; }
         public bool SameAddress { get; set; }
         public bool SaveInfo { get; set; }
-        public string PromoCode { get; set; }
+        public string? PromoCode { get; set; }
     }
 }
