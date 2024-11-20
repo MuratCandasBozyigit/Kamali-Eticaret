@@ -1,61 +1,107 @@
 ﻿@model ECOMM.Core.ViewModels.CheckoutViewModel
 
-<h1>Sepet Özeti</h1>
+<div class="card">
+    <div class="card-body p-6">
+        <h3>Sepet Özeti</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ürün Adı</th>
+                    <th>Fiyat</th>
+                    <th>Miktar</th>
+                    <th>Toplam</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.CartItems)
+                {
+                    <tr>
+                        <td>@item.ProductName</td>
+                        <td>@item.Price.ToString("C")</td>
+                        <td>@item.Quantity</td>
+                        <td>@item.TotalPrice.ToString("C")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Ürün Adı</th>
-            <th>Fiyat</th>
-            <th>Miktar</th>
-            <th>Toplam</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.CartItems)
-        {
-            <tr>
-                <td>@item.ProductName</td>
-                <td>@item.Price.ToString("C")</td>
-                <td>@item.Quantity</td>
-                <td>@(item.Price * item.Quantity).ToString("C")</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-<h3>Toplam Tutar: @Model.TotalAmount.ToString("C")</h3>
-
-<h2>Ödeme Bilgileri</h2>
-<form method="post" asp-controller="Checkout" asp-action="PlaceOrder">
-    <div class="form-group">
-        <label for="address">Adres</label>
-        <input type="text" class="form-control" id="address" name="Address" required />
+        <div>
+            <h4>Toplam Tutar: @Model.TotalAmount.ToString("C")</h4>
+        </div>
     </div>
+</div>
 
+<h3>Ödeme Bilgileri</h3>
+<form asp-action="PlaceOrder" method="post">
     <div class="form-group">
-        <label for="paymentMethod">Ödeme Yöntemi</label>
-        <select class="form-control" id="paymentMethod" name="PaymentMethod">
-            <option value="Kredi Kartı">Kredi Kartı</option>
-            <!-- Diğer ödeme yöntemleri eklenebilir -->
+        <label for="Address">Adres</label>
+        <input type="text" class="form-control" id="Address" name="Address" placeholder="Adresinizi girin" required />
+    </div>
+    <div class="form-group">
+        <label for="PaymentMethod">Ödeme Yöntemi</label>
+        <select class="form-control" id="PaymentMethod" name="PaymentMethod">
+            <option value="CreditCard">Kredi Kartı</option>
+            <option value="PayPal">PayPal</option>
         </select>
     </div>
 
-    <h3>Kredi Kartı Bilgileri</h3>
     <div class="form-group">
-        <label for="cardNumber">Kredi Kartı Numarası</label>
-        <input type="text" class="form-control" id="cardNumber" name="CardNumber" placeholder="1234 5678 9012 3456" required />
+        <label for="CardNumber">Kredi Kartı Numarası</label>
+        <input type="number" class="form-control" id="CardNumber" name="CardNumber"
+               placeholder="1234 5678 9012 3456" required pattern="\d{4} \d{4} \d{4} \d{4}"
+               maxlength="19" title="Kredi kartı numarasını dörtlü gruplar halinde girin (ör. 1234 5678 9012 3456)." />
+    </div>
+
+
+    <div class="form-group">
+        <label for="ExpirationDate">Son Kullanma Tarihi</label>
+        <input type="number" class="form-control" id="ExpirationDate" name="ExpirationDate"
+               placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/\d{2}" maxlength="5"
+               title="Lütfen geçerli bir son kullanma tarihi girin (MM/YY formatında)." />
     </div>
 
     <div class="form-group">
-        <label for="expiryDate">Son Kullanma Tarihi</label>
-        <input type="month" class="form-control" id="expiryDate" name="ExpiryDate" required />
+        <label for="CVV">CVV</label>
+        <input type="number" class="form-control" id="CVV" name="CVV" placeholder="123"
+               required pattern="\d{3}" maxlength="3" title="Lütfen geçerli 3 haneli CVV numarası girin." />
     </div>
 
-    <div class="form-group">
-        <label for="cvv">CVV</label>
-        <input type="text" class="form-control" id="cvv" name="Cvv" placeholder="123" required />
-    </div>
+
 
     <button type="submit" class="btn btn-primary">Siparişi Tamamla</button>
 </form>
+
+
+               @section Scripts{
+    <script>
+        document.getElementById("submitForm").addEventListener("submit", function(event){
+            // Kredi Kartı Numarası
+            var cardNumber = document.getElementById("CardNumber").value;
+            var cardPattern = /^\d{4} \d{4} \d{4} \d{4}$/;
+            if (!cardPattern.test(cardNumber)) {
+                alert("Lütfen geçerli bir kredi kartı numarası girin.");
+                event.preventDefault(); // Formu gönderme
+                return;
+            }
+
+            // Son Kullanma Tarihi
+            var expirationDate = document.getElementById("ExpirationDate").value;
+            var expirationPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
+            if (!expirationPattern.test(expirationDate)) {
+                alert("Lütfen geçerli bir son kullanma tarihi girin.");
+                event.preventDefault(); // Formu gönderme
+                return;
+            }
+
+            // CVV
+            var cvv = document.getElementById("CVV").value;
+            var cvvPattern = /^\d{3}$/;
+            if (!cvvPattern.test(cvv)) {
+                alert("Lütfen geçerli bir CVV numarası girin.");
+                event.preventDefault(); // Formu gönderme
+                return;
+            }
+        });
+    </script>
+
+               }

@@ -7,19 +7,19 @@ namespace ECOMM.Web.Controllers
 {
     public class CheckoutController : Controller
     {
-        private readonly ICartService _cartService;
+        private readonly ISessionService _sessionService;
 
-        public CheckoutController(ICartService cartService)
+        public CheckoutController(ISessionService sessionService)
         {
-            _cartService = cartService;
+            _sessionService = sessionService;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            // Sepet öğelerini getir ve toplam tutarı hesapla
-            var cartItems = _cartService.GetCartItems();
-            var totalAmount = cartItems.Sum(c => c.Price * c.Quantity);
+            // Sepet öğelerini ve toplam tutarı al
+            var cartItems = _sessionService.GetCartItems();
+            var totalAmount = cartItems.Sum(c => c.TotalPrice); // Toplam tutar hesapla
 
             // Checkout özetini doldur
             var viewModel = new CheckoutViewModel
@@ -28,7 +28,7 @@ namespace ECOMM.Web.Controllers
                 TotalAmount = totalAmount
             };
 
-            return View(viewModel); // Kullanıcıdan onay almak için
+            return View(viewModel); // Sepet bilgilerini kullanıcıya gönder
         }
 
         [HttpPost]
