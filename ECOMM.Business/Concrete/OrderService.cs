@@ -60,5 +60,10 @@ namespace ECOMM.Business.Concrete
             return orders.Where(o => o.UserId == userId).ToList();
         }
 
+        public void PlaceOrder(Orders order)
+        {
+            // Save the order to the database
+            _orderRepository.AddAsync(order);
+        }
     }
 }

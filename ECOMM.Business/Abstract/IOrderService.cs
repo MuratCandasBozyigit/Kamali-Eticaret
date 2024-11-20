@@ -11,5 +11,6 @@ namespace ECOMM.Business.Abstract
     {
         Task PlaceOrderAsync(Orders order);
         Task<List<Orders>> GetOrdersByUserAsync(string userId);
+        void PlaceOrder(Orders order);
     }
 }

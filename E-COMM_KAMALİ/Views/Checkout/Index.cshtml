@@ -1,107 +1,131 @@
 ﻿@model ECOMM.Core.ViewModels.CheckoutViewModel
 
-<div class="card">
-    <div class="card-body p-6">
-        <h3>Sepet Özeti</h3>
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@using (Html.BeginForm("PlaceOrder", "Checkout", FormMethod.Post))
+{
+    <div class="cart-summary">
+        <h3>Cart Summary</h3>
         <table class="table">
             <thead>
                 <tr>
-                    <th>Ürün Adı</th>
-                    <th>Fiyat</th>
-                    <th>Miktar</th>
-                    <th>Toplam</th>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total Price</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.CartItems)
+                @if (Model.CartItems != null && Model.CartItems.Any())
                 {
-                    <tr>
-                        <td>@item.ProductName</td>
-                        <td>@item.Price.ToString("C")</td>
-                        <td>@item.Quantity</td>
-                        <td>@item.TotalPrice.ToString("C")</td>
-                    </tr>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <tr>
+                            <td>@item.ProductName</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.Price.ToString("C")</td>
+                            <td>@item.TotalPrice.ToString("C")</td>
+                        </tr>
+                    }
                 }
+                else
+                {
+                    <tr><td colspan="4">No items in the cart.</td></tr>
+                }
+
             </tbody>
         </table>
 
-        <div>
-            <h4>Toplam Tutar: @Model.TotalAmount.ToString("C")</h4>
+        <p><strong>Total Amount: </strong>@Model.TotalAmount.ToString("C")</p>
+    </div>
+
+    <div class="shipping-info">
+        <h3>Shipping Information</h3>
+
+        <div class="form-group">
+            <label for="CustomerName">Full Name</label>
+            @Html.TextBoxFor(m => m.CustomerName, new { @class = "form-control", placeholder = "Enter your full name" })
+            @Html.ValidationMessageFor(m => m.CustomerName)
         </div>
+
+        <div class="form-group">
+            <label for="Email">Email Address</label>
+            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter your email" })
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+
+        <div class="form-group">
+            <label for="PhoneNumber">Phone Number</label>
+            @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Enter your phone number" })
+            @Html.ValidationMessageFor(m => m.PhoneNumber)
+        </div>
+
+        <div class="form-group">
+            <label for="Address">Address</label>
+            @Html.TextBoxFor(m => m.Address, new { @class = "form-control", placeholder = "Enter your address" })
+            @Html.ValidationMessageFor(m => m.Address)
+        </div>
+
+        <div class="form-group">
+            <label for="City">City</label>
+            @Html.TextBoxFor(m => m.City, new { @class = "form-control", placeholder = "Enter your city" })
+            @Html.ValidationMessageFor(m => m.City)
+        </div>
+
+        <div class="form-group">
+            <label for="State">State</label>
+            @Html.TextBoxFor(m => m.State, new { @class = "form-control", placeholder = "Enter your state" })
+            @Html.ValidationMessageFor(m => m.State)
+        </div>
+
+        <div class="form-group">
+            <label for="ZipCode">Zip Code</label>
+            @Html.TextBoxFor(m => m.ZipCode, new { @class = "form-control", placeholder = "Enter your zip code" })
+            @Html.ValidationMessageFor(m => m.ZipCode)
+        </div>
+
+        <div class="form-group">
+            <label for="Country">Country</label>
+            @Html.TextBoxFor(m => m.Country, new { @class = "form-control", placeholder = "Enter your country" })
+            @Html.ValidationMessageFor(m => m.Country)
+        </div>
+
+        <div class="form-group">
+            <label for="PaymentMethod">Payment Method</label>
+            @Html.DropDownListFor(m => m.PaymentMethod, new SelectList(new List<string> { "Credit Card", "PayPal", "Bank Transfer" }), "Select Payment Method", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.PaymentMethod)
+        </div>
+
+        <div class="form-group">
+            <label for="PromoCode">Promo Code</label>
+            @Html.TextBoxFor(m => m.PromoCode, new { @class = "form-control", placeholder = "Enter promo code (if any)" })
+            @Html.ValidationMessageFor(m => m.PromoCode)
+        </div>
+
+        <div class="form-group">
+            <label for="SameAddress">Shipping and Billing Address are the Same</label>
+            @Html.CheckBoxFor(m => m.SameAddress)
+        </div>
+
+        <div class="form-group">
+            <label for="SaveInfo">Save my information for future orders</label>
+            @Html.CheckBoxFor(m => m.SaveInfo)
+        </div>
+
+        <button type="submit" class="btn btn-primary">Place Order</button>
     </div>
+}
+
+<div class="order-confirmation">
+    <h3>Order Confirmation</h3>
+    @if (TempData["OrderConfirmation"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["OrderConfirmation"]
+        </div>
+    }
 </div>
-
-<h3>Ödeme Bilgileri</h3>
-<form asp-action="PlaceOrder" method="post">
-    <div class="form-group">
-        <label for="Address">Adres</label>
-        <input type="text" class="form-control" id="Address" name="Address" placeholder="Adresinizi girin" required />
-    </div>
-    <div class="form-group">
-        <label for="PaymentMethod">Ödeme Yöntemi</label>
-        <select class="form-control" id="PaymentMethod" name="PaymentMethod">
-            <option value="CreditCard">Kredi Kartı</option>
-            <option value="PayPal">PayPal</option>
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="CardNumber">Kredi Kartı Numarası</label>
-        <input type="number" class="form-control" id="CardNumber" name="CardNumber"
-               placeholder="1234 5678 9012 3456" required pattern="\d{4} \d{4} \d{4} \d{4}"
-               maxlength="19" title="Kredi kartı numarasını dörtlü gruplar halinde girin (ör. 1234 5678 9012 3456)." />
-    </div>
-
-
-    <div class="form-group">
-        <label for="ExpirationDate">Son Kullanma Tarihi</label>
-        <input type="number" class="form-control" id="ExpirationDate" name="ExpirationDate"
-               placeholder="MM/YY" required pattern="(0[1-9]|1[0-2])\/\d{2}" maxlength="5"
-               title="Lütfen geçerli bir son kullanma tarihi girin (MM/YY formatında)." />
-    </div>
-
-    <div class="form-group">
-        <label for="CVV">CVV</label>
-        <input type="number" class="form-control" id="CVV" name="CVV" placeholder="123"
-               required pattern="\d{3}" maxlength="3" title="Lütfen geçerli 3 haneli CVV numarası girin." />
-    </div>
-
-
-
-    <button type="submit" class="btn btn-primary">Siparişi Tamamla</button>
-</form>
-
-
-               @section Scripts{
-    <script>
-        document.getElementById("submitForm").addEventListener("submit", function(event){
-            // Kredi Kartı Numarası
-            var cardNumber = document.getElementById("CardNumber").value;
-            var cardPattern = /^\d{4} \d{4} \d{4} \d{4}$/;
-            if (!cardPattern.test(cardNumber)) {
-                alert("Lütfen geçerli bir kredi kartı numarası girin.");
-                event.preventDefault(); // Formu gönderme
-                return;
-            }
-
-            // Son Kullanma Tarihi
-            var expirationDate = document.getElementById("ExpirationDate").value;
-            var expirationPattern = /^(0[1-9]|1[0-2])\/\d{2}$/;
-            if (!expirationPattern.test(expirationDate)) {
-                alert("Lütfen geçerli bir son kullanma tarihi girin.");
-                event.preventDefault(); // Formu gönderme
-                return;
-            }
-
-            // CVV
-            var cvv = document.getElementById("CVV").value;
-            var cvvPattern = /^\d{3}$/;
-            if (!cvvPattern.test(cvv)) {
-                alert("Lütfen geçerli bir CVV numarası girin.");
-                event.preventDefault(); // Formu gönderme
-                return;
-            }
-        });
-    </script>
-
-               }
