@@ -26,5 +26,7 @@ namespace ECOMM.Core.Models
 
        //public ICollection<Category> Categories { get; set; }
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+
+
     }
 }

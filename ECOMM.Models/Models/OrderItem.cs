@@ -17,6 +17,14 @@ namespace ECOMM.Core.Models
 
             [Column(TypeName = "decimal(18,2)")] // Hassasiyet belirleme
             public decimal Price { get; set; } // Ürün fiyatı
-        }
+
+        public int Id { get; set; }
+        public int OrderId { get; set; }
+        public Orders Order { get; set; }
+        public decimal UnitPrice { get; set; }
+        // Yeni eklenen özellikler
+        public string ProductName { get; set; }
+        public string ImagePath { get; set; }
+    }
     
 }

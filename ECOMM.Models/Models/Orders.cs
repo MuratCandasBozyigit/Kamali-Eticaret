@@ -7,6 +7,7 @@ namespace ECOMM.Core.Models
     public class Orders : BaseModel
     {
         public int OrderId { get; set; }
+        public int OrderNumber {  get; set; }
 
         public string UserId { get; set; } // User sınıfındaki Id ile uyumlu hale getirildi
         public User User { get; set; } // Kullanıcı nesnesi

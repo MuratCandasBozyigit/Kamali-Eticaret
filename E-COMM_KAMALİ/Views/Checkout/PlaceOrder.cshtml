@@ -1,0 +1,41 @@
+﻿@model ECOMM.Core.ViewModels.CheckoutViewModel
+
+@{
+    ViewData["Title"] = "Sipariş Özeti";
+}
+
+<h2>Sipariş Özeti</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Fiyat</th>
+            <th>Miktar</th>
+            <th>Toplam</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartItems)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Price</td>
+                <td>@item.Quantity</td>
+                <td>@(item.Price * item.Quantity)</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<p><strong>Toplam Tutar: </strong>@Model.TotalAmount</p>
+
+<h3>Adres Bilgileri</h3>
+<p>@Model.Address</p>
+
+<h3>Ödeme Yöntemi</h3>
+<p>@Model.PaymentMethod</p>
+
+<form asp-action="PlaceOrder" method="post">
+    <button type="submit" class="btn btn-primary">Siparişi Tamamla</button>
+</form>

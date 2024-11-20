@@ -1,0 +1,9 @@
+﻿@{
+    ViewData["Title"] = "Sipariş Başarıyla Tamamlandı";
+}
+
+<h2>Siparişiniz Başarıyla Tamamlandı!</h2>
+
+<p>Siparişiniz başarıyla alınmıştır. Sipariş numaranız: <strong>@ViewData["OrderNumber"]</strong></p>
+
+<a href="@Url.Action("History", "Order")" class="btn btn-primary">Sipariş Geçmişimi Görüntüle</a>

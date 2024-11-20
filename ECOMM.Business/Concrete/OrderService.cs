@@ -44,5 +44,21 @@ namespace ECOMM.Business.Concrete
         {
             return await _orderRepository.DeleteAsync(id);
         }
+
+        public async Task PlaceOrderAsync(Orders order)
+        {
+            // Siparişi ekle
+            _orderRepository.AddAsync(order);
+
+            // Asenkron işlemi simüle et
+            await Task.CompletedTask;
+        }
+
+        public async Task<List<Orders>> GetOrdersByUserAsync(string userId)
+        {
+            var orders = await _orderRepository.GetAllAsync();
+            return orders.Where(o => o.UserId == userId).ToList();
+        }
+
     }
 }

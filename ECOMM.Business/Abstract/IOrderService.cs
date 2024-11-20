@@ -9,5 +9,7 @@ namespace ECOMM.Business.Abstract
 {
     public interface IOrderService:IService<Orders>
     {
+        Task PlaceOrderAsync(Orders order);
+        Task<List<Orders>> GetOrdersByUserAsync(string userId);
     }
 }

@@ -23,6 +23,8 @@ namespace ECOMM.Business.Configuration
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ISessionService, SessionService>();
             services.AddScoped<IFavouritesService,FavouritesService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderProcessingService, OrderProcessingService>();
         }
 
         public static void RepositoryDI(this IServiceCollection services)

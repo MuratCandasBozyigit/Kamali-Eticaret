@@ -1,0 +1,29 @@
+﻿@model IEnumerable<ECOMM.Core.Models.Orders>
+
+@{
+    ViewData["Title"] = "Sipariş Geçmişi";
+}
+
+<h2>Sipariş Geçmişi</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Sipariş Numarası</th>
+            <th>Toplam Tutar</th>
+            <th>Sipariş Tarihi</th>
+            <th>Durum</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.OrderNumber</td>
+                <td>@order.TotalAmount</td>
+                <td>@order.OrderDate.ToString("d")</td>
+                <td>@order.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
