@@ -1,51 +1,60 @@
 ﻿@model ECOMM.Core.ViewModels.CheckoutViewModel
 
-@{
-    ViewData["Title"] = "Checkout";
-}
+<h1>Sepet Özeti</h1>
 
-<h2>Checkout</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Ürün Adı</th>
+            <th>Fiyat</th>
+            <th>Miktar</th>
+            <th>Toplam</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CartItems)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Price.ToString("C")</td>
+                <td>@item.Quantity</td>
+                <td>@(item.Price * item.Quantity).ToString("C")</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
-<form asp-action="PlaceOrder" method="post">
-    <div class="cart-summary">
-        <h4>Sepet Özeti</h4>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Ürün Adı</th>
-                    <th>Fiyat</th>
-                    <th>Miktar</th>
-                    <th>Toplam</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.CartItems)
-                {
-                    <tr>
-                        <td>@item.ProductName</td>
-                        <td>@item.Price</td>
-                        <td>@item.Quantity</td>
-                        <td>@(item.Price * item.Quantity)</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+<h3>Toplam Tutar: @Model.TotalAmount.ToString("C")</h3>
 
-        <p><strong>Toplam Tutar: </strong>@Model.TotalAmount</p>
-    </div>
-
-    <h3>Ödeme Bilgileri</h3>
+<h2>Ödeme Bilgileri</h2>
+<form method="post" asp-controller="Checkout" asp-action="PlaceOrder">
     <div class="form-group">
-        <label for="Address">Adres:</label>
-        <input type="text" class="form-control" id="Address" name="Address" required />
+        <label for="address">Adres</label>
+        <input type="text" class="form-control" id="address" name="Address" required />
     </div>
 
     <div class="form-group">
-        <label for="PaymentMethod">Ödeme Yöntemi:</label>
-        <select class="form-control" id="PaymentMethod" name="PaymentMethod" required>
+        <label for="paymentMethod">Ödeme Yöntemi</label>
+        <select class="form-control" id="paymentMethod" name="PaymentMethod">
             <option value="Kredi Kartı">Kredi Kartı</option>
-            <option value="Paypal">Paypal</option>
+            <!-- Diğer ödeme yöntemleri eklenebilir -->
         </select>
+    </div>
+
+    <h3>Kredi Kartı Bilgileri</h3>
+    <div class="form-group">
+        <label for="cardNumber">Kredi Kartı Numarası</label>
+        <input type="text" class="form-control" id="cardNumber" name="CardNumber" placeholder="1234 5678 9012 3456" required />
+    </div>
+
+    <div class="form-group">
+        <label for="expiryDate">Son Kullanma Tarihi</label>
+        <input type="month" class="form-control" id="expiryDate" name="ExpiryDate" required />
+    </div>
+
+    <div class="form-group">
+        <label for="cvv">CVV</label>
+        <input type="text" class="form-control" id="cvv" name="Cvv" placeholder="123" required />
     </div>
 
     <button type="submit" class="btn btn-primary">Siparişi Tamamla</button>
