@@ -34,7 +34,13 @@
                             <img src="@Url.Content(product.ImagePath ?? "~/images/default.jpg")" alt="Ürün Resmi" width="50">
                         </td>
                         <td>@product.ProductTitle</td>
-                        <td>@product.ProductDescription</td>
+                        <td style="">
+                            @(
+                                product.ProductDescription.Length > 150 ? product.ProductDescription.Substring(0, 150) + "..." : product.ProductDescription
+                                )
+                        </td>
+
+
                         <td>@product.ProductPrice.ToString("C")</td>
                         <td>@product.Category?.ParentCategoryName</td>
                         <td>

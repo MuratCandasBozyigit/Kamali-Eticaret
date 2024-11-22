@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOMM.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241111104253_Initial")]
-    partial class Initial
+    [Migration("20241121225029_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -290,9 +290,14 @@ namespace ECOMM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("UserId1")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Orders");
                 });
@@ -660,6 +665,10 @@ namespace ECOMM.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ECOMM.Core.Models.User", null)
+                        .WithMany("UserOrders")
+                        .HasForeignKey("UserId1");
+
                     b.Navigation("User");
                 });
 
@@ -775,6 +784,8 @@ namespace ECOMM.Data.Migrations
 
             modelBuilder.Entity("ECOMM.Core.Models.User", b =>
                 {
+                    b.Navigation("UserOrders");
+
                     b.Navigation("UserRoles");
                 });
 #pragma warning restore 612, 618
