@@ -107,6 +107,7 @@
                             <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
                             <div class="card-body text-center">
                                 <h5 class="card-title">@product.ProductName</h5>
+                                <h6 >@product.ProductTitle</h6>
                                 <p class="card-text">@product.ProductPrice.ToString("C")</p>
                                 <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-primary btn-hover mb-4 mt-3">Detaylar</a>
 
@@ -139,7 +140,8 @@
             </div>
         </div>
     </div>
-
+  </br>
+    </br>
     <section id="testimonials" class="position-relative mb-4" ">
         <div class="container">
             <div class="row">

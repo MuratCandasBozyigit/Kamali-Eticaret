@@ -8,7 +8,8 @@ namespace ECOMM.Core.ViewModels
     public class ProductEditViewModel
     {
         public Product Product { get; set; }
-        public int ProductId { get; set; } 
+        public int ProductId { get; set; }
+      public string ProductName { get; set; }
         public string ProductTitle { get; set; } 
         public string ProductDescription { get; set; } 
         public decimal ProductPrice { get; set; } 
@@ -19,6 +20,7 @@ namespace ECOMM.Core.ViewModels
 
         public void UpdateProductInfo(Product product)
         {
+            product.ProductName = this.ProductName;
             product.ProductTitle = this.ProductTitle;
             product.ProductDescription = this.ProductDescription;
             product.ProductPrice =(decimal)this.ProductPrice;

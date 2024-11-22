@@ -16,6 +16,11 @@
         <span asp-validation-for="ProductTitle" class="text-danger"></span>
     </div>  <br />
     <div class="form-group">
+        <label asp-for="ProductName">Ürün Adı:</label>
+        <input asp-for="ProductName" class="form-control" required />
+        <span asp-validation-for="ProductName" class="text-danger"></span>
+    </div>  <br />
+    <div class="form-group">
         <label asp-for="ProductPrice">Ürün Fiyatı:</label>
         <input asp-for="ProductPrice" class="form-control" type="number" step="0.01" required />
         <span asp-validation-for="ProductPrice" class="text-danger"></span>

@@ -19,6 +19,7 @@
             <thead>
                 <tr>
                     <th>Resim</th>
+                    <th>Ürün Adı</th>
                     <th>Başlık</th>
                     <th>Açıklama</th>
                     <th>Fiyat</th>
@@ -33,6 +34,7 @@
                         <td>
                             <img src="@Url.Content(product.ImagePath ?? "~/images/default.jpg")" alt="Ürün Resmi" width="50">
                         </td>
+                        <td>@product.ProductName</td>
                         <td>@product.ProductTitle</td>
                         <td style="">
                             @(

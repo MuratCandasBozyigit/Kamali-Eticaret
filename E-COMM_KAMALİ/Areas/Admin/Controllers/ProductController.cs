@@ -160,6 +160,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             {
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
+                ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
                 ProductPrice = (decimal)product.ProductPrice,
                 ImagePath = product.ImagePath,
