@@ -34,20 +34,42 @@ namespace E_COMM_KAMALİ.Controllers
             var product = await _productService.GetByIdAsync(productId); // Ürünü al
             if (product != null)
             {
-                var cartItem = new CartItemViewModel
-                {
-                    ProductId = product.Id,
-                    ProductName = product.ProductName,
-                    ImagePath = product.ImagePath,
-                    Price = product.ProductPrice,
-                    Quantity = quantity
-                };
+                var cart = _sessionService.GetCartItems(); // Kullanıcının mevcut sepetini al
+                var existingItem = cart.FirstOrDefault(c => c.ProductId == productId);
 
-                _sessionService.AddToCart(cartItem); // Sepete ekle
+                if (existingItem != null)
+                {
+                    // Eğer ürün zaten sepetteyse, toplam miktarı kontrol et
+                    int newQuantity = existingItem.Quantity + quantity;
+                    if (newQuantity > 5)
+                    {
+                        existingItem.Quantity = 5; // Maksimum 5 ile sınırla
+                    }
+                    else
+                    {
+                        existingItem.Quantity = newQuantity;
+                    }
+                }
+                else
+                {
+                    // Yeni bir ürün ekleniyorsa
+                    if (quantity > 5) quantity = 5;
+                    var cartItem = new CartItemViewModel
+                    {
+                        ProductId = product.Id,
+                        ProductName = product.ProductName,
+                        ImagePath = product.ImagePath,
+                        Price = product.ProductPrice,
+                        Quantity = quantity
+                    };
+
+                    _sessionService.AddToCart(cartItem);
+                }
             }
 
-            return RedirectToAction("Index", "ShopCart"); // Sepet sayfasına yönlendir
+            return RedirectToAction("Index", "ShopCart");
         }
+
 
         [HttpPost]
         public IActionResult RemoveFromCart(int productId)

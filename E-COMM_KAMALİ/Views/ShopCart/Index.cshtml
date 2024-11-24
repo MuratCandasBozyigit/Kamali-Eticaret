@@ -1,7 +1,8 @@
-﻿@model List<ECOMM.Core.ViewModels.CartItemViewModel> // Sepet öğeleri listesi
+﻿@model List<ECOMM.Core.ViewModels.CartItemViewModel>
 @{
-    ViewData["Title"] = "Sepet";
+    ViewData["Title"] = "Sepetim";
 }
+
 <section class="pb-4">
     <div class="border rounded-5">
         <section class="w-100 px-3 py-5">
@@ -11,75 +12,116 @@
                         <h3 class="fw-normal mb-0">Sepetim</h3>
                     </div>
 
-                    @foreach (var item in Model) // Sepet öğelerini döngü ile göster
+                    @foreach (var item in Model) 
                     {
                         <div class="card rounded-3 mb-4">
                             <div class="card-body p-4">
                                 <div class="row d-flex justify-content-between align-items-center">
+                                    <!-- Ürün Resmi -->
                                     <div class="col-md-2 col-lg-2 col-xl-2">
                                         <img src="@item.ImagePath" class="img-fluid rounded-3" alt="@item.ProductName">
                                     </div>
+
+                                    <!-- Ürün Bilgileri -->
                                     <div class="col-md-3 col-lg-3 col-xl-3">
                                         <p class="lead fw-normal mb-2">@item.ProductName</p>
-                                        <p><span id="quantity" class="text-muted" max="5">Miktar: </span>@item.Quantity</p>
+                                        <p>
+                                            <span class="text-muted">Miktar: </span>
+                                            <span class="quantity">@item.Quantity</span>
+                                            @if (item.Quantity >= 5)
+                                            {
+                                                <span class="text-danger">(En fazla 5 adet eklenebilir!)</span>
+                                            }
+                                        </p>
                                     </div>
+
+                                    <!-- Ürün Fiyatı -->
                                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                         <h5 class="mb-0">@item.Price.ToString("C")</h5>
                                     </div>
+
+                                    <!-- İşlem Butonları -->
                                     <div class="col-md-2 col-lg-2 col-xl-2 text-end">
+                                        <!-- Favorilere Ekle -->
                                         <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn d-inline-block" method="post">
                                             <input type="hidden" name="productId" value="@item.ProductId" />
                                             <button type="submit" class="btn btn-warning btn-hover">
-                                                <i class="fa-regular fa-heart"></i> 
+                                                <i class="fa-regular fa-heart"></i>
                                             </button>
                                         </form>
+
+                                        <!-- Sepetten Çıkar -->
                                         <form asp-controller="ShopCart" asp-action="RemoveFromCart" method="post" class="d-inline-block">
                                             <input type="hidden" name="productId" value="@item.ProductId" />
-                                            <input type="hidden" name="quantity"  value="@item.Quantity" />
                                             <button type="submit" class="btn btn-danger btn-hover">
-                                                <i class="fas fa-trash fa-lg  btn-danger btn-hover"></i>
+                                                <i class="fas fa-trash fa-lg"></i>
                                             </button>
                                         </form>
+
+                                        <!-- Miktar Artır -->
+                                        @if (item.Quantity < 5)
+                                        {
+                                            <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-inline-block">
+                                                <input type="hidden" name="productId" value="@item.ProductId" />
+                                                <input type="hidden" name="quantity" value="1" />
+                                                <button type="submit" class="btn btn-success btn-hover">
+                                                    <i class="fas fa-plus"></i> Ekle
+                                                </button>
+                                            </form>
+                                        }
+                                        else
+                                        {
+                                            <button class="btn btn-secondary btn-hover" disabled>
+                                                Maksimum Adet!
+                                            </button>
+                                        }
                                     </div>
                                 </div>
-
                             </div>
-
                         </div>
                     }
 
-                    @* <div class="card mb-4">
-                        <div class="card-body p-4 d-flex flex-row">
-                            <div class="form-outline flex-fill">
-                                <input type="text" id="form1" class="form-control form-control-lg">
-                                <label class="form-label" for="form1" style="margin-left: 0px;">İndirim kodu</label>
-                            </div>
-                            <button type="button" class="btn btn-outline-warning btn-lg ms-3">Uygula</button>
-                        </div>
-                    </div> *@
-
+                    <!-- Toplam ve Ödeme Alanı -->
                     <div class="card">
                         <div class="card-body p-6">
                             <div class="d-flex justify-content-end">
-                           
                                 <button style="font-weight:600;" type="button" class="btn btn-warning btn-lg">Ödeme Yap</button>
                             </div>
                         </div>
                     </div>
-
-                    <style>
-                        .btn-lg {
-                            transition: background-color 0.7s, transform 0.5s;
-                        }
-
-                            .btn-lg:hover { /* * karakteri kaldırıldı */
-                                font-size: 20px;
-                                background-color: rgb(237, 190, 19);
-                            }
-                    </style>
                 </div>
             </div>
         </section>
     </div>
 </section>
 
+<!-- CSS -->
+<style>
+    .btn-lg {
+        transition: background-color 0.7s, transform 0.5s;
+    }
+
+    .btn-lg:hover {
+        font-size: 20px;
+        background-color: rgb(237, 190, 19);
+    }
+
+    .text-danger {
+        font-weight: bold;
+        color: red !important;
+    }
+
+    .btn-secondary {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    .btn-hover {
+        transition: all 0.3s ease;
+    }
+
+    .btn-hover:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+</style>
