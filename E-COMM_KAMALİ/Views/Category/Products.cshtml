@@ -6,7 +6,8 @@
 }
 <link rel="stylesheet" href="~/css/Mağaza/Ürünler.css" />
 
-<h1 style="text-align: center;">@Model.SubCategory.SubCategoryName</h1>
+<h1 style="text-align: center;margin-bottom:45px;margin-top:45px;font-weight:bolder;">@Model.SubCategory.SubCategoryName</h1>
+
 
 @if (Model.Products != null && Model.Products.Any())
 {
@@ -14,15 +15,29 @@
         @foreach (var product in Model.Products)
         {
             <div class="product-card">
-                <h4>@product.ProductName</h4>
-                <p>Fiyat: @product.ProductPrice.ToString("C")</p> <!-- Fiyat formatlaması -->
-                <p>Açıklama: @product.ProductDescription</p>
-                <!-- Ürün resmi varsa göster -->
                 @if (!string.IsNullOrEmpty(product.ImagePath))
                 {
-                    <img src="@product.ImagePath" alt="@product.ProductName" class="product-image" />
+                    <img src="@product.ImagePath" alt="@product.ProductName" class="product-image mb-4" />
                 }
+                <h4 class="mb-2">@product.ProductName</h4>
+                <h6 class="mb-2">@product.ProductTitle</h6>
+                <p class="mb-2">Fiyat: @product.ProductPrice.ToString("C")</p> <!-- Fiyat formatlaması -->
+             @*    <p>Açıklama: @product.ProductDescription</p> *@
+                <!-- Ürün resmi varsa göster -->
+                <div class="product-actions">
+                    <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-detay mb-2 mt-3">
+                        Detaylar
+                    </a>
+                    <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
+                        <input type="hidden" name="productId" value="@product.Id" />
+                        <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
+                        <button type="submit" class="btn btn-detay btn-hover mb-3">
+                            <i class="fa-solid fa-cart-shopping "></i> Sepete Ekle
+                        </button>
+                    </form>
+                </div>
             </div>
+            
         }
     </div>
 }
@@ -30,3 +45,6 @@ else
 {
     <p class="no-products">Bu alt kategoride ürün bulunmamaktadır.</p>
 }
+
+
+              
