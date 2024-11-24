@@ -30,26 +30,33 @@
                                             <div class="quantity-controls d-flex align-items-center">
                                                 <!-- - Butonu -->
                                                 <button class="btn btn-sm btn-danger decrease-quantity"
-                                                @* butonun devre dışı olmasını Razor ile kontrol et *@
-                                                @if (item.Quantity <= 1)
-                                                {
-                                                    <text>disabled</text>
-                                                }
-                                                            onclick="updateQuantity(@item.ProductId, -1)">-</button>
+                                                        id="decrease-@item.ProductId"
+                                                @(item.Quantity <= 1 ? "disabled" : "")
+                                                        onclick="updateQuantity(@item.ProductId, -1)">
+                                                    -
+                                                </button>
 
                                                 <!-- Miktar -->
                                                 <span class="mx-2 quantity-text" id="quantity-@item.ProductId">@item.Quantity</span>
 
                                                 <!-- + Butonu -->
                                                 <button class="btn btn-sm btn-success increase-quantity"
-                                                @* butonun devre dışı olmasını Razor ile kontrol et *@
-                                                @if (item.Quantity >= 5)
-                                                {
-                                                    <text>disabled</text>
-                                                }
-                                                            onclick="updateQuantity(@item.ProductId, 1)">+</button>
+                                                        id="increase-@item.ProductId"
+                                                @(item.Quantity >= 5 ? "disabled" : "")
+                                                        onclick="updateQuantity(@item.ProductId, 1)">
+                                                    +
+                                                </button>
                                             </div>
                                         </p>
+
+                                        <!-- Maksimum limit mesajı -->
+                                        @if (item.Quantity >= 5)
+                                        {
+                                            <div class="max-limit-message">Maksimum limite ulaşıldı.
+                                                <p style="font-size:12px;margin-top:5px;margin-bottom:2px;">En fazla 5 ürün eklenebilr</p>
+                                            </div>
+                                        
+                                        }
                                     </div>
 
                                     <!-- Ürün Fiyatı -->
@@ -158,6 +165,17 @@
         .decrease-quantity:hover {
             background-color: #c82333;
         }
+
+    /* Maksimum limit mesajı için stil */
+    .max-limit-message {
+        font-size: 18px;
+        font-weight: bold;
+        text-align:center;
+        color: wheat;
+        background-color: slategray;
+        padding: 5px;
+        border-radius: 5px;
+    }
 </style>
 
 @section Scripts {
@@ -169,6 +187,10 @@
 
             if (newQuantity >= 1 && newQuantity <= 5) {
                 quantityElement.innerText = newQuantity;
+
+                // Miktar butonlarını güncelle
+                document.getElementById("decrease-" + productId).disabled = newQuantity <= 1;
+                document.getElementById("increase-" + productId).disabled = newQuantity >= 5;
 
                 // AJAX ile backend'e yeni miktarı gönder
                 fetch(`/ShopCart/UpdateQuantity?productId=${productId}&quantity=${newQuantity}`, {
