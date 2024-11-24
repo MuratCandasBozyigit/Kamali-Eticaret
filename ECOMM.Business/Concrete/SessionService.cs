@@ -42,6 +42,20 @@ public class SessionService : ISessionService
         SaveCartItems(cartItems);
     }
 
+    public async Task UpdateQuantityAsync(int productId, int quantity)
+    {
+        var cartItems = GetCartItems(); // Oturumu al
+        var item = cartItems.FirstOrDefault(i => i.ProductId == productId);
+
+        if (item != null)
+        {
+            // Miktarı güncelle
+            item.Quantity = quantity;
+            SaveCartItems(cartItems); // Sepeti kaydet
+        }
+    }
+
+
     public void RemoveFromCart(int productId)
     {
         var cartItems = GetCartItems();

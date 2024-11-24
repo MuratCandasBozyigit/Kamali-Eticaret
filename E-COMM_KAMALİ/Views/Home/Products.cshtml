@@ -26,19 +26,20 @@
                     <div class="product-card">
                         <img src="@product.ImageUrl" class="product-image" alt="@product.ProductName">
                         <div class="card-body">
-                            <h5 class="card-title">@product.ProductName</h5>
-                            <p class="card-text text-muted">@product.CategoryName</p>
+                            <h5 class="card-title Name">@product.ProductName</h5>
+                            <p class="card-text Name text-muted">@product.CategoryName</p>
                             <p class="card-text"><strong>Fiyat:</strong> @product.Price.ToString("C")</p>
                             <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-details ">Detaylar</a>
                         </div>
                         <div class="card-footer">
                             <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
-                              @*   <input type="number" name="quantity" value="1" min="1" class="form-control mb-2 " style="width: 60px; display: inline-block;" /> *@
-                                <button type="submit" class="btn  btn-light btn-add-to-cart">
+                                <input type="hidden" name="quantity" value="1" /> <!-- Miktar her zaman 1 olarak gönderilecek -->
+                                <button type="submit" class="btn btn-light btn-add-to-cart">
                                     <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                                 </button>
                             </form>
+
 
                           <br />
                             <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
@@ -72,6 +73,18 @@
         /* Tüm sayfanın arka plan rengi */
         body {
             background-color: rgb(230, 228, 223); /* Açık gri ton */
+        }
+
+        .Name {
+            max-width: 161.13px; /* Maksimum genişlik */
+            max-height: 23.04px; /* Maksimum yükseklik */
+            white-space: nowrap; /* Satır kaydırmayı engelle */
+            overflow: hidden; /* Taşan metni gizle */
+            text-overflow: ellipsis; /* Taşan metin yerine "..." ekle */
+            font-weight: bold; /* Kalın yazı */
+            color: red;
+            font-size: 14px; /* Font boyutunu da optimize edelim */
+            line-height: 1.2; /* Satır yüksekliği */
         }
 
         /* Ürün kartları düzeni */
