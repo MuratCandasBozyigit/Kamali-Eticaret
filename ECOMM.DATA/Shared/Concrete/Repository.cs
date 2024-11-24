@@ -27,6 +27,10 @@ namespace ECOMM.Data.Shared.Concrete
         {
             return await _dbSet.ToListAsync();
         }
+        public async Task<IQueryable<T>> GetAllAsyncQuery()
+        {
+            return await Task.FromResult(_context.Set<T>()); // IQueryable döndürme
+        }
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
         {
