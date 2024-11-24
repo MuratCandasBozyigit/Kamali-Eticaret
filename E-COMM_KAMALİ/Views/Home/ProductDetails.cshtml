@@ -18,18 +18,21 @@
             </div>
 
             <div class="product-content">
-                <!-- Ürün Başlığı -->
+                <!-- Ürün Başlığı -->  <h3 class="product-title">@Model.Product.ProductName</h3>
+                </br>             
                 <h2 class="product-title">@Model.Product.ProductTitle</h2>
+
+
 
                 <!-- Mağazaya Git Linki -->
                 <a asp-controller="Home" asp-action="Index" class="product-link">Visit store</a>
 
                 <!-- Ürün Değerlendirmesi -->
-             @*    <div class="product-rating">
-                    @for (int i = 0; i < 5; i++)
-                    {
-                        <i class="fas fa-star @((i < Model.Product.Rating) ? "filled" : "")"></i>
-                    }
+                @*    <div class="product-rating">
+                @for (int i = 0; i < 5; i++)
+                {
+                <i class="fas fa-star @((i < Model.Product.Rating) ? "filled" : "")"></i>
+                }
                 </div> *@
 
                 <!-- Ürün Fiyatı -->

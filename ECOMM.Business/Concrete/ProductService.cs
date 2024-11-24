@@ -91,5 +91,27 @@ namespace ECOMM.Business.Concrete
           var products = await _productRepository.GetAllAsync();
             return products.Where(p=>p.Id == categoryId).ToList();
         }
+
+        public async Task<List<ProductViewModel>> GetAllProductsAsync()
+        {
+            var products = await _productRepository.GetAllAsyncQuery();
+            return await products.Include(p => p.Category)
+                .Select(p => new ProductViewModel
+                {
+                    ProductId = p.Id,
+                    ImageUrl = p.ImagePath,
+                    ProductName = p.ProductName,
+                    ProductTitle = p.ProductTitle,
+                    ProductDescription = p.ProductDescription,
+                    Price = p.ProductPrice,
+                    Category = new CategoryViewModel
+                    {
+                        ParentCategoryName = p.Category.ParentCategoryName
+                    }
+                }).ToListAsync();
+        }
+
+
+
     }
 }

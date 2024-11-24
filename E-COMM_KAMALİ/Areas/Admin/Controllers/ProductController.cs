@@ -64,13 +64,27 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         }
 
         #region Tamamlandı 
-
-        [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        [HttpGet("GetAllAsync")]
+        public async Task<IActionResult> GetAllAsync()
         {
-            _productService.GetAllAsync();
-            return Ok();
+            try
+            {
+                var products = await _productService.GetAllAsync();
+                var categories = await _categoryService.GetAllAsync();
+
+                foreach (var product in products)
+                {
+                    product.Category = categories.FirstOrDefault(c => c.Id == product.CategoryId);
+                }
+
+                return Json(products); // JSON formatında döndür
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+            }
         }
+
 
         [HttpGet("Create")]
         public async Task<IActionResult> Create()
@@ -102,6 +116,12 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
             await _productService.AddAsync(Product); // Asenkron olarak ekle
             return RedirectToAction("Index"); // Başarılı ekleme sonrası Index'e yönlendir
+        }
+        [HttpGet("GetAllProductsAsync")]
+        public async Task<IActionResult> GetAllProductsAsync()
+        {
+            var products = await _productService.GetAllProductsAsync();
+            return Json(products); // JSON olarak döndürme
         }
 
         [HttpDelete("DeleteAsync/{id}")]
@@ -160,6 +180,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             {
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
+                ProductName = product.ProductName,
                 ProductDescription = product.ProductDescription,
                 ProductPrice = (decimal)product.ProductPrice,
                 ImagePath = product.ImagePath,
@@ -219,150 +240,3 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
 
 
-
-#region YORUMSATIRLARISSSS
-
-//ASIL EDİT BU
-//[HttpGet]
-//public IActionResult Edit()
-//{
-//    return View();
-//}
-//[HttpProduct]
-//public IActionResult Edit([FromBody] Product Product)
-//{
-//    if (Product == null)
-//    {
-//        return BadRequest("Product nesnesi null.");
-//    }
-
-//    if (!ModelState.IsValid)
-//    {
-//        return BadRequest("Product model doğrulama hatası.");
-//    }
-
-//    try
-//    {
-//        // Eğer 'GetAll' metodunun doğru bir kullanımı değilse, uygun metodu çağırmalısınız.
-//        var Products = _productService.GetAll(); // Eğer 'Product' ile filtreleme yapılacaksa uygun metodu çağırmalısınız
-//        return Ok(Products);
-//    }
-//    catch (Exception ex)
-//    {
-//        // Özel hata mesajları veya loglama
-//        return StatusCode(500, $"Sunucu hatası: {ex.Message}");
-//    }
-//}
-
-
-//[HttpGet]
-//public IActionResult Edit()
-//{
-//    return View();
-//}
-//[HttpProduct]
-//public IActionResult Edit([FromBody] Product Product)
-//{
-//    if (Product == null)
-//    {
-//        return BadRequest("Product nesnesi null.");
-//    }
-
-//    if (!ModelState.IsValid)
-//    {
-//        return BadRequest("Product model doğrulama hatası.");
-//    }
-
-//    try
-//    {
-//        // Eğer 'GetAll' metodunun doğru bir kullanımı değilse, uygun metodu çağırmalısınız.
-//        var Products = _productService.GetAll(); // Eğer 'Product' ile filtreleme yapılacaksa uygun metodu çağırmalısınız
-//        return Ok(Products);
-//    }
-//    catch (Exception ex)
-//    {
-//        // Özel hata mesajları veya loglama
-//        return StatusCode(500, $"Sunucu hatası: {ex.Message}");
-//    }
-//}
-
-
-
-//public IActionResult Create(Product Product, IFormFile image)
-//{
-//    if (ModelState.IsValid)
-//    {
-//        if (image != null && image.Length > 0)
-//        {
-//            var fileName = Path.GetFileName(image.FileName);
-//            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-//            using (var stream = new FileStream(filePath, FileMode.Create))
-//            {
-//                image.CopyTo(stream);
-//            }
-
-//            Product.ImagePath = "~/images/" + fileName;
-//        }
-
-//        _productService.Add(Product);
-//        return RedirectToAction("Index");
-//    }
-
-//    return View(Product);
-//}
-
-
-
-
-
-
-
-
-
-//[HttpGet("{id}")]
-//public IActionResult Edit(int id)
-//{
-//    var Product = _productService.GetById(id);
-//    if (Product == null)
-//    {
-//        return NotFound();
-//    }
-
-//    var categories = _categoryService.GetAll();
-//    var viewModel = new ProductEditViewModel
-//    {
-//        Product = Product,
-//        Categories = categories
-//    };
-
-//    return View(viewModel);
-//}
-
-//[HttpProduct]
-//public IActionResult Edit(ProductEditViewModel viewModel, IFormFile image)
-//{
-//    if (!ModelState.IsValid)
-//    {
-//        viewModel.Categories = _categoryService.GetAll(); // Kategorileri yeniden yükle
-//        return View(viewModel);
-//    }
-
-//    if (image != null && image.Length > 0)
-//    {
-//        var fileName = Path.GetFileName(image.FileName);
-//        var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-//        using (var stream = new FileStream(filePath, FileMode.Create))
-//        {
-//            image.CopyTo(stream);
-//        }
-
-//        viewModel.Product.ImagePath = "/images/" + fileName;
-//    }
-
-//    _productService.Update(viewModel.Product); // Update metodunu çağırdığınızdan emin olun
-//    return RedirectToAction("Index");
-//}
-
-#endregion

@@ -1,6 +1,4 @@
-﻿@model ECOMM.Web.Areas.Admin.Controllers.ProductController.HomeViewModel
-
-@{
+﻿@{
     ViewData["Title"] = "Ürün Listesi";
 }
 
@@ -19,6 +17,7 @@
             <thead>
                 <tr>
                     <th>Resim</th>
+                    <th>Ürün Adı</th>
                     <th>Başlık</th>
                     <th>Açıklama</th>
                     <th>Fiyat</th>
@@ -27,23 +26,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var product in Model.Products)
-                {
-                    <tr id="product-@product.Id">
-                        <td>
-                            <img src="@Url.Content(product.ImagePath ?? "~/images/default.jpg")" alt="Ürün Resmi" width="50">
-                        </td>
-                        <td>@product.ProductTitle</td>
-                        <td>@product.ProductDescription</td>
-                        <td>@product.ProductPrice.ToString("C")</td>
-                        <td>@product.Category?.ParentCategoryName</td>
-                        <td>
-                            <a asp-area="Admin" asp-controller="Product" asp-action="Edit" asp-route-id="@product.Id" class="btn btn-sm btn-warning">Düzenle</a>
-                            <button class="btn btn-danger deleteProduct" data-id="@product.Id">Sil</button>
-
-                        </td>
-                    </tr>
-                }
+                <!-- AJAX ile veri buraya eklenecek -->
             </tbody>
         </table>
     </div>
@@ -54,8 +37,44 @@
 }
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
     <script>
         $(document).ready(function () {
+            // DataTable'ı başlat
+            var table = $('#tblProducts').DataTable({
+                ajax: {
+                    url: '/Admin/Product/GetAllProductsAsync', // AJAX isteği yapacak endpoint
+                    dataSrc: '' // Gelen veriyi doğrudan kullan
+                },
+                columns: [
+                    {
+                        data: 'imageUrl', title: 'Resim', render: function (data) {
+                            return '<img src="' + (data || '/images/default.jpg') + '" alt="Ürün Resmi" style="width: 50px; height: 50px;" />';
+                        }
+                    },
+                    { data: 'productName', title: 'Ürün Adı' },
+                    { data: 'productTitle', title: 'Başlık' },
+                    {
+                        data: 'productDescription', title: 'Açıklama', render: function (data) {
+                            return data.length > 150 ? data.substring(0, 150) + "..." : data;
+                        }
+                    },
+                    {
+                        data: 'price', title: 'Fiyat', render: function (data) {
+                            return data.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' });
+                        }
+                    },
+                    { data: 'category.parentCategoryName', title: 'Kategori' },
+                    {
+                        data: null, title: 'İşlemler', render: function (data) {
+                            return '<a href="/Admin/Product/Edit/' + data.productId + '" class="btn btn-sm btn-warning">Düzenle</a>' +
+                                '<button class="btn btn-danger deleteProduct" data-id="' + data.productId + '">Sil</button>';
+                        }
+                    }
+                ]
+            });
+
             // Silme butonuna tıklandığında AJAX ile silme işlemi
             $('#tblProducts').on('click', '.deleteProduct', function () {
                 var id = $(this).data('id'); // data-id'den ID'yi alıyoruz
@@ -77,7 +96,7 @@
                             url: "/Admin/Product/DeleteAsync/" + id, // Silme URL'si
                             success: function () {
                                 // Başarılı olursa, tabloyu yeniden yükle (veya satırı kaldır)
-                                $('#product-' + id).remove();  // Silinen öğeyi sayfadan kaldırma
+                                table.row($(this).parents('tr')).remove().draw(); // Silinen öğeyi sayfadan kaldırma
                                 Swal.fire('Silindi!', 'Ürün başarıyla silindi.', 'success');
                             },
                             error: function () {

@@ -14,9 +14,11 @@ namespace ECOMM.Core.ViewModels
         public string ProductName { get; set; }
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
-        public string CategoryName { get; set; }
         public string ProductDescription { get; set; }
         // Kategoriyi ProductViewModel içinde detaylı almak için Category nesnesi ekleyelim
+        public string ParentCategoryName { get; set; }
+      
+        public string CategoryName { get; set; }
         public CategoryViewModel Category { get; set; }  // Burada Category'yi bir nesne olarak ekliyoruz
 
     

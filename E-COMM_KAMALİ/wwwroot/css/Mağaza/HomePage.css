@@ -34,13 +34,16 @@ body {
 }
 
 .product-card {
-    width: 520px; /* Kartın genişliği */
-    height: 450px; /* Kartın yüksekliği */
+    width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
+    max-width: 300px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
+    height:550px; /* Kartın yüksekliği */
+    margin: 0 auto;
+   
 }
 
 .product-image {
     width: 100%; /* Kartın genişliğine uyum sağlar */
-    height: 200px; /* Sabit resim yüksekliği */
+    height: 165px; /* Sabit resim yüksekliği */
     object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
     object-position: center; /* Resmin ortalanmasını sağlar */
 }

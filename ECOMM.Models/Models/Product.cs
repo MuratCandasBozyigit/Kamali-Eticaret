@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ECOMM.Core.Models
@@ -6,6 +7,8 @@ namespace ECOMM.Core.Models
     public class Product : BaseModel
     {
         public string ProductTitle { get; set; }
+
+        [MaxLength(11, ErrorMessage = "Ürün adı en fazla 11 karakter olmalıdır.")]
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }
 

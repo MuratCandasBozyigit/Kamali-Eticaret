@@ -11,14 +11,14 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/dataTables.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.0/css/responsive.bootstrap.min.css">
     <!-- DataTables CSS -->
-    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css" rel="stylesheet">
 
-    <!-- Font Awesome CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- FontAwesome (Örnek olarak) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/AdminPage/adminLayout.css" />
 
     @await RenderSectionAsync("Css", required: false)
 
@@ -30,38 +30,13 @@
             display: flex;
             overflow-x: hidden;
             transition: background-color 0.6s ease;
+            background-color: #ffffff;
         }
 
-        /* Koyu mod arka plan rengi */
-        .night-mode {
-            background-color: #2b2b2b;
-            color: #f5f5f5;
-        }
-
-            /* Tablo koyu mod için */
-            .night-mode .table {
-                background-color: #343a40;
-                color: #ffffff;
-            }
-
-                .night-mode .table th,
-                .night-mode .table td {
-                    border-color: #474747;
-                }
-
-            .night-mode .table-hover tbody tr:hover {
-                background-color: #444444;
-            }
-
-            /* Gece modu için modal ve kart renkleri */
-            .night-mode .modal-content,
-            .night-mode .card {
-                background-color: #3a3a3a;
+            /* Gece Modu */
+            body.night-mode {
+                background-color: #2b2b2b;
                 color: #f5f5f5;
-            }
-
-            .night-mode .modal-header {
-                background-color: #1f1f1f;
             }
 
         /* Sidebar */
@@ -75,6 +50,10 @@
             top: 0;
             left: 0;
         }
+
+            #sidebar.active {
+                margin-left: -250px; /* Sidebar kapandığında görünmez yap */
+            }
 
             #sidebar .sidebar-header {
                 padding: 15px;
@@ -111,28 +90,45 @@
             transition: margin 0.3s, width 0.3s;
         }
 
-        /* Gece modu butonu */
-        #nightmode {
-            padding: 15px;
-            border: 2px solid rgb(12, 42, 52);
-            border-radius: 60px;
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            transition: background-color 0.6s ease;
-        }
-
-            #nightmode:hover {
-                background-color: coral;
-                cursor: pointer;
+            #content.active {
+                margin-left: 0;
+                width: 100%;
             }
 
         /* Sidebar Aç/Kapat Düğmesi */
         #sidebarCollapse {
+            position: fixed;
+            top: 20px;
+            left: 20px;
             background: #343a40;
             color: #fff;
             border: none;
+            z-index: 1000;
+            padding: 10px 15px;
+            border-radius: 4px;
         }
+
+            #sidebarCollapse:hover {
+                background-color: #fff;
+                color: #343a40;
+            }
+
+        /* Gece Modu Düğmesi */
+        #nightmode {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border: 2px solid #343a40;
+            border-radius: 60px;
+            transition: background-color 0.6s ease;
+            cursor: pointer;
+            background-color:black;
+        }
+
+            #nightmode:hover {
+                background-color: coral;
+            }
     </style>
 </head>
 
@@ -140,6 +136,8 @@
     <!-- Sidebar -->
     <div id="sidebar">
         <div class="sidebar-header">
+            <br />
+            <br />
             <h3>Admin Blog.Web</h3>
             <button type="button" id="sidebarCollapse" class="btn btn-sm">
                 <i class="fas fa-bars"></i>
@@ -148,8 +146,7 @@
         <ul class="list-unstyled components">
             <li><a asp-area="" asp-controller="Home" asp-action="Index">Anasayfa</a></li>
             <br />
-           <br />
-            <li><a asp-area="Admin" asp-controller="Home" asp-action="Index">Grafikler</a></li>
+            <br />
             <li><a asp-area="Admin" asp-controller="Product" asp-action="Index">Ürünler</a></li>
             <li><a asp-area="Admin" asp-controller="Category" asp-action="Index">Kategoriler</a></li>
             <li><a asp-area="Admin" asp-controller="Category" asp-action="SubCategoryIndex">Alt Kategoriler</a></li>
@@ -164,36 +161,69 @@
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
-        <button id="nightmode"><i class="fa-solid fa-moon"></i></button>
+        <button id="nightmode"><i class="fa-regular fa-moon"></i></button>
     </div>
+
     <!-- jQuery ve Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- DataTables ve diğer JS dosyaları -->
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- SweetAlert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src='https://code.jquery.com/jquery-1.12.3.js'></script>
-    <script src='https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js'></script>
-    <script src="https://cdn.datatables.net/1.10.12/js/dataTables.bootstrap.min.js" charset="utf-8"></script>
 
     <!-- Custom JS -->
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 
     <!-- Gece Modu Toggle Script -->
     <script>
         $(document).ready(function () {
-            // Sayfa yüklendiğinde, localStorage'dan gece modu durumunu kontrol et
-            if (localStorage.getItem('nightMode') === 'enabled') {
-                $('body').addClass('night-mode');
+            const COOKIE_NAME = 'sidebarState'; // Cookie name
+
+            // Check sidebar state on page load
+            const sidebarState = getCookie(COOKIE_NAME);
+            if (sidebarState === 'collapsed') {
+                $('#sidebar').addClass('active'); // Collapse the sidebar
+                $('#content').addClass('active'); // Expand the content area
             }
 
+            // Toggle sidebar on button click
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').toggleClass('active');
+                $('#content').toggleClass('active');
+
+                // Save the new state in a cookie
+                if ($('#sidebar').hasClass('active')) {
+                    setCookie(COOKIE_NAME, 'collapsed', 7); // Save as collapsed
+                } else {
+                    setCookie(COOKIE_NAME, 'expanded', 7); // Save as expanded
+                }
+            });
+
+            // Function to set a cookie
+            function setCookie(name, value, days) {
+                const date = new Date();
+                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/`;
+            }
+
+            // Function to get a cookie
+            function getCookie(name) {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop().split(';').shift();
+                return null;
+            }
+
+            // Gece Modu Toggle Script
             $('#nightmode').on('click', function () {
                 $('body').toggleClass('night-mode');
-
-                // Gece modu durumunu localStorage'a kaydet
                 if ($('body').hasClass('night-mode')) {
                     localStorage.setItem('nightMode', 'enabled');
                 } else {
@@ -201,10 +231,10 @@
                 }
             });
 
-            $('#sidebarCollapse').on('click', function () {
-                $('#sidebar').toggleClass('active');
-                $('#content').toggleClass('active');
-            });
+            // Check night mode on page load
+            if (localStorage.getItem('nightMode') === 'enabled') {
+                $('body').addClass('night-mode');
+            }
         });
     </script>
 </body>
