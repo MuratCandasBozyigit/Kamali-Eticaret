@@ -34,11 +34,12 @@
                         <div class="card-footer">
                             <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
-                              @*   <input type="number" name="quantity" value="1" min="1" class="form-control mb-2 " style="width: 60px; display: inline-block;" /> *@
-                                <button type="submit" class="btn  btn-light btn-add-to-cart">
+                                <input type="hidden" name="quantity" value="1" /> <!-- Miktar her zaman 1 olarak gönderilecek -->
+                                <button type="submit" class="btn btn-light btn-add-to-cart">
                                     <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                                 </button>
                             </form>
+
 
                           <br />
                             <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
