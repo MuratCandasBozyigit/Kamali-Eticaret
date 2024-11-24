@@ -12,7 +12,7 @@
                         <h3 class="fw-normal mb-0">Sepetim</h3>
                     </div>
 
-                    @foreach (var item in Model) 
+                    @foreach (var item in Model)
                     {
                         <div class="card rounded-3 mb-4">
                             <div class="card-body p-4">
@@ -27,11 +27,28 @@
                                         <p class="lead fw-normal mb-2">@item.ProductName</p>
                                         <p>
                                             <span class="text-muted">Miktar: </span>
-                                            <span class="quantity">@item.Quantity</span>
-                                            @if (item.Quantity >= 5)
-                                            {
-                                                <span class="text-danger">(En fazla 5 adet eklenebilir!)</span>
-                                            }
+                                            <div class="quantity-controls d-flex align-items-center">
+                                                <!-- - Butonu -->
+                                                <button class="btn btn-sm btn-danger decrease-quantity"
+                                                @* butonun devre dışı olmasını Razor ile kontrol et *@
+                                                @if (item.Quantity <= 1)
+                                                {
+                                                    <text>disabled</text>
+                                                }
+                                                            onclick="updateQuantity(@item.ProductId, -1)">-</button>
+
+                                                <!-- Miktar -->
+                                                <span class="mx-2 quantity-text" id="quantity-@item.ProductId">@item.Quantity</span>
+
+                                                <!-- + Butonu -->
+                                                <button class="btn btn-sm btn-success increase-quantity"
+                                                @* butonun devre dışı olmasını Razor ile kontrol et *@
+                                                @if (item.Quantity >= 5)
+                                                {
+                                                    <text>disabled</text>
+                                                }
+                                                            onclick="updateQuantity(@item.ProductId, 1)">+</button>
+                                            </div>
                                         </p>
                                     </div>
 
@@ -57,24 +74,6 @@
                                                 <i class="fas fa-trash fa-lg"></i>
                                             </button>
                                         </form>
-
-                                        <!-- Miktar Artır -->
-                                        @if (item.Quantity < 5)
-                                        {
-                                            <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-inline-block">
-                                                <input type="hidden" name="productId" value="@item.ProductId" />
-                                                <input type="hidden" name="quantity" value="1" />
-                                                <button type="submit" class="btn btn-success btn-hover">
-                                                    <i class="fas fa-plus"></i> Ekle
-                                                </button>
-                                            </form>
-                                        }
-                                        else
-                                        {
-                                            <button class="btn btn-secondary btn-hover" disabled>
-                                                Maksimum Adet!
-                                            </button>
-                                        }
                                     </div>
                                 </div>
                             </div>
@@ -101,10 +100,10 @@
         transition: background-color 0.7s, transform 0.5s;
     }
 
-    .btn-lg:hover {
-        font-size: 20px;
-        background-color: rgb(237, 190, 19);
-    }
+        .btn-lg:hover {
+            font-size: 20px;
+            background-color: rgb(237, 190, 19);
+        }
 
     .text-danger {
         font-weight: bold;
@@ -120,8 +119,74 @@
         transition: all 0.3s ease;
     }
 
-    .btn-hover:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        .btn-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+    /* Miktar butonları ve tasarım */
+    .quantity-controls {
+        display: flex;
+        align-items: center;
     }
+
+        .quantity-controls .btn {
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+    .quantity-text {
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .increase-quantity {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .decrease-quantity {
+        background-color: #dc3545;
+        color: white;
+    }
+
+        .increase-quantity:hover, .decrease-quantity:hover {
+            background-color: #218838;
+        }
+
+        .decrease-quantity:hover {
+            background-color: #c82333;
+        }
 </style>
+
+@section Scripts {
+    <script>
+        function updateQuantity(productId, change) {
+            var quantityElement = document.getElementById("quantity-" + productId);
+            var quantity = parseInt(quantityElement.innerText);
+            var newQuantity = quantity + change;
+
+            if (newQuantity >= 1 && newQuantity <= 5) {
+                quantityElement.innerText = newQuantity;
+
+                // AJAX ile backend'e yeni miktarı gönder
+                fetch(`/ShopCart/UpdateQuantity?productId=${productId}&quantity=${newQuantity}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productId: productId, quantity: newQuantity })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        // Sepet güncellendiyse burada yapılacak işlemler
+                        console.log("Miktar güncellendi.");
+                    })
+                    .catch(error => {
+                        console.error("Bir hata oluştu:", error);
+                    });
+            }
+        }
+    </script>
+}

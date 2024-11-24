@@ -84,5 +84,19 @@ namespace E_COMM_KAMALİ.Controllers
             _sessionService.ClearCart(); // Sepeti temizle
             return RedirectToAction("Index", "ShopCart"); // Sepet sayfasına yönlendir
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateQuantity(int productId, int quantity)
+        {
+            if (quantity >= 1 && quantity <= 5)
+            {
+                await _sessionService.UpdateQuantityAsync(productId, quantity); // Miktarı güncelle
+                return Json(new { success = true }); // Başarılı dönüş
+            }
+
+            return Json(new { success = false, message = "Miktar 1 ile 5 arasında olmalıdır." }); // Hata durumu
+        }
+
+
     }
 }
