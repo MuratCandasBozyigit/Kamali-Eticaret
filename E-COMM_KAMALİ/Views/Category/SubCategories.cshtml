@@ -12,12 +12,8 @@
     <div class="subcategory-container">
         @foreach (var subCategory in Model)
         {
-            <div class="subcategory-card">
-                <a asp-controller="Category" asp-action="Products" asp-route-subCategoryId="@subCategory.Id" style="text-decoration: none; color: inherit;">
-                    <h4>@subCategory.SubCategoryName</h4>
-                    <p>Ürün sayısı: @subCategory.ProductCount</p>
-                </a>
-            </div>
+            <div class="subcategory-card"> <a asp-controller="Category" asp-action="Products" asp-route-subCategoryId="@subCategory.Id" style="text-decoration: none; color: inherit;"> <h4>@subCategory.SubCategoryName</h4> <p>Ürün sayısı: @subCategory.ProductCount</p> </a> </div>
+
         }
     </div>
 }
@@ -25,3 +21,5 @@ else
 {
     <p class="no-subcategories">Bu kategoride alt kategori bulunmamaktadır.</p>
 }
+
+
