@@ -12,6 +12,7 @@
     width: 200px; /* Kart genişliği */
     text-align: center;
     transition: transform 0.2s;
+    box-sizing: border-box;
 }
 
     .product-card:hover {
@@ -38,3 +39,49 @@
         transform: scale(1.2); /* Hover sırasında büyüme efekti */
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Hafif gölge efekti */
     }
+
+.no-products {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #888;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .product-card {
+        width: 220px; /* Orta büyüklükteki ekranlarda kartlar biraz daha genişlesin */
+    }
+}
+
+@media (max-width: 992px) {
+    .product-card {
+        width: 45%; /* Tablet boyutlarında kart genişliğini %45 yapalım, 2 ürün yan yana */
+    }
+}
+
+@media (max-width: 768px) {
+    .product-card {
+        width: 45%; /* Küçük tabletlerde ve büyük telefonlarda da %45 genişlik */
+    }
+}
+
+@media (max-width: 576px) {
+    .product-card {
+        width: 100%; /* Mobilde her ürün tam genişlikte olacak */
+        padding: 15px; /* Daha küçük padding */
+    }
+
+    .product-actions .btn-detay {
+        padding: 8px 15px; /* Butonları mobilde küçült */
+        font-size: 0.9rem; /* Font boyutunu küçült */
+    }
+
+    .product-image {
+        height: 150px; /* Mobilde daha küçük görseller */
+        object-fit: cover; /* Görsellerin kutuya sığmasını sağlar */
+    }
+
+    .no-products {
+        font-size: 1rem; /* Mobilde metin boyutunu küçült */
+    }
+}
