@@ -1,6 +1,4 @@
-﻿/*#region KART CSS */
-
-/* Genel Stiller */
+﻿/* Genel Stiller */
 body {
     font-family: 'Open Sans', sans-serif;
     margin: 0;
@@ -42,6 +40,7 @@ body {
     padding-left: 20px;
     box-shadow: none; /* Gölge kaldırıldı */
 }
+
 /* Resim Stili */
 .product-imgs {
     flex: 1;
@@ -69,7 +68,6 @@ body {
         object-fit: cover; /* Resmi kapsayıcı boyuta göre kırpmak için */
         border-radius: 0; /* Köşeler düz */
     }
-
 
 /* Ürün İçeriği */
 .product-content {
@@ -106,7 +104,6 @@ body {
         text-decoration: none;
         font-weight: 600;
     }
-
 
 .product-rating i {
     color: #ffc107;
@@ -224,31 +221,108 @@ body {
         box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Mavi ışıltılı gölge efekti */
     }
 
+/* Responsive için Medya Sorguları */
 
+/* Tablet ve küçük ekranlar */
+@media (max-width: 768px) {
+    .card-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
 
+    .product-imgs {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+        padding-bottom: 20px;
+    }
 
-/*#endregion */
+    .product-content {
+        margin-left: 0;
+        margin-top: 20px;
+    }
 
+    .product-title {
+        font-size: 2.5rem;
+    }
 
+    .product-link {
+        font-size: 1.2rem;
+    }
 
-/*#region ÜrünListesiCSS */
+    .product-price {
+        font-size: 1.5rem;
+    }
 
+    .product-detail h2 {
+        font-size: 1.2rem;
+    }
 
+    .read-more {
+        font-size: 1.2rem;
+    }
 
-/*#endregion */
+    .purchase-info .btn {
+        padding: 10px 20px;
+        font-size: 1rem;
+    }
 
+    .purchase-info .form-control {
+        font-size: 16px;
+        width: 50%;
+    }
+}
 
+/* Mobil ekranlar */
+@media (max-width: 480px) {
+    .card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
 
+    .product-imgs {
+        width: 100%;
+        margin-top: 20px;
+    }
 
+    .img-showcase img {
+        width: 100%;
+        height: auto; /* Yüksekliği otomatik ayarla */
+    }
 
-/*#region YorumlarCss */
+    .product-content {
+        width: 100%;
+        margin-top: 20px;
+    }
 
+    .product-title {
+        font-size: 1.8rem;
+    }
 
+    .product-price {
+        font-size: 1.4rem;
+    }
 
-/*#endregion */
+    .product-detail h2 {
+        font-size: 1.3rem;
+    }
 
-/*#region EkstraÜrünDetayCss */
+    .product-detail.expand {
+        max-height: 1000px;
+    }
 
+    .read-more {
+        font-size: 1.1rem;
+    }
 
+    .purchase-info .btn {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
 
-/*#endregion */
+    .purchase-info .form-control {
+        width: 80%;
+        font-size: 14px;
+    }
+}
