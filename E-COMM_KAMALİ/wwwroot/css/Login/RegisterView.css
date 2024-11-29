@@ -14,7 +14,6 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    /* background: #f3f2f2;*/
     background-color: rgb(129, 150, 135);
 }
 
@@ -22,21 +21,21 @@ html, body {
 .session {
     display: flex;
     justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+    align-items: stretch; /* Yükseklikleri eşitlemek için */
     width: 100%;
-    height: 100%;
+    height: 100%; /* Ekranın tamamı */
     padding: 1rem;
 }
 
 /* Sol alan (arka plan resmi) */
 .left {
-    width: 40%;
+    width: 50%; /* Resmin genişliği */
     min-width: 240px;
-    height: 100%;
     background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
     background-size: cover;
     background-position: center;
+    height: auto;
+    max-height: 100%; /* Resmin yüksekliği form ile aynı olacak */
     border-top-left-radius: 5px;
     border-bottom-left-radius: 5px;
 }
@@ -51,99 +50,29 @@ html, body {
     display: flex;
     flex-direction: column;
     border-radius: 0 5px 5px 0;
-}
-
-.floating-label {
-    position: relative;
-    margin-bottom: 1.5rem;
-}
-
-    .floating-label input {
-        width: 100%;
-        padding: 0.8rem;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        outline: none;
-        font-size: 1rem;
-        transition: border-color 0.3s;
-    }
-
-        .floating-label input:focus {
-            border-color: #6c63ff;
-        }
-
-    .floating-label label {
-        position: absolute;
-        top: 50%;
-        left: 0.8rem;
-        transform: translateY(-50%);
-        font-size: 1rem;
-        color: #aaa;
-        pointer-events: none;
-        transition: top 0.3s, font-size 0.3s, color 0.3s;
-    }
-
-    .floating-label input:focus + label,
-    .floating-label input:not(:placeholder-shown) + label {
-        top: -0.6rem;
-        font-size: 0.8rem;
-        color: #6c63ff;
-        background-color: #ffffff;
-        padding: 0 0.2rem;
-    }
-
-button[type="submit"] {
-    background-color: #6c63ff;
-    color: #fff;
-    border: none;
-    padding: 0.8rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1.2rem;
-    width: 100%;
-    transition: background-color 0.3s;
-}
-
-    button[type="submit"]:hover {
-        background-color: #5a52d4;
-    }
-
-a {
-    color: #6c63ff;
-    text-decoration: none;
-}
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-.text-center {
-    text-align: center;
-}
-
-.text-danger {
-    color: #ff3333;
+    height: auto;
+    max-height: 100%; /* Yükseklik sınırlaması */
 }
 
 /* Tablet ve mobil cihazlar için düzenlemeler */
 @media (max-width: 1024px) { /* Tablet */
     .session {
-        max-width: 768px; /* Sınır belirledik */
-        height: auto; /* Tam ekrana zorlamadık */
+        max-width: 768px;
+        height: auto;
         margin: auto;
         border-radius: 10px;
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
     }
 
     .left {
-        height: 300px; /* Daha küçük resim alanı */
+        height: 100%; /* Yükseklik eşitlenecek */
         border-radius: 10px 10px 0 0; /* Yuvarlama */
-        width: 100%;
     }
 
     .log-in {
         width: 100%;
-        border-radius: 0 0 10px 10px; /* Yuvarlama */
+        border-radius: 0 0 10px 10px;
+        height: 100%; /* Yükseklik eşitlenecek */
     }
 
     h4 {
@@ -153,7 +82,7 @@ a {
 
     p {
         font-size: 30px;
-        color:mediumpurple;
+        color: mediumpurple;
         text-align: center;
     }
 
@@ -161,6 +90,7 @@ a {
         font-size: 1rem;
     }
 }
+
 @media (max-width: 768px) {
     .session {
         flex-direction: column; /* Üst üste hizalama */
@@ -171,14 +101,14 @@ a {
 
     .left {
         width: 100%; /* Tam genişlik */
-        height: calc(50% - 90px); /* %50'den 50px daha kısa */
+        height: 50%; /* %50 yüksekliği */
         background-size: cover; /* Arka plan resmi ayarlanır */
         background-position: center; /* Ortalanır */
     }
 
     .log-in {
         width: 100%; /* Tam genişlik */
-        height: calc(50% + 50px); /* Form alanını kalan yüksekliğe göre uzat */
+        height: 50%; /* %50 yükseklik */
         padding: 20px;
         display: flex;
         flex-direction: column;
@@ -211,11 +141,11 @@ a {
 
 @media (max-width: 480px) {
     .left {
-        height: calc(50% - 90px); /* %50'den 50px daha kısa */
+        height: 50%; /* %50'lik yükseklik */
     }
 
     .log-in {
-        height: calc(50% +70px); /* Form alanını kalan yüksekliğe göre uzat */
+        height: 50%; /* %50'lik yükseklik */
         padding: 15px;
     }
 
