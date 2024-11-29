@@ -54,118 +54,35 @@ html, body {
     max-height: 100%; /* Yükseklik sınırlaması */
 }
 
-/* Tablet ve mobil cihazlar için düzenlemeler */
-@media (max-width: 1024px) { /* Tablet */
-    .session {
-        max-width: 768px;
-        height: auto;
-        margin: auto;
-        border-radius: 10px;
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .left {
-        height: 100%; /* Yükseklik eşitlenecek */
-        border-radius: 10px 10px 0 0; /* Yuvarlama */
-    }
-
-    .log-in {
-        width: 100%;
-        border-radius: 0 0 10px 10px;
-        height: 100%; /* Yükseklik eşitlenecek */
-    }
-
-    h4 {
-        font-size: 1.8rem;
-        text-align: center;
-    }
-
-    p {
-        font-size: 30px;
-        color: mediumpurple;
-        text-align: center;
-    }
-
-    button[type="submit"] {
-        font-size: 1rem;
-    }
-}
-
+/* Responsive tasarım için medya sorguları */
 @media (max-width: 768px) {
     .session {
-        flex-direction: column; /* Üst üste hizalama */
-        width: 100vw; /* Tam genişlik */
-        height: 100vh; /* Tam yükseklik */
-        overflow: hidden; /* Taşmaları engelle */
+        flex-direction: column; /* Dikey hizalama */
     }
 
     .left {
-        width: 100%; /* Tam genişlik */
-        height: 50%; /* %50 yüksekliği */
-        background-size: cover; /* Arka plan resmi ayarlanır */
-        background-position: center; /* Ortalanır */
+        width: 100%; /* Sol alanın genişliği %100 olacak */
+        border-radius: 5px 5px 0 0; /* Yuvarlak köşeleri yukarıda yap */
+        max-height: 250px; /* Yüksekliği sınırla */
     }
 
     .log-in {
-        width: 100%; /* Tam genişlik */
-        height: 50%; /* %50 yükseklik */
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center; /* Dikey ortalama */
-        align-items: center; /* Yatay ortalama */
+        border-radius: 0 0 5px 5px; /* Aşağıda yuvarlatılmış köşeler */
         box-shadow: none; /* Gölgeyi kaldır */
-        overflow: auto; /* İçeriğin taşmasını önler */
-    }
-
-    h4 {
-        font-size: 20px;
-    }
-
-    p {
-        font-size: 13px;
-        margin-top: 20px;
-    }
-
-    .floating-label input {
-        height: 48px;
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    button {
-        font-size: 14px;
-        padding: 10px 20px;
     }
 }
 
 @media (max-width: 480px) {
-    .left {
-        height: 50%; /* %50'lik yükseklik */
-    }
-
     .log-in {
-        height: 50%; /* %50'lik yükseklik */
-        padding: 15px;
-    }
-
-    h4 {
-        font-size: 18px;
-    }
-
-    p {
-        font-size: 16px;
-        margin-bottom: 30px;
+        padding: 1rem; /* İçerik alanının padding'ini azalt */
     }
 
     .floating-label input {
-        height: 40px;
-        font-size: 14px;
-        padding: 8px;
+        font-size: 14px; /* Giriş alanı font boyutunu küçült */
     }
 
     button {
-        padding: 8px 16px;
-        font-size: 12px;
+        padding: 1rem; /* Butonun padding'ini artır */
+        font-size: 16px; /* Butonun font boyutunu artır */
     }
 }
