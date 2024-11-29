@@ -1,69 +1,55 @@
-﻿* {
+﻿/* Genel stil */
+* {
     font-family: -apple-system, BlinkMacSystemFont, "San Francisco", Helvetica, Arial, sans-serif;
     font-weight: 300;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 html, body {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     margin: 0;
     display: flex;
-    align-items: center; /* Dikey ortalama */
-    justify-content: center; /* Yatay ortalama */
+    align-items: center;
+    justify-content: center;
     background: #f3f2f2;
 }
 
+/* Form konteyneri */
 .session {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap;
     width: 100%;
-    height: 100vh; /* Ekranın tamamını kaplaması için */
+    height: 100%;
     padding: 1rem;
 }
 
-
+/* Sol alan (arka plan resmi) */
 .left {
-    width: 240px;
-    height: 543px;
-    /*min-height: 100%;*/
-    border-top-left-radius: 5px;
+    width: 40%;
+    min-width: 240px;
+    height: 100%;
     background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
     background-size: cover;
+    background-position: center;
     border-top-left-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-bottom-left-radius: 5px;
 }
-/*.left {
-    background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-    background-size: cover;
-    background-position: center;*/ /* Resmi ortalar */
-    /*background-repeat: no-repeat;
-  
-    display: flex;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    align-items: center;
-    justify-content: center;
-    flex: 1;*/ /* Esnek alan kullanımı */
-    /*min-width: 400px;*/ /* Minimum genişlik belirledik */
-/*}*/
 
+/* Form alanı */
 .log-in {
     background: #ffffff;
     padding: 2rem;
-    max-width: 600px; /* Form genişliğini artırdık */
+    max-width: 600px;
     width: 100%;
-   
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 0 5px 5px 0;
 }
 
 .floating-label {
@@ -77,7 +63,7 @@ html, body {
         border: 1px solid #ddd;
         border-radius: 5px;
         outline: none;
-        font-size: 0.9rem;
+        font-size: 1rem;
         transition: border-color 0.3s;
     }
 
@@ -99,7 +85,7 @@ html, body {
     .floating-label input:focus + label,
     .floating-label input:not(:placeholder-shown) + label {
         top: -0.6rem;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: #6c63ff;
         background-color: #ffffff;
         padding: 0 0.2rem;
@@ -112,7 +98,7 @@ button[type="submit"] {
     padding: 0.8rem;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.2rem;
     width: 100%;
     transition: background-color 0.3s;
 }
@@ -136,4 +122,117 @@ a {
 
 .text-danger {
     color: #ff3333;
+}
+
+/* Tablet ve mobil cihazlar için düzenlemeler */
+@media (max-width: 1024px) { /* Tablet */
+    .session {
+        max-width: 768px; /* Sınır belirledik */
+        height: auto; /* Tam ekrana zorlamadık */
+        margin: auto;
+        border-radius: 10px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .left {
+        height: 300px; /* Daha küçük resim alanı */
+        border-radius: 10px 10px 0 0; /* Yuvarlama */
+        width: 100%;
+    }
+
+    .log-in {
+        width: 100%;
+        border-radius: 0 0 10px 10px; /* Yuvarlama */
+    }
+
+    h4 {
+        font-size: 1.8rem;
+        text-align: center;
+    }
+
+    p {
+        font-size: 1rem;
+        text-align: center;
+    }
+
+    button[type="submit"] {
+        font-size: 1rem;
+    }
+}
+@media (max-width: 768px) {
+    .session {
+        flex-direction: column; /* Üst üste hizalama */
+        width: 100vw; /* Tam genişlik */
+        height: 100vh; /* Tam yükseklik */
+        overflow: hidden; /* Taşmaları engelle */
+    }
+
+    .left {
+        width: 100%; /* Tam genişlik */
+        height: calc(50% - 90px); /* %50'den 50px daha kısa */
+        background-size: cover; /* Arka plan resmi ayarlanır */
+        background-position: center; /* Ortalanır */
+    }
+
+    .log-in {
+        width: 100%; /* Tam genişlik */
+        height: calc(50% + 50px); /* Form alanını kalan yüksekliğe göre uzat */
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Dikey ortalama */
+        align-items: center; /* Yatay ortalama */
+        box-shadow: none; /* Gölgeyi kaldır */
+        overflow: auto; /* İçeriğin taşmasını önler */
+    }
+
+    h4 {
+        font-size: 20px;
+    }
+
+    p {
+        font-size: 13px;
+        margin-top: 20px;
+    }
+
+    .floating-label input {
+        height: 48px;
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .left {
+        height: calc(50% - 90px); /* %50'den 50px daha kısa */
+    }
+
+    .log-in {
+        height: calc(50% +70px); /* Form alanını kalan yüksekliğe göre uzat */
+        padding: 15px;
+    }
+
+    h4 {
+        font-size: 18px;
+    }
+
+    p {
+        font-size: 12px;
+    }
+
+    .floating-label input {
+        height: 40px;
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    button {
+        padding: 8px 16px;
+        font-size: 12px;
+    }
 }
