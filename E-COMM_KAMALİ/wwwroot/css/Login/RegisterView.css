@@ -14,7 +14,8 @@ html, body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #f3f2f2;
+    /* background: #f3f2f2;*/
+    background-color: rgb(129, 150, 135);
 }
 
 /* Form konteyneri */
@@ -151,7 +152,8 @@ a {
     }
 
     p {
-        font-size: 1rem;
+        font-size: 30px;
+        color:mediumpurple;
         text-align: center;
     }
 
@@ -222,7 +224,8 @@ a {
     }
 
     p {
-        font-size: 12px;
+        font-size: 16px;
+        margin-bottom: 30px;
     }
 
     .floating-label input {
