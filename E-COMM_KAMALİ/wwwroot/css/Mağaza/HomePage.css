@@ -124,7 +124,7 @@ body {
 }
 
     .icon-box:hover {
-        transform: scale(1.75); /* Hover durumunda büyütme */
+        transform: scale(1.3); /* Hover durumunda büyütme */
         color: aliceblue;
         background-color: darkslategray; /* Arka plan rengi değişikliği */
         box-shadow: 0 0 40px rgba(0, 0, 0, 0.3); /* Gölgeyi artırma */
@@ -223,12 +223,34 @@ body {
 
 /* Responsive düzenleme */
 @media (max-width: 767px) {
-    .footer-menu {
-        text-align: center; /* Küçük ekranlarda ortala */
+    #company-services .row {
+        display: flex; /* Flexbox düzeni */
+        flex-wrap: wrap; /* Satır taşmaları için sarma */
+        justify-content: center; /* Ortalama */
     }
 
-    .social-links {
-        justify-content: center; /* Sosyal bağlantıları ortala */
+    #company-services .col-lg-3 {
+        flex: 1 0 45%; /* Kolon genişliği mobilde %45 */
+        max-width: 45%; /* Maksimum genişlik */
+        padding: 5px; /* Daha az boşluk */
+    }
+
+    #company-services .icon-box {
+        width: 100%; /* Mobilde tam genişlik */
+        height: auto; /* Yükseklik otomatik */
+        padding: 10px; /* Daha az iç boşluk */
+        margin: 5px auto; /* Kartlar arasında daha az boşluk */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Hafif gölge */
+    }
+
+    #company-services .icon-box-content h3 {
+        font-size: 14px; /* Daha küçük başlık */
+        margin-bottom: 5px; /* Daha az başlık altı boşluk */
+    }
+
+    #company-services .icon-box-content p {
+        font-size: 12px; /* Daha küçük metin */
+        line-height: 1.2; /* Satır yüksekliği azaltıldı */
     }
 }
 
