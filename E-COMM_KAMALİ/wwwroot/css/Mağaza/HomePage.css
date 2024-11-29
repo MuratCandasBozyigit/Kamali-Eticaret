@@ -232,27 +232,42 @@ body {
     #company-services .col-lg-3 {
         flex: 1 0 45%; /* Kolon genişliği mobilde %45 */
         max-width: 45%; /* Maksimum genişlik */
-        padding: 5px; /* Daha az boşluk */
+        padding: 5px; /* Daha az dış boşluk */
     }
 
     #company-services .icon-box {
-        width: 100%; /* Mobilde tam genişlik */
-        height: auto; /* Yükseklik otomatik */
-        padding: 10px; /* Daha az iç boşluk */
-        margin: 5px auto; /* Kartlar arasında daha az boşluk */
+        width: 105%; /* Tam genişlik */
+        height: 120px; /* Sabit yükseklik */
+        padding: 10px;
+        /* İçerik için boşluk */
+        margin: 5px auto; /* Kartlar arasında az boşluk */
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.05); /* Hafif gölge */
+        display: flex; /* İçerikleri hizalamak için flexbox */
+        flex-direction: column; /* İçerikleri dikey hizala */
+        align-items: center; /* Yatayda ortala */
+
+        justify-content: center; /* Dikeyde ortala */
+        box-sizing: border-box; /* İçerik boyutlandırmayı dahil et */
+        overflow: hidden; /* Taşmaları gizle */
     }
 
     #company-services .icon-box-content h3 {
         font-size: 14px; /* Daha küçük başlık */
         margin-bottom: 5px; /* Daha az başlık altı boşluk */
+        text-align: center; /* Metni ortala */
+        white-space: nowrap; /* Uzun başlıklar için tek satır */
+        overflow: hidden; /* Taşmayı gizle */
+        text-overflow: ellipsis; /* Uzun başlıkların sonunda '...' göster */
     }
 
     #company-services .icon-box-content p {
-        font-size: 12px; /* Daha küçük metin */
-        line-height: 1.2; /* Satır yüksekliği azaltıldı */
+        font-size: 12px; /* Daha küçük açıklama */
+        line-height: 1.2; /* Daha sıkı satır yüksekliği */
+        text-align: center; /* Metni ortala */
+        white-space: normal; /* Metni satır sonuna göre böl */
     }
 }
+
 
 
 .fa-cart-shopping {
