@@ -238,16 +238,6 @@ body {
         object-position: center; /* Resmin ortalanmasını sağlar */
     }
 
-    .btn-light {
-        background-color: lightgray; /* Açık gri arka plan */
-        color: black; /* Yazı rengi */
-        border: none; /* Kenar çizgisi yok */
-    }
-
-    .btn-hover {
-        background-color: gray; /* Hover durumunda daha koyu gri */
-        color: white; /* Hover durumunda yazı rengi beyaz */
-    }
 
     /* Butonlar arasında biraz boşluk bırakmak için */
     .col-auto {
