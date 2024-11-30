@@ -223,6 +223,25 @@ body {
 
 /* Responsive düzenleme */
 @media (max-width: 767px) {
+    .product-card {
+        width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
+        max-width: 300px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
+        height: 550px; /* Kartın yüksekliği */
+        margin: 0 auto;
+    }
+
+    .product-image {
+        width: 100%; /* Kartın genişliğine uyum sağlar */
+        height: 165px; /* Sabit resim yüksekliği */
+        object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
+        object-position: center; /* Resmin ortalanmasını sağlar */
+    }
+
+    .card-title {
+        margin-bottom: 5px; /* Başlık ve açıklama arasındaki boşluk */
+    }
+
+
     #company-services .row {
         display: flex; /* Flexbox düzeni */
         flex-wrap: wrap; /* Satır taşmaları için sarma */
@@ -304,6 +323,8 @@ body {
         text-align: center;
         padding: 10px;
     }
+
+    
 }
 
 @media (max-width: 480px) {
