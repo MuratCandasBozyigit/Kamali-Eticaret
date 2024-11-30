@@ -86,23 +86,19 @@
         </div>
     </div>
 </section>
-
 <!-- Ürün Listesi Bölümü -->
 <div class="container mt-4">
     <div class="row justify-content-center align-items-center">
-        <!-- Sol Yön Okları -->
-        <div class="col-auto">
-            <a class="btn btn-light @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
+        <div class="col-12">
+            <h1 class="text-center">ÜRÜNLER</h1>
         </div>
 
-        <div class="col-10">
-            <h1 style=" text-align: center;">ÜRÜNLER</h1>
+        <!-- Ürünler Listesi -->
+        <div class="col-12">
             <div class="row g-3 justify-content-center">
                 @foreach (var product in Model.Products)
                 {
-                    <div class="col-6 col-md-4 col-lg-3 custom-col">
+                    <div class="col-6 col-md-4 col-lg-3">
                         <div class="card mb-3 product-card">
                             <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
                             <div class="card-body text-center">
@@ -110,19 +106,19 @@
                                 <h6>@product.ProductTitle</h6>
                                 <p class="card-text">@product.ProductPrice.ToString("C")</p>
                                 <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-primary btn-hover mb-2 mt-3">Detaylar</a>
-                                <!-- Tek Form Yapısı -->
+                                <!-- Sepete Ekle -->
                                 <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
                                     <input type="hidden" name="productId" value="@product.Id" />
                                     <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
                                     <button type="submit" class="btn btn-primary btn-hover mb-3">
-                                        <i class="fa-solid fa-cart-shopping "></i> Sepete Ekle
+                                        <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                                     </button>
                                 </form>
-
+                                <!-- Favorilere Ekle -->
                                 <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
                                     <input type="hidden" name="productId" value="@product.Id" />
                                     <button type="submit" class="btn btn-primary btn-hover mb-2">
-                                        <i class="fa-regular fa-heart"> </i>  Favoriler
+                                        <i class="fa-regular fa-heart"></i> Favoriler
                                     </button>
                                 </form>
                             </div>
@@ -132,8 +128,11 @@
             </div>
         </div>
 
-        <!-- Sağ Yön Okları -->
-        <div class="col-auto">
+        <!-- Sayfalama Kontrolleri (Mobilde Alt Kısımda Gösterilecek) -->
+        <div class="col-12 d-flex justify-content-between align-items-center mt-4">
+            <a class="btn btn-light @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
             <a class="btn btn-light @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
