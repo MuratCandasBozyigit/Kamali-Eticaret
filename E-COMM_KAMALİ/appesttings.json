@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=MyDatabase;User Id=myusername;Password=mypassword;"
+    "DefaultConnection": "Server=217.195.207.215\\MSSQLSERVER2019;Database=dunyani1_kamali;User Id=murat;Password=81644936.Ma;"
   },
   "Logging": {
     "LogLevel": {
