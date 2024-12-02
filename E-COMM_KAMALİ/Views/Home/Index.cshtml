@@ -87,23 +87,28 @@
     </div>
 </section>
 <!-- Ürün Listesi Bölümü -->
-
 <!-- Ürün Listesi Bölümü -->
 <div class="container mt-4">
     <div class="row justify-content-center align-items-center">
         <!-- Sol Yön Okları -->
-        <div class="col-auto">
+        @*    <div class="col-auto">
             <a class="btn btn-light @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" aria-label="Previous">
                 <span aria-hidden="true">&laquo;</span>
             </a>
-        </div>
+        </div> *@
 
         <div class="col-10">
             <h1 style=" text-align: center;">ÜRÜNLER</h1>
+            <p class="all_products" onclick="window.location.href='@Url.Action("Products", "Home")'">Tüm Ürünlerimiz</p>
             <div class="row g-3 justify-content-center">
+
+
+
                 @foreach (var product in Model.Products)
                 {
+
                     <div class="col-6 @* col-md-3  *@col-lg-3 custom-col">
+
                         <div class="card mb-3 product-card">
                             <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
                             <div class="card-body text-center">
@@ -115,7 +120,7 @@
                                 </h6>
 
                                 <p class="card-text">@product.ProductPrice.ToString("C")</p>
-                                <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-primary btn-hover mb-2 mt-3">Detaylar</a>
+                                <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
                                 <!-- Tek Form Yapısı -->
                                 <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
                                     <input type="hidden" name="productId" value="@product.Id" />
@@ -138,22 +143,23 @@
             </div>
         </div>
 
-        <!-- Sağ Yön Okları -->
+        @*   <!-- Sağ Yön Okları -->
         <div class="col-auto">
             <a class="btn btn-light @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" aria-label="Next">
                 <span aria-hidden="true">&raquo;</span>
             </a>
-        </div>
+        </div> *@
     </div>
 </div>
 
 
   </br>
   </br>
-<section id="testimonials" class="position-relative mb-4" ">
+<section id="testimonials" class="position-relative mb-4">
     <div class="container">
         <div class="row">
             <div class="review-content position-relative">
+                <!-- Sol Chevron -->
                 <div class="swiper-icon swiper-arrow swiper-arrow-prev position-absolute d-flex align-items-center">
                     <svg class="chevron-left">
                         <use xlink:href="#chevron-left" />
@@ -162,32 +168,33 @@
 
                 <div class="swiper testimonial-swiper">
                     <div class="swiper-wrapper">
-@if (Model.Comments != null && Model.Comments.Any()) // Eğer yorum varsa
-{
-    foreach (var comment in Model.Comments)
-    {
+                        @if (Model.Comments != null && Model.Comments.Any())
+                        {
+                            foreach (var comment in Model.Comments)
+                            {
                                 <div class="swiper-slide text-center d-flex justify-content-center">
                                     <div class="review-item col-md-10 card">
-                                        <blockquote>“@comment.Content”</blockquote> <!-- Yorum içeriği -->
+                                        <blockquote>“@comment.Content”</blockquote>
                                         <div class="author-detail">
-                                            <div class="name text-dark text-uppercase pt-2">@comment.Author</div> <!-- Yazar ismi -->
-                                            <div class="date text-muted">@comment.DateCommented.ToString("g")</div> <!-- Yorum tarihi -->
+                                            <div class="name text-dark text-uppercase pt-2">@comment.Author</div>
+                                            <div class="date text-muted">@comment.DateCommented.ToString("g")</div>
                                         </div>
                                     </div>
                                 </div>
-    }
-}
-else
-{
+                            }
+                        }
+                        else
+                        {
                             <div class="swiper-slide text-center d-flex justify-content-center">
                                 <div class="review-item col-md-10 card">
                                     <blockquote>“Henüz yorum yok”</blockquote>
                                 </div>
                             </div>
-}
+                        }
                     </div>
                 </div>
 
+                <!-- Sağ Chevron -->
                 <div class="swiper-icon swiper-arrow swiper-arrow-next position-absolute d-flex align-items-center">
                     <svg class="chevron-right">
                         <use xlink:href="#chevron-right" />
