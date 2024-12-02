@@ -107,8 +107,13 @@
                         <div class="card mb-3 product-card">
                             <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
                             <div class="card-body text-center">
-                                <h5 class="card-title">@product.ProductName</h5>
-                                <h6>@product.ProductTitle</h6>
+                                <h5 class="card-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@product.ProductName">
+                                    @product.ProductName
+                                </h5>
+                                <h6 style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@product.ProductTitle">
+                                    @product.ProductTitle
+                                </h6>
+
                                 <p class="card-text">@product.ProductPrice.ToString("C")</p>
                                 <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-primary btn-hover mb-2 mt-3">Detaylar</a>
                                 <!-- Tek Form Yapısı -->

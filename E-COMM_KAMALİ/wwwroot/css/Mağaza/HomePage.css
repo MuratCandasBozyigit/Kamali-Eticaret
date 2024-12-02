@@ -221,6 +221,12 @@ body {
     line-height: 1.5; /* Okunabilirlik için satır yüksekliği */
 }
 
+
+
+
+
+/*#endregion */
+
 /* Responsive düzenleme */
 @media (max-width: 767px) {
     .product-card {
@@ -391,10 +397,4 @@ body {
             transform: scale(1.1); /* Çok küçük bir büyüme sağla */
         }
 
-
-
-
-
-
-/*#endregion */
 
