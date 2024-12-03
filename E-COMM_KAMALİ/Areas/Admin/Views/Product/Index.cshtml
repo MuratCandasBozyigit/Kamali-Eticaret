@@ -7,11 +7,11 @@
 <div class="mt-4" style="text-align:right;">
     <a asp-area="Admin" asp-controller="Product" asp-action="Create" class="btn btn-primary ti-plus">Ekle</a>
 </div>
-
-<div class="card bg-light text-dark mt-4">
-    <div class="card-header d-flex justify-content-between align-items-center">
+<br />
+@* <div class="card bg-light text-dark mt-4"> *@
+   @*  <div class="card-header d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><box-icon name="box" color="dark" size="sm" animation="tada"></box-icon> Ürünler</h5>
-    </div>
+    </div> *@
     <div class="card-body">
         <table id="tblProducts" class="table table-hover">
             <thead>
@@ -30,7 +30,7 @@
             </tbody>
         </table>
     </div>
-</div>
+@* </div> *@
 
 @section Css {
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css" />

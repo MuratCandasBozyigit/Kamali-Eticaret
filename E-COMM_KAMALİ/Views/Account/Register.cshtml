@@ -11,41 +11,46 @@
         <!-- Buraya arka plan resmi otomatik olarak uygulanacak -->
     </div>
     <form asp-action="Register" method="post" class="log-in" autocomplete="off">
-        <h4>We are <span>NUVA</span></h4>
-        <p>Welcome! Register to join us:</p>
+
+        <p>Giriş yapabilmek için Kayıt olunuz:</p>
         <div asp-validation-summary="ModelOnly" class="text-danger text-center"></div>
 
         <div class="floating-label">
+            <label asp-for="Name">İsim:</label>
             <input asp-for="Name" class="form-control" type="text" id="name" required />
-            <label asp-for="Name">Name:</label>
+
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="floating-label">
-            <input asp-for="Email" class="form-control" type="text" id="email" required />
             <label asp-for="Email">Email:</label>
+            <input asp-for="Email" class="form-control" type="text" id="email" required />
+
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
         <div class="floating-label">
+            <label asp-for="Password">Şifre:</label>
             <input asp-for="Password" class="form-control" type="password" id="password" required />
-            <label asp-for="Password">Password:</label>
+
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
         <div class="floating-label">
+            <label asp-for="ConfirmPassword">Şifre Tekrar:</label>
             <input asp-for="ConfirmPassword" class="form-control" type="password" id="confirmPassword" required />
-            <label asp-for="ConfirmPassword">Confirm Password:</label>
+
             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
-
-        <button type="submit" class="btn btn-success p-2 w-100">Register</button>
+        </br>
+      
+        <button type="submit" class="btn btn-success p-2 w-100">Kayıt Ol</button>
         <p class="text-center mt-2">
-            Already have an account?
-            <a class="text-decoration-none" asp-controller="Account" asp-action="Login">Login</a>
+            Zaten Hesabınız varmı ?
+            <a class="text-decoration-none" asp-controller="Account" asp-action="Login">Giriş Yap</a>
         </p>
-        <div class="text-center">
-            <a asp-controller="Home" asp-action="Index" class="text-decoration-none mt-3">Back</a>
+        <div class="text-center " style="margin-top:0px;">
+            <a asp-controller="Home" asp-action="Index" class="text-decoration-none mt-3">Geri</a>
         </div>
     </form>
 </div>

@@ -1,28 +1,41 @@
-﻿body {
+﻿@model IEnumerable<ECOMM.Core.Models.SubCategory> @ {
+    ViewData ["Title"] = "Alt Kategoriler";
+}
+
+<link rel="stylesheet" href="~/css/Mağaza/AltKategoriler.css" / >
+
+<style >
+/* Genel Stiller */
+body {
     font-family: Arial, sans-serif; /* Yazı tipi stili */
     background-color: rgb(233, 237, 245); /* Arka plan rengi */
-    /* Genel iç boşluk */
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
 }
 
 p.no-subcategories {
     text-align: center;
     font-weight: bold;
-    font-size: 90px;
+    font-size: 1.2rem;
     color: rgb(35, 64, 43);
-    justify-content: center; /* Bu özellik sadece flex veya grid öğelerinde çalışır */
-    align-items: center; /* Bu özellik de flex veya grid öğelerinde çalışır */
+    margin: 20px 0;
 }
 
-
-
+/* Alt Kategori Kart Konteyneri */
 .subcategory-container {
     display: flex;
-    margin-top: 45px; /* Üstten boşluk */
+    margin-top: 45px;
     flex-wrap: wrap;
-    gap: 20px; /* Kartlar arasında boşluk */
-    justify-content: center; /* Kartları ortala */
+    gap: 20px;
+    justify-content: center;
 }
 
+/* Alt Kategori Kart Stili */
 .subcategory-card {
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -30,26 +43,63 @@ p.no-subcategories {
     width: 220px;
     background-color: rgb(201, 206, 214);
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.2s, box-shadow 0.2s; /* Geçiş efekti */
-    cursor: pointer; /* Hover'da el simgesi */
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+    text-align: center;
 }
 
     .subcategory-card h4 {
-        margin: 0; /* Başlık için varsayılan marjı sıfırla */
-        font-size: 18px; /* Başlık boyutu */
-        color: #333; /* Başlık rengi */
-        text-align: center; /* Başlığı ortala */
+        margin: 0;
+        font-size: 18px;
+        color: #333;
+    }
+
+    .subcategory-card p {
+        margin: 10px 0 0;
+        font-size: 14px;
+        color: #555;
     }
 
     .subcategory-card:hover {
-        transform: scale(1.5); /* Kartı büyüt */
-        background-color: rgb(126, 128, 130); /* Hover'da arka plan rengi */
-        box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2); /* Hover'da gölgeyi artır */
+        transform: scale(1.05);
+        background-color: rgb(126, 128, 130);
+        box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.2);
     }
 
-.no-subcategories {
-    text-align: center; /* Mesajı ortala */
-    color: #666; /* Mesaj rengi */
-    font-size: 16px; /* Mesaj boyutu */
-    margin-top: 20px; /* Mesaj üst boşluğu */
+/* Tablet ve Mobil Cihazlar */
+@media (max-width: 768px) {
+    .subcategory-card {
+        width: 180px;
+        padding: 10px;
+    }
+
+        .subcategory-card h4 {
+            font-size: 16px;
+        }
+
+        .subcategory-card p {
+            font-size: 12px;
+        }
+
+    p.no-subcategories {
+        font-size: 1rem;
+    }
 }
+
+@media (max-width: 480px) {
+    .subcategory-card {
+        width: 100%;
+        padding: 10px;
+        margin: 0 auto;
+    }
+
+    .subcategory-container {
+        gap: 10px;
+    }
+
+    p.no-subcategories {
+        font-size: 0.9rem;
+    }
+}
+
+</style >

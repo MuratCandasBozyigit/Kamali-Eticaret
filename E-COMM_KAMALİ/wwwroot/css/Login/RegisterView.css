@@ -1,139 +1,88 @@
-﻿* {
+﻿/* Genel stil */
+* {
     font-family: -apple-system, BlinkMacSystemFont, "San Francisco", Helvetica, Arial, sans-serif;
     font-weight: 300;
     margin: 0;
+    padding: 0;
     box-sizing: border-box;
 }
 
 html, body {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     margin: 0;
     display: flex;
-    align-items: center; /* Dikey ortalama */
-    justify-content: center; /* Yatay ortalama */
-    background: #f3f2f2;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(129, 150, 135);
 }
 
+/* Form konteyneri */
 .session {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: stretch; /* Yükseklikleri eşitlemek için */
     width: 100%;
-    height: 100vh; /* Ekranın tamamını kaplaması için */
+    height: 100%; /* Ekranın tamamı */
     padding: 1rem;
 }
 
-
+/* Sol alan (arka plan resmi) */
 .left {
-    width: 240px;
-    height: 543px;
-    /*min-height: 100%;*/
-    border-top-left-radius: 5px;
+    width: 50%; /* Resmin genişliği */
+    min-width: 240px;
     background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
     background-size: cover;
+    background-position: center;
+    height: auto;
+    max-height: 100%; /* Resmin yüksekliği form ile aynı olacak */
     border-top-left-radius: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     border-bottom-left-radius: 5px;
 }
-/*.left {
-    background-image: url("https://images.pexels.com/photos/114979/pexels-photo-114979.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940");
-    background-size: cover;
-    background-position: center;*/ /* Resmi ortalar */
-    /*background-repeat: no-repeat;
-  
-    display: flex;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-    align-items: center;
-    justify-content: center;
-    flex: 1;*/ /* Esnek alan kullanımı */
-    /*min-width: 400px;*/ /* Minimum genişlik belirledik */
-/*}*/
 
+/* Form alanı */
 .log-in {
     background: #ffffff;
     padding: 2rem;
-    max-width: 600px; /* Form genişliğini artırdık */
+    max-width: 600px;
     width: 100%;
-   
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
+    border-radius: 0 5px 5px 0;
+    height: auto;
+    max-height: 100%; /* Yükseklik sınırlaması */
 }
 
-.floating-label {
-    position: relative;
-    margin-bottom: 1.5rem;
+/* Responsive tasarım için medya sorguları */
+@media (max-width: 768px) {
+    .session {
+        flex-direction: column; /* Dikey hizalama */
+    }
+
+    .left {
+        width: 100%; /* Sol alanın genişliği %100 olacak */
+        border-radius: 5px 5px 0 0; /* Yuvarlak köşeleri yukarıda yap */
+        max-height: 250px; /* Yüksekliği sınırla */
+    }
+
+    .log-in {
+        border-radius: 0 0 5px 5px; /* Aşağıda yuvarlatılmış köşeler */
+        box-shadow: none; /* Gölgeyi kaldır */
+    }
 }
+
+@media (max-width: 480px) {
+    .log-in {
+        padding: 1rem; /* İçerik alanının padding'ini azalt */
+    }
 
     .floating-label input {
-        width: 100%;
-        padding: 0.8rem;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        outline: none;
-        font-size: 0.9rem;
-        transition: border-color 0.3s;
+        font-size: 14px; /* Giriş alanı font boyutunu küçült */
     }
 
-        .floating-label input:focus {
-            border-color: #6c63ff;
-        }
-
-    .floating-label label {
-        position: absolute;
-        top: 50%;
-        left: 0.8rem;
-        transform: translateY(-50%);
-        font-size: 1rem;
-        color: #aaa;
-        pointer-events: none;
-        transition: top 0.3s, font-size 0.3s, color 0.3s;
+    button {
+        padding: 1rem; /* Butonun padding'ini artır */
+        font-size: 16px; /* Butonun font boyutunu artır */
     }
-
-    .floating-label input:focus + label,
-    .floating-label input:not(:placeholder-shown) + label {
-        top: -0.6rem;
-        font-size: 0.9rem;
-        color: #6c63ff;
-        background-color: #ffffff;
-        padding: 0 0.2rem;
-    }
-
-button[type="submit"] {
-    background-color: #6c63ff;
-    color: #fff;
-    border: none;
-    padding: 0.8rem;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    width: 100%;
-    transition: background-color 0.3s;
-}
-
-    button[type="submit"]:hover {
-        background-color: #5a52d4;
-    }
-
-a {
-    color: #6c63ff;
-    text-decoration: none;
-}
-
-    a:hover {
-        text-decoration: underline;
-    }
-
-.text-center {
-    text-align: center;
-}
-
-.text-danger {
-    color: #ff3333;
 }

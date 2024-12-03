@@ -36,9 +36,8 @@ body {
 .product-card {
     width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
     max-width: 300px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
-    height:550px; /* Kartın yüksekliği */
+    height: 550px; /* Kartın yüksekliği */
     margin: 0 auto;
-   
 }
 
 .product-image {
@@ -124,7 +123,7 @@ body {
 }
 
     .icon-box:hover {
-        transform: scale(1.75); /* Hover durumunda büyütme */
+        transform: scale(1.3); /* Hover durumunda büyütme */
         color: aliceblue;
         background-color: darkslategray; /* Arka plan rengi değişikliği */
         box-shadow: 0 0 40px rgba(0, 0, 0, 0.3); /* Gölgeyi artırma */
@@ -221,21 +220,11 @@ body {
     line-height: 1.5; /* Okunabilirlik için satır yüksekliği */
 }
 
-/* Responsive düzenleme */
-@media (max-width: 767px) {
-    .footer-menu {
-        text-align: center; /* Küçük ekranlarda ortala */
-    }
-
-    .social-links {
-        justify-content: center; /* Sosyal bağlantıları ortala */
-    }
-}
-
+/*#region Kaldırbunu */
 
 .fa-cart-shopping {
     width: 20px; /* Sabit ikon genişliği */
-     /* Sabit ikon yüksekliği */
+    /* Sabit ikon yüksekliği */
     transition: transform 0.3s ease-in-out; /* Geçiş süresini kontrol et */
     padding: 0; /* Yanlış padding hatasını düzelttim */
     display: inline-block; /* İkonun çevresindeki alanı düzenle */
@@ -270,10 +259,1268 @@ body {
             transform: scale(1.1); /* Çok küçük bir büyüme sağla */
         }
 
+.all_products {
+    position: relative; /* Sabitleme yapar */
+    top: 0; /* Üst kısmına hizalar */
+    right: 0; /* Sağ kısmına hizalar */
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: underline;
+    margin: 0;
+    transition: transform 0.3s ease; /* Yumuşak geçiş ekler */
+}
 
+    .all_products:hover {
+        color: black;
+        font-weight: bolder;
+        text-decoration: none;
+    }
+
+.row {
+    position: relative; /* .all_products öğesinin doğru konumlanabilmesi için row elementine relative ekleriz */
+}
+
+
+/*#endregion */
 
 
 
 
 /*#endregion */
 
+/* Responsive düzenleme */
+
+@media (max-width: 1192px) {
+    .icon-box {
+        position: relative; /* Pozisyon ayarlama */
+        width: 200px; /* Genişlik küçültüldü */
+        height: 200px; /* Yükseklik küçültüldü */
+        margin-left: 5px;
+        font-size:15px;
+        font-weight:bolder;
+        background-color: #fff; /* Beyaz arka plan */
+        border-radius: 8px; /* Köşe yuvarlama */
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Gölge efekti biraz daha küçültüldü */
+        padding: 8px; /* İç boşluk küçültüldü */
+        text-align: center; /* İçerik merkezleme */
+        transition: transform 0.3s ease, background-color 0.3s ease; /* Animasyon geçişi */
+        margin: 8px; /* Dış boşluk küçültüldü */
+        display: flex; /* Flexbox kullanarak içeriği ayarlama */
+        flex-direction: column; /* Dikey yönde yerleştirme */
+        align-items: center; /* İçerikleri yatayda ortalama */
+        justify-content: center; /* İçerikleri dikeyde ortalama */
+        box-sizing: border-box; /* Boyutlandırma modelini kutu içeriklerine dahil et */
+    }
+
+        .icon-box:hover {
+            transform: scale(1.2); /* Hover durumunda büyütme oranı küçültüldü */
+            color: aliceblue;
+            background-color: darkslategray; /* Arka plan rengi değişikliği */
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.3); /* Gölgeyi artırma */
+        }
+
+    .icon-box-icon {
+        margin-bottom: 8px; /* İkon ve başlık arasındaki boşluk küçültüldü */
+        font-size: 24px; /* İkon boyutunu küçülttük */
+    }
+
+    .card-title {
+        font-size:20px;
+        font-weight: bolder;
+        margin-bottom: 5px; /* Başlık ve açıklama arasındaki boşluk */
+        font-size: 14px; /* Başlık boyutu küçültüldü */
+    }
+
+    .icon-box::after {
+        content: '';
+        position: absolute;
+        top: 0; /* Kutunun üstüne gölge */
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.1); /* Gölgenin rengi */
+        border-radius: 8px; /* Köşe yuvarlama */
+        z-index: -1; /* Arka planda kalması için */
+    }
+}
+
+@media (max-width: 980px) {
+
+    /* Şirket Hizmetleri Bölümü */
+    #company-services {
+        padding: 30px 15px; /* Üst ve alt paddingi ayarla */
+    }
+
+    .icon-box {
+        background-color: #f9f9f9; /* Arka plan rengi */
+        border-radius: 8px; /* Köşe yuvarlama */
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+        text-align: center;
+        margin-bottom: 15px; /* Alt boşluk */
+        transition: transform 0.3s ease;
+        width: 100%; /* Her kutunun tam genişlikte olmasını sağla */
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+          
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 26px; /* Başlık font boyutunu küçült */
+        text-transform: uppercase;
+    }
+     
+
+        .icon-box p {
+            font-size: 19px; /* Açıklama font boyutunu küçült */
+            color: #555;
+        }
+        .icon-box p:hover{
+            color:darkgoldenrod;
+        }
+        /* Kolonları daha düzenli yap */
+        .col-lg-3, .col-md-6 {
+            width: 50%; /* Her kutu %100 genişliğe sahip olacak */
+            margin-bottom: 20px; /* Alt boşluk */
+        }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0; /* Son kutu için sağ boşluğu kaldır */
+        }
+
+    /* Ürün Listesi Bölümü */
+   
+
+    .col-10 {
+        width: 100%; /* Ürün başlığını tüm genişlikte kullan */
+        margin-bottom: 20px; /* Alt boşluk */
+    }
+
+    .all_products {
+        text-align: center;
+        font-size: 14px;
+        color: #007bff;
+        cursor: pointer;
+        margin-bottom: 20px; /* Alt boşluk */
+    }
+
+    .product-card {
+        font-size:25px;
+        max-width:370px;
+        width:100%;
+        border-radius: 8px; /* Kart köşeleri yuvarla */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+        margin-bottom: 10px; /* Alt boşluk */
+    }
+
+    .product-image {
+        width: 100%; /* Resimler tüm kart alanını kapsar */
+        height: 180px; /* Sabit yükseklik */
+        object-fit: cover; /* Resmin kutuya uyumlu şekilde kesilmesi */
+    }
+
+    .card-body {
+        padding: 10px; /* İç padding */
+    }
+
+    .card-title {
+        font-size: 23px; /* Başlık font boyutunu küçült */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card-text {
+        font-size: 17px; /* Fiyat yazısının font boyutunu küçült */
+        color: black; 
+        font-weight:bolder;/* Fiyatı mavi renk yap */
+    }
+
+    .btn-primary {
+        font-size: 12px; /* Buton boyutunu küçült */
+        padding: 6px 12px; /* İç padding */
+    }
+
+    .fav-btn button {
+        font-size: 12px; /* Favori butonunun font boyutu */
+    }
+
+    .form-control {
+        width: 60px; /* Genişlik daraltıldı */
+        font-size: 14px; /* Font boyutunu küçült */
+    }
+
+    .product-card h5, .product-card h6 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .swiper-pagination {
+        margin-top: 20px; /* Sayfalama alt boşluk */
+    }
+
+    .swiper-pagination-bullet {
+        background-color: #007bff;
+        width: 10px;
+        height: 10px;
+        margin: 0 5px;
+    }
+
+    .swiper-pagination-bullet-active {
+        background-color: #0056b3; /* Aktif sayfa için renk */
+    }
+}
+
+@media (max-width: 769px) {
+
+    .icon-box {
+        background-color: #f9f9f9; /* Arka plan rengi */
+        border-radius: 8px; /* Köşe yuvarlama */
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+        text-align: center;
+        margin-bottom: 15px; /* Alt boşluk */
+        transition: transform 0.3s ease;
+        width: 100%; /* Her kutunun tam genişlikte olmasını sağla */
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 18px; /* Başlık font boyutunu küçült */
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 19px; /* Açıklama font boyutunu küçült */
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+    /* Kolonları daha düzenli yap */
+    .col-lg-3, .col-md-6 {
+        width: 50%; /* Her kutu %100 genişliğe sahip olacak */
+        margin-bottom: 20px; /* Alt boşluk */
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0; /* Son kutu için sağ boşluğu kaldır */
+        }
+
+
+
+
+
+    .product-image {
+        width: 100%;
+        height: 165px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .product-card {
+        margin-top: 5px;
+        width: 100%;
+        max-width: 370px;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .fav-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        transition: all 0.3s ease;
+    }
+
+        .fav-btn button:hover {
+            transform: scale(1.1);
+            background-color: #f0f0f0;
+        }
+}
+
+@media(max-width:520px) {
+    .icon-box {
+        background-color: #f9f9f9; /* Arka plan rengi */
+        border-radius: 8px; /* Köşe yuvarlama */
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+        text-align: center;
+        margin-bottom: 15px; /* Alt boşluk */
+        transition: transform 0.3s ease;
+        width: 100%; /* Her kutunun tam genişlikte olmasını sağla */
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 16px; /* Başlık font boyutunu küçült */
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 17px; /* Açıklama font boyutunu küçült */
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+    /* Kolonları daha düzenli yap */
+    .col-lg-3, .col-md-6 {
+        width:45%; /* Her kutu %100 genişliğe sahip olacak */
+        margin-bottom: 20px; /* Alt boşluk */
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0; /* Son kutu için sağ boşluğu kaldır */
+        }
+}
+
+@media (max-width: 490px) {
+    /* Şirket Hizmetleri Bölümü */
+  
+    .icon-box {
+        background-color: #f9f9f9; /* Arka plan rengi */
+        border-radius: 8px; /* Köşe yuvarlama */
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+        text-align: center;
+        margin-bottom: 15px; /* Alt boşluk */
+        transition: transform 0.3s ease;
+        width: 100%; /* Her kutunun tam genişlikte olmasını sağla */
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 14px; /* Başlık font boyutunu küçült */
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 12px; /* Açıklama font boyutunu küçült */
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+    /* Kolonları daha düzenli yap */
+    .col-lg-3, .col-md-6 {
+        width: 50%; /* Her kutu %100 genişliğe sahip olacak */
+        margin-bottom: 20px; /* Alt boşluk */
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0; /* Son kutu için sağ boşluğu kaldır */
+        }
+
+
+    /* Daha küçük cihazlar için düzenlemeler */
+    .footer-logo {
+        max-width: 120px;
+    }
+
+    .footer-menu p {
+        font-size: 14px;
+    }
+
+    .social-links svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Daha küçük ekranlarda footer öğelerini tamamen alt alta dizme */
+    .footer-top-area .col-lg-3 {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media(max-width:425px) {
+    .icon-box {
+        background-color: #f9f9f9; 
+        border-radius: 8px;  
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        text-align: center;
+        margin-bottom: 15px;  
+        transition: transform 0.3s ease;
+        width: 100%;  
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 13px; 
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 13px;
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+     Kolonları daha düzenli yap 
+    .col-lg-3, .col-md-6 {
+        width:50%; 
+        margin-bottom: 20px; 
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0; 
+        }
+}
+
+@media(max-width:403px) {
+    .icon-box {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+        width: 100%;
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 12px;
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 13px;
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+
+    Kolonları daha düzenli yap
+    .col-lg-3, .col-md-6 {
+        width: 50%;
+        margin-bottom: 20px;
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0;
+        }
+}
+
+@media (max-width: 375px) {
+
+    .icon-box {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+        width: 100%;
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 11px;
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 12px;
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+
+    Kolonları daha düzenli yap
+    .col-lg-3, .col-md-6 {
+        width: 50%;
+        margin-bottom: 20px;
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0;
+        }
+
+    .review-item {
+        margin-bottom: 12px; /* Yorum alanıyla buton arasındaki mesafeyi artır */
+    }
+
+    /* Buton boyutlarını daha da küçült */
+    .btn {
+        font-size: 11px; /* Buton metin boyutunu daha da küçült */
+        padding: 4px 6px; /* Buton içindeki boşlukları daha da daralt */
+    }
+
+    /* Sol ve sağ butonlar için margin ayarlamaları */
+    .swiper-icon {
+        margin-left: -25px; /* Sol butonu biraz sağa kaydır */
+        margin-right:-25px; /* Sağ butonu biraz sola kaydır */
+    }
+
+    .swiper-arrow-prev .chevron-left, .swiper-arrow-next .chevron-right {
+        width: 20px; /* İkon boyutunu daha da küçült */
+        height: 20px; /* İkon boyutunu daha da küçült */
+    }
+
+    .product-card {
+        margin-top: 5px;
+        width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
+        max-width: 370px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
+        height: 480px; /* Kartın yüksekliği */
+        margin: 0 auto;
+    }
+
+    .fav-btn {
+        display: flex;
+        justify-content: center; /* Yatayda ortalar */
+        align-items: center; /* Dikeyde ortalar */
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+
+
+    .product-image {
+        width: 100%; /* Kartın genişliğine uyum sağlar */
+        height: 150px; /* Sabit resim yüksekliği */
+        object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
+        object-position: center; /* Resmin ortalanmasını sağlar */
+    }
+
+    /* Daha küçük cihazlar için düzenlemeler */
+    .footer-logo {
+        max-width: 120px;
+    }
+
+    .footer-menu p {
+        font-size: 11px;
+    }
+
+    .social-links svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    /* Daha küçük ekranlarda footer öğelerini tamamen alt alta dizme */
+    .footer-top-area .col-lg-3 {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media(max-width:340px) {
+    .icon-box {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+        width: 100%;
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 10px;
+        font-weight: bolder;
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 12px;
+        font-weight: bold;
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+
+    Kolonları daha düzenli yap
+    .col-lg-3, .col-md-6 {
+        width: 50%;
+        margin-bottom: 20px;
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0;
+        }
+}
+
+@media (max-width: 322px) {
+
+
+    .row.justify-content-center {
+        margin: 0; /* Boşluğu sıfırla */
+    }
+
+    #billboard {
+        margin-bottom: 0.5rem; /* Billboard ve ürün kartları arasında boşluk */
+    }
+
+    .btn-medium{
+      font-size:14px !important;
+      font-weight:700;
+
+    }
+
+    .swiper-icon {
+        color: white; /* Ok ikonlarının rengi beyaz */
+        background-color: rgba(0, 0, 0, 0.5); /* Okların arka planı yarı saydam siyah */
+        border-radius: 50%; /* Daire şekli */
+        width: 20px; /* Genişlik */
+        height: 20px; /* Yükseklik */
+        display: flex; /* Flexbox kullanarak içerikleri ortalayalım */
+        align-items: center; /* Dikey ortalama */
+        justify-content: center; /* Yatay ortalama */
+        cursor: pointer; /* İmleci pointer yap */
+        position: absolute; /* Pozisyonlandırma */
+        top: 50%; /* Dikey merkezleme */
+        transform: translateY(-50%); /* Dikey olarak tam merkezde */
+        z-index: 10; /* Üstte görünmesi için */
+    }
+
+    .swiper-arrow-prev {
+        left: 10px; /* Sol ok konumu */
+    }
+
+    .swiper-arrow-next {
+        right: 10px; /* Sağ ok konumu */
+    }
+
+
+    #billboard {
+        background-color: rgb(107, 106, 122) !important;
+        width: 100%; /* Tam genişlik ayarı */
+        height: 200px; /* Yükseklik ayarı */
+        position: relative; /* Pozisyonlandırma */
+        overflow: hidden; /* Taşmayı gizle */
+    }
+
+    .main-swiper {
+        width: 100%; /* Swiper genişliği */
+        height: 100%; /* Swiper yüksekliği */
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%; /* Her slide tam genişlik kaplasın */
+        height: 100%; /* Her slide tam yükseklik kaplasın */
+    }
+
+
+    .icon-box {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+        width: 100%;
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size: 10px;
+        font-weight: bolder;
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 12px;
+        font-weight: bold;
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+
+    Kolonları daha düzenli yap
+    .col-lg-3, .col-md-6 {
+        width: 50%;
+        margin-bottom: 20px;
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0;
+        }
+
+    .review-item {
+        margin-bottom: 12px; /* Yorum alanıyla buton arasındaki mesafeyi artır */
+    }
+
+    /* Buton boyutlarını daha da küçült */
+    .btn {
+        font-size: 6px; /* Buton metin boyutunu daha da küçült */
+        padding: 4px 6px; /* Buton içindeki boşlukları daha da daralt */
+    }
+
+    .swiper-slide {
+        font-size:19px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left:1px;
+        max-width: 300px;
+        width: 100%;
+        max-height: 170px; /* Her slide tam genişlik kaplasın */
+        height: 100%; /* Her slide tam yükseklik kaplasın */
+    }
+    /* Sol ve sağ butonlar için margin ayarlamaları */
+    .swiper-icon {
+        margin-left: -10px; /* Sol butonu biraz sağa kaydır */
+        margin-right: -10px; /* Sağ butonu biraz sola kaydır */
+    }
+
+    .swiper-arrow-prev .chevron-left, .swiper-arrow-next .chevron-right {
+        width: 10px; /* İkon boyutunu daha da küçült */
+        height: 10px; /* İkon boyutunu daha da küçült */
+    }
+
+    .product-card {
+        width: 100%;
+        max-width: 280px; /* Kartın daha küçük olması için genişlik sınırını küçültüyoruz */
+        height: 350px; /* Kartın yüksekliğini küçültüyoruz */
+        margin: 10px auto;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 90px; /* Resmin daha küçük olmasını sağlıyoruz */
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .fav-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px;
+    }
+
+    /* Buton boyutlarını küçültme */
+    .btn-hover {
+        font-size: 10px; /* Buton fontunu daha küçük yapıyoruz */
+        height: 30px; /* Butonun yüksekliğini küçültüyoruz */
+        width: auto;
+        padding: 5px 10px; /* Butonun yatay padding'ini küçültüyoruz */
+        background-color: rgb(237, 233, 221);
+        color: black;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .btn-hover:hover {
+            background-color: rgb(224, 219, 202);
+            transform: scale(1.1);
+            color: black;
+        }
+
+    /* Sepete Ekle ve Favoriler butonlarının boyutları */
+    .fav-btn button,
+    .product-card .btn {
+        font-size: 10px; /* Buton fontunu küçültüyoruz */
+        height: 28px; /* Butonun boyutunu küçültüyoruz */
+        padding: 5px 10px; /* Yatay padding'i azaltıyoruz */
+    }
+
+    /* Detaylar butonu */
+    .product-card .btn-primary {
+        font-size: 10px; /* Font boyutunu küçültüyoruz */
+        height: 28px;
+        padding: 5px 10px; /* Yatay padding */
+    }
+
+    /* Sepet Ekle butonu */
+    .fav-btn button {
+        font-size: 10px; /* Font boyutunu küçültüyoruz */
+        height: 28px;
+        padding: 5px 10px; /* Yatay padding */
+    }
+
+    .fa-cart-shopping, .fa-heart {
+        font-size: 14px; /* İkonları küçültüyoruz */
+    }
+
+    /* Ürün sayısının düzenlendiği input ve butonları küçültme */
+    .product-card form input[type="number"] {
+        width: 50px; /* Input alanını daraltıyoruz */
+        font-size: 12px; /* Font boyutunu küçültüyoruz */
+        height: 25px; /* Input yüksekliğini küçültüyoruz */
+        padding: 5px; /* Padding değeri küçültülüyor */
+    }
+
+    .product-card form button {
+        font-size: 10px; /* Buton fontunu küçültüyoruz */
+        height: 28px; /* Buton yüksekliğini küçültüyoruz */
+        padding: 5px 10px; /* Yatay padding'i küçültüyoruz */
+    }
+
+    .fa-cart-shopping {
+        font-size: 14px; /* Sepet ikonunu küçültüyoruz */
+    }
+}
+
+@media(max-width:300px) {
+
+
+
+
+    .product-card {
+        margin-top: 5px;
+        width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
+        max-width: 370px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
+        height: 440px; /* Kartın yüksekliği */
+        margin: 0 auto;
+    }
+
+    .fav-btn {
+        display: flex;
+        justify-content: center; /* Yatayda ortalar */
+        align-items: center; /* Dikeyde ortalar */
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+
+
+    .product-image {
+        width: 100%; /* Kartın genişliğine uyum sağlar */
+        height: 150px; /* Sabit resim yüksekliği */
+        object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
+        object-position: center; /* Resmin ortalanmasını sağlar */
+    }
+
+
+    .icon-box {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-bottom: 15px;
+        transition: transform 0.3s ease;
+        width: 100%;
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+    .icon-box-content {
+        margin-top: 15px;
+    }
+
+    .card-title {
+        font-size:7px;
+        font-weight: bolder;
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 8px;
+        font-weight: bold;
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+
+    Kolonları daha düzenli yap
+    .col-lg-3, .col-md-6 {
+        width: 50%;
+        margin-bottom: 20px;
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0;
+        }
+}
+
+@media (max-width: 240px) {
+
+
+    .row.justify-content-center {
+        margin: 0; /* Boşluğu sıfırla */
+    }
+
+    #billboard {
+        margin-bottom: 0.5rem; /* Billboard ve ürün kartları arasında boşluk */
+    }
+
+
+    .btn-medium {
+        font-size: 10px !important;
+        font-weight: 700;
+    }
+
+    .swiper-icon {
+        color: white; /* Ok ikonlarının rengi beyaz */
+        background-color: rgba(0, 0, 0, 0.5); /* Okların arka planı yarı saydam siyah */
+        border-radius: 50%; /* Daire şekli */
+        width: 20px; /* Genişlik */
+        height: 20px; /* Yükseklik */
+        display: flex; /* Flexbox kullanarak içerikleri ortalayalım */
+        align-items: center; /* Dikey ortalama */
+        justify-content: center; /* Yatay ortalama */
+        cursor: pointer; /* İmleci pointer yap */
+        position: absolute; /* Pozisyonlandırma */
+        top: 50%; /* Dikey merkezleme */
+        transform: translateY(-50%); /* Dikey olarak tam merkezde */
+        z-index: 10; /* Üstte görünmesi için */
+    }
+
+    .swiper-arrow-prev {
+        left: 11px; /* Sol ok konumu */
+    }
+
+    .swiper-arrow-next {
+        right: 11px; /* Sağ ok konumu */
+    }
+
+
+    #billboard {
+        background-color: rgb(107, 106, 122) !important;
+        width: 100%; /* Tam genişlik ayarı */
+        height:150px; /* Yükseklik ayarı */
+        position: relative; /* Pozisyonlandırma */
+        overflow: hidden; /* Taşmayı gizle */
+    }
+
+    .main-swiper {
+        width: 100%; /* Swiper genişliği */
+        height: 100%; /* Swiper yüksekliği */
+    }
+
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%; /* Her slide tam genişlik kaplasın */
+        height: 100%; /* Her slide tam yükseklik kaplasın */
+    }
+
+
+    .icon-box {
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        padding:4 4 4 4;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        margin-bottom: 5px;
+        transition: transform 0.3s ease;
+        height: 100%;
+        width: 100%;
+    }
+
+        .icon-box:hover {
+            transform: scale(1.05);
+        }
+
+   /* .icon-box-content {
+        margin-top: 15px;
+    }*/
+
+    .card-title {
+        font-size: 13px;
+        font-weight: bolder;
+        text-transform: uppercase;
+    }
+
+
+    .icon-box p {
+        font-size: 11px;
+        font-weight: bold;
+        color: #555;
+    }
+
+        .icon-box p:hover {
+            color: darkgoldenrod;
+        }
+
+
+    .col-lg-3, .col-md-6 {
+        width: 100%;
+        height: 10%;
+        margin-bottom: 20px;
+    }
+
+        .col-lg-3:last-child, .col-md-6:last-child {
+            margin-right: 0;
+        }
+
+    .review-item {
+        margin-bottom: 12px; /* Yorum alanıyla buton arasındaki mesafeyi artır */
+    }
+
+    /* Buton boyutlarını daha da küçült */
+    .btn {
+        font-size: 6px; /* Buton metin boyutunu daha da küçült */
+        padding: 4px 6px; /* Buton içindeki boşlukları daha da daralt */
+    }
+
+    .swiper-slide {
+        font-size: 19px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-left: 1px;
+        max-width: 300px;
+        width: 100%;
+        max-height: 170px; /* Her slide tam genişlik kaplasın */
+        height: 100%; /* Her slide tam yükseklik kaplasın */
+    }
+    /* Sol ve sağ butonlar için margin ayarlamaları */
+    .swiper-icon {
+        margin-left: -10px; /* Sol butonu biraz sağa kaydır */
+        margin-right: -10px; /* Sağ butonu biraz sola kaydır */
+    }
+
+    .swiper-arrow-prev .chevron-left, .swiper-arrow-next .chevron-right {
+        width: 10px; /* İkon boyutunu daha da küçült */
+        height: 10px; /* İkon boyutunu daha da küçült */
+    }
+
+    .product-card{
+        height:320px;
+    }
+
+    .btn-hover,
+    .fav-btn button,
+    .product-card .btn,
+    .product-card .btn-primary {
+        font-size: 8px; /* Yazı boyutunu daha da küçültüyoruz */
+        height: 20px; /* Buton yüksekliğini daha kısa yapıyoruz */
+        padding: 3px 8px; /* Yatay ve dikey padding değerlerini küçültüyoruz */
+    }
+
+    .fav-btn {
+        padding: 2px; /* Buton çevresindeki boşluğu küçültüyoruz */
+    }
+
+    .fa-cart-shopping,
+    .fa-heart {
+        font-size: 10px; /* İkonların boyutunu daha da küçültüyoruz */
+    }
+
+    .product-card form input[type="number"] {
+        width: 40px; /* Input alanını daha da daraltıyoruz */
+        font-size: 10px; /* Input içindeki yazının boyutunu küçültüyoruz */
+        height: 20px; /* Input yüksekliğini daha da küçültüyoruz */
+        padding: 3px; /* İçerideki boşluğu azaltıyoruz */
+    }
+
+    .product-card form button {
+        font-size: 8px; /* Buton yazı boyutunu küçültüyoruz */
+        height: 20px; /* Buton yüksekliğini daha kısa yapıyoruz */
+        padding: 3px 8px; /* Yatay padding'i küçültüyoruz */
+    }
+
+    .product-card {
+        max-width: 200px; /* Ürün kartının genişliğini daha küçük yapıyoruz */
+    }
+
+    .product-image {
+        height: 70px; /* Ürün resmini daha kısa yapıyoruz */
+    }
+}
+
+/*#region YorumSatırı */
+
+/*@media (max-width: 767px) {
+    .product-card {
+        width: 95%;*/ /* Kartın genişliği, esnek olması için %100 yapıldı */
+/*max-width: 250px;*/ /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
+/*height: 470px;*/ /* Kartın yüksekliği */
+/*font-display: swap;
+        margin: 0 auto;
+    }
+
+    .product-image {
+        width: 100%;*/ /* Kartın genişliğine uyum sağlar */
+/*height: 135px;*/ /* Sabit resim yüksekliği */
+/*object-fit: cover;*/ /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
+/*object-position: center;*/ /* Resmin ortalanmasını sağlar */
+/*}*/
+
+
+/* Butonlar arasında biraz boşluk bırakmak için */
+/*.col-auto {
+        display: flex;
+        align-items: center;
+    }
+
+
+
+    #company-services .row {
+        display: flex;*/ /* Flexbox düzeni */
+/*flex-wrap: wrap;*/ /* Satır taşmaları için sarma */
+/*justify-content: center;*/ /* Ortalama */
+/*}
+
+    #company-services .col-lg-3 {
+        flex: 1 0 45%;*/ /* Kolon genişliği mobilde %45 */
+/*max-width: 45%;*/ /* Maksimum genişlik */
+/*padding: 5px;*/ /* Daha az dış boşluk */
+/*}
+
+    #company-services .icon-box {
+        width: 105%;*/ /* Tam genişlik */
+/*height: 120px;*/ /* Sabit yükseklik */
+/*padding: 10px;*/
+/* İçerik için boşluk */
+/*margin: 5px auto;*/ /* Kartlar arasında az boşluk */
+/*box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);*/ /* Hafif gölge */
+/*display: flex;*/ /* İçerikleri hizalamak için flexbox */
+/*flex-direction: column;*/ /* İçerikleri dikey hizala */
+/*align-items: center;*/ /* Yatayda ortala */
+
+/*justify-content: center;*/ /* Dikeyde ortala */
+/*box-sizing: border-box;*/ /* İçerik boyutlandırmayı dahil et */
+/*overflow: hidden;*/ /* Taşmaları gizle */
+/*}
+
+    #company-services .icon-box-content h3 {
+        font-size: 14px;*/ /* Daha küçük başlık */
+/*margin-bottom: 5px;*/ /* Daha az başlık altı boşluk */
+/*text-align: center;*/ /* Metni ortala */
+/*white-space: nowrap;*/ /* Uzun başlıklar için tek satır */
+/*overflow: hidden;*/ /* Taşmayı gizle */
+/*text-overflow: ellipsis;*/ /* Uzun başlıkların sonunda '...' göster */
+/*}
+
+    #company-services .icon-box-content p {
+        font-size: 12px;*/ /* Daha küçük açıklama */
+/*line-height: 1.2;*/ /* Daha sıkı satır yüksekliği */
+/*text-align: center;*/ /* Metni ortala */
+/*white-space: normal;*/ /* Metni satır sonuna göre böl */
+/*}
+
+    .footer-logo {
+        max-width: 150px;
+        margin-bottom: 20px;*/ /* Logo altındaki boşluk */
+/*}
+
+    .footer-menu,
+    .footer-title,
+    .list-unstyled {
+        text-align: center;
+    }*/
+
+/* Footer menü kolonları alt alta dizilir */
+/*.footer-top-area .row {
+        display: block;
+        text-align: center;
+    }*/
+
+/* Footer öğeleri arasındaki mesafeyi arttırma */
+/*.footer-top-area .col-lg-3 {
+        margin-bottom: 20px;
+    }*/
+
+/* Sosyal medya ikonları daha büyük ve merkezi hizalanmış */
+/*.social-links ul {
+        justify-content: center;
+    }
+
+    .social-links svg {
+        width: 25px;
+        height: 25px;
+        margin: 0 10px;*/ /* İkonlar arasında daha fazla mesafe */
+/*}*/
+
+/* Footer alt kısmı dağılmasın, merkezi hizalanmış olsun */
+/*.footer-bottom-area {
+        text-align: center;
+        padding: 10px;
+    }
+}*/
+
+/*#endregion */

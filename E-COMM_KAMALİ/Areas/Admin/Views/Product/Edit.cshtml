@@ -55,6 +55,19 @@
     <a asp-action="Index" class="btn btn-secondary">İptal</a>
 </form>
 
+
+ <style>
+
+.form-group img {
+    max-width: 100%; /* Ensure the image doesn't overflow */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Image is a block element */
+    margin: 0 auto; /* Center the image */
+}
+
+</style>
+
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

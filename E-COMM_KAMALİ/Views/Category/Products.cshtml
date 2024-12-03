@@ -1,43 +1,39 @@
 ﻿@model ECOMM.Web.ViewModels.SubCategoryProductsViewModel
 
-
 @{
     ViewData["Title"] = Model.SubCategory.SubCategoryName; // Alt kategori adını başlık olarak kullan
 }
-<link rel="stylesheet" href="~/css/Mağaza/Ürünler.css" />
 
-<h1 style="text-align: center;margin-bottom:45px;margin-top:45px;font-weight:bolder;">@Model.SubCategory.SubCategoryName</h1>
-
+<h1 class="text-center mt-4 mb-3" style="font-weight:bold; text-shadow: 1px 1px 1px black;">@Model.SubCategory.SubCategoryName</h1>
 
 @if (Model.Products != null && Model.Products.Any())
 {
     <div class="product-container">
         @foreach (var product in Model.Products)
         {
-            <div class="product-card">
-                @if (!string.IsNullOrEmpty(product.ImagePath))
-                {
-                    <img src="@product.ImagePath" alt="@product.ProductName" class="product-image mb-4" />
-                }
-                <h4 class="mb-2">@product.ProductName</h4>
-                <h6 class="mb-2">@product.ProductTitle</h6>
-                <p class="mb-2">Fiyat: @product.ProductPrice.ToString("C")</p> <!-- Fiyat formatlaması -->
-             @*    <p>Açıklama: @product.ProductDescription</p> *@
-                <!-- Ürün resmi varsa göster -->
-                <div class="product-actions">
-                    <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-detay mb-2 mt-3">
-                        Detaylar
-                    </a>
-                    <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
-                        <input type="hidden" name="productId" value="@product.Id" />
-                        <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
-                        <button type="submit" class="btn btn-detay btn-hover mb-3">
-                            <i class="fa-solid fa-cart-shopping "></i> Sepete Ekle
-                        </button>
-                    </form>
+            <div class="col-md-3">
+                <div class="product-card">
+                    @if (!string.IsNullOrEmpty(product.ImagePath))
+                    {
+                        <img src="@product.ImagePath" alt="@product.ProductName" class="product-image mb-4" />
+                    }
+                    <h4 class="mb-2">@product.ProductName</h4>
+                    <h6 class="mb-2">@product.ProductTitle</h6>
+                    <p class="mb-2">Fiyat: @product.ProductPrice.ToString("C")</p>
+                    <div class="product-actions">
+                        <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-detay mb-2 mt-3">
+                            Detaylar
+                        </a>
+                        <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
+                            <input type="hidden" name="productId" value="@product.Id" />
+                            <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
+                            <button type="submit" class="btn btn-detay btn-hover mb-3">
+                                <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                            </button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            
         }
     </div>
 }
@@ -46,5 +42,164 @@ else
     <p class="no-products">Bu alt kategoride ürün bulunmamaktadır.</p>
 }
 
+ @section Css{
+     <style>
+        body {
+            background-color: rgb(230, 228, 223); /* Açık gri ton */
+        }
 
-              
+        .Name {
+            max-width: 161.13px;
+            max-height: 23.04px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-weight: bold;
+            color: red;
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        /* Ürün kartları düzeni */
+        .product-card {
+            width: 100%;
+            max-width: 300px;
+            margin: 15px auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            /* Hover durumunda büyüme efekti */
+            .product-card:hover {
+                transform: scale(1.05);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .card-body {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: black;
+            margin-bottom: 10px;
+        }
+
+        .card-footer {
+            padding: 10px;
+            background-color: transparent;
+            text-align: center;
+        }
+
+            .card-footer .btn {
+                background-color: #343a40;
+                color: white;
+                border: 1px solid black;
+                width: 100%;
+                padding: 10px;
+                font-size: 1rem;
+                border-radius: 5px;
+                transition: all 0.4s ease;
+            }
+
+                .card-footer .btn:hover {
+                    color: black;
+                    background-color: white;
+                    border: 1px solid black;
+                }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .col-md-3 {
+            flex: 1;
+            max-width: 48%;
+            margin-bottom: 20px;
+        }
+
+        /* Responsive design */
+        .media (max-width: 1200px) {
+            .col-md-3
+
+        {
+            max-width: 33.33%;
+        }
+
+        }
+
+        .media (max-width: 992px) {
+            .col-md-3
+
+        {
+            max-width: 50%;
+        }
+
+        }
+
+        .media (max-width: 768px) {
+            .col-md-3
+
+        {
+            max-width: 50%;
+        }
+
+        }
+
+        .media (max-width: 576px) {
+            .col-sm-6, .col-md-4
+
+        {
+            max-width: 100%;
+        }
+
+        .product-image {
+            height: 180px;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 1rem;
+        }
+
+        .card-footer {
+            padding: 8px;
+        }
+
+            .card-footer .btn {
+                font-size: 0.9rem;
+                padding: 8px;
+            }
+
+        .Name {
+            font-size: 12px;
+        }}
+     </style>
+
+}
+
+                         

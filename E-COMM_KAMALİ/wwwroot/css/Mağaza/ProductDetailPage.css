@@ -82,12 +82,12 @@ body {
 .product-title {
     font-size: 4rem;
     font-weight: 700;
-    margin-bottom: 15px;
+    margin-bottom: 4px; /* Başlık ile diğer içerikler arasında 3-4px boşluk */
     color: rgb(10, 10, 10);
 }
 
 .product-link {
-    margin-top: 12px;
+    margin-top: 4px; /* Başlık ile diğer içerikler arasında 3-4px boşluk */
     font-weight: 500;
     font-size: 1.5rem;
     color: #007bff;
@@ -95,7 +95,6 @@ body {
     margin-bottom: 10px;
     display: inline-block;
     transition: transform 0.5s ease-in, color 0.5s ease-in;
-    /* Sol üst köşeden büyüme */
 }
 
     .product-link:hover {
@@ -204,21 +203,21 @@ body {
 .purchase-info .form-control {
     color: black;
     text-align: center;
-    margin-top: 5px; /* Yukarıda biraz daha boşluk ekledim */
-    margin-bottom: 5px; /* Aşağıda biraz daha boşluk ekledim */
-    margin-left: 10px; /* Sol tarafta biraz daha boşluk ekledim */
-    border-color: black; /* Koyu sınır rengi */
-    border: 1px solid; /* Sınır kalınlığını belirledim */
-    font-size: 14px; /* Küçük yazı tipi yerine daha okunabilir bir boyut */
-    padding: 8px 10px; /* İç paddingi biraz daha arttırdım */
-    border-radius: 5px; /* Yuvarlak köşeler için */
-    transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Sınır rengi ve gölge efekti için geçiş ekledim */
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 10px;
+    border-color: black;
+    border: 1px solid;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
     .purchase-info .form-control:focus {
-        outline: none; /* Odaklandığında kutunun etrafında bir hat çizilmesini engeller */
-        border-color: #007bff; /* Odaklandığında kutunun kenarını maviye çevirir */
-        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Mavi ışıltılı gölge efekti */
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
     }
 
 /* Responsive için Medya Sorguları */
@@ -239,15 +238,17 @@ body {
 
     .product-content {
         margin-left: 0;
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
     .product-title {
         font-size: 2.5rem;
+        margin-bottom: 3px; /* Başlık ve içerikler arasındaki boşluk */
     }
 
     .product-link {
         font-size: 1.2rem;
+        margin-top: 3px; /* Başlık ve içerikler arasındaki boşluk */
     }
 
     .product-price {
@@ -265,6 +266,7 @@ body {
     .purchase-info .btn {
         padding: 10px 20px;
         font-size: 1rem;
+        justify-content: center; /* Butonu ortala */
     }
 
     .purchase-info .form-control {
@@ -288,16 +290,18 @@ body {
 
     .img-showcase img {
         width: 100%;
-        height: auto; /* Yüksekliği otomatik ayarla */
+        height: auto;
     }
 
     .product-content {
+        margin-bottom: 0px;
         width: 100%;
-        margin-top: 20px;
+        margin-top: 10px;
     }
 
     .product-title {
         font-size: 1.8rem;
+        margin-bottom: 3px; /* Başlık ve içerikler arasındaki boşluk */
     }
 
     .product-price {
@@ -315,14 +319,25 @@ body {
     .read-more {
         font-size: 1.1rem;
     }
-
+    .purchase-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        height: 100%; /* Sayfa yüksekliği kadar */
+        margin-top:0px ;
+    }
     .purchase-info .btn {
+        justify-content: center;
         padding: 8px 20px;
         font-size: 0.9rem;
+        margin: 10px 0;
     }
 
     .purchase-info .form-control {
         width: 80%;
         font-size: 14px;
+        margin: 10px 0;
     }
 }

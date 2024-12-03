@@ -1,0 +1,93 @@
+﻿/* General Styles */
+body {
+    padding: 20px; /* Add padding for mobile screens */
+}
+
+.card {
+    margin: 0 auto; /* Center the card */
+    width: 100%; /* Ensure the card takes full width */
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between; /* Space items evenly */
+    align-items: center; /* Center items vertically */
+}
+
+/* Modal Styles */
+.modal-dialog {
+    max-width: 90%; /* Make modal responsive */
+    width: auto; /* Allow width to adjust */
+}
+
+.modal-content {
+    border-radius: 5px; /* Rounded corners for better aesthetics */
+}
+
+/* Responsive Table */
+.table {
+    width: 100%; /* Full width table */
+    table-layout: auto; /* Allow table to adjust based on content */
+}
+
+    .table th, .table td {
+        font-size: 14px; /* Smaller font size for better readability */
+    }
+
+/* Media Queries */
+@media (max-width: 768px) {
+    /* For tablets and smaller screens */
+    body {
+        padding: 10px; /* Reduce padding on smaller screens */
+    }
+
+    .card {
+        margin: 0 10px; /* Add margin on left and right for smaller screens */
+        padding: 10px; /* Add padding for better content spacing */
+    }
+
+    .modal-dialog {
+        max-width: 95%; /* Allow modal to use more width on smaller screens */
+    }
+
+    .table th, .table td {
+        font-size: 16px; /* Slightly larger font size for better readability */
+    }
+
+    /* Stack the buttons in the modal vertically */
+    .modal-footer {
+        flex-direction: column; /* Stack buttons vertically */
+        align-items: stretch; /* Make buttons full width */
+    }
+
+        .modal-footer button {
+            margin-top: 10px; /* Space between buttons */
+        }
+}
+
+/* Media Query for Mobile Phones */
+@media (max-width: 576px) {
+    .modal-dialog {
+        max-width: 100%; /* Full width modal on mobile */
+    }
+
+    .modal-body {
+        padding: 10px; /* Reduce padding in modal body */
+    }
+
+    .card-header h5 {
+        font-size: 18px; /* Larger header size for mobile */
+    }
+
+    .table th, .table td {
+        font-size: 18px; /* Increase font size for better readability */
+    }
+
+    .btn {
+        font-size: 16px; /* Make buttons more prominent */
+    }
+
+    .modal-content {
+        padding: 15px; /* Add extra padding for clarity */
+    }
+}
