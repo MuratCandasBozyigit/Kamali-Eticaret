@@ -1,4 +1,5 @@
-﻿@model ECOMM.Web.Areas.Admin.Controllers.ProductController.HomeViewModel
+﻿@model ECOMM.Core.ViewModels.ProductEditViewModel
+
 
 <h2>Yeni Ürün Ekle</h2>
 
@@ -15,7 +16,21 @@
 
     <div class="form-group">
         <label for="ProductPrice">Ürün Fiyatı</label>
-        <input type="number" class="form-control" id="ProductPrice" name="ProductPrice" required>
+        <input type="number" class="form-control" id="ProductPrice" name="ProductPrice" required min"0">
+    </div>
+
+    <div class="form-group">
+        <label>Ürün Bedeni:</label>
+        <div id="size-container">
+            @foreach (var size in Model.ProductSizes ?? new List<string>())
+            {
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" name="ProductSizes" value="@size" required>
+                    <button type="button" class="btn btn-danger remove-size">Sil</button>
+                </div>
+            }
+        </div>
+        <button type="button" id="add-size" class="btn btn-secondary">Beden Ekle</button>
     </div>
 
     <div class="form-group">
@@ -29,12 +44,13 @@
             <option value="">Kategori Seçin</option>
             @foreach (var category in Model.Categories)
             {
-                <option value="@category.Id">@category.ParentCategoryName</option>
+                <option value="@category.Value">@category.Text</option>
             }
         </select>
     </div>
 
-    <div class="form-group ">
+
+    <div class="form-group">
         <label for="Image" class="col-sm-3 col-form-label">Ürün Görseli</label>
         <input type="file" class="form-control" id="Image" name="image">
     </div>
@@ -44,6 +60,28 @@
 
 @section Scripts {
     <script>
+        // Beden Ekleme
+        document.getElementById('add-size').addEventListener('click', function () {
+            const sizeContainer = document.getElementById('size-container');
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group mb-2';
+
+            inputGroup.innerHTML = `
+                <input type="text" class="form-control" name="ProductSizes" placeholder="Beden giriniz" required>
+                <button type="button" class="btn btn-danger remove-size">Sil</button>
+            `;
+
+            sizeContainer.appendChild(inputGroup);
+        });
+
+        // Beden Silme
+        document.getElementById('size-container').addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-size')) {
+                e.target.parentElement.remove();
+            }
+        });
+
+        // Form Gönderimi Öncesi Validasyon
         document.querySelector('form').addEventListener('submit', function (e) {
             const requiredFields = document.querySelectorAll('[required]');
             let valid = true;
@@ -63,6 +101,7 @@
                 }
             });
 
+            // Eğer geçersizse formu gönderme
             if (!valid) e.preventDefault();
         });
     </script>

@@ -15,65 +15,129 @@
         <input asp-for="ProductTitle" class="form-control" required />
         <span asp-validation-for="ProductTitle" class="text-danger"></span>
     </div>  <br />
+
     <div class="form-group">
         <label asp-for="ProductName">Ürün Adı:</label>
         <input asp-for="ProductName" class="form-control" required />
         <span asp-validation-for="ProductName" class="text-danger"></span>
     </div>  <br />
+
     <div class="form-group">
         <label asp-for="ProductPrice">Ürün Fiyatı:</label>
         <input asp-for="ProductPrice" class="form-control" type="number" step="0.01" required />
         <span asp-validation-for="ProductPrice" class="text-danger"></span>
     </div>  <br />
+    <!-- İndirim Oranı -->
+    <div class="form-group">
+        <label asp-for="DiscountRate">İndirim Oranı (%):</label>
+        <input asp-for="DiscountRate" class="form-control" type="number" step="0.01" min="0" max="100" />
+        <span asp-validation-for="DiscountRate" class="text-danger"></span>
+    </div>
+
+    <!-- Hesaplanan İndirimli Fiyat -->
+    <div class="form-group">
+        <label>İndirimli Fiyat:</label>
+        <input class="form-control" id="discountedPrice" type="text" readonly />
+    </div>
+    <div class="form-group">
+        <label>Ürün Bedeni:</label>
+        <div id="size-container">
+            @foreach (var size in Model.ProductSizes)
+            {
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" name="ProductSizes" value="@size" required />
+                    <button type="button" class="btn btn-danger remove-size">Sil</button>
+                </div>
+            }
+        </div>
+        <button type="button" id="add-size" class="btn btn-secondary">Beden Ekle</button>
+    </div> <br />
+
     <div class="form-group">
         <label asp-for="ProductDescription">Ürün Açıklaması:</label>
         <textarea asp-for="ProductDescription" class="form-control" rows="4" required></textarea>
         <span asp-validation-for="ProductDescription" class="text-danger"></span>
-    </div>
+    </div> <br />
 
-    <br />
     <div class="form-group">
         <label asp-for="CategoryId">Kategori:</label>
-        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))" required>
+        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))" required>
             <option value="">-- Kategori Seçin --</option>
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
+    </div> <br />
 
-    <br />
     <div class="form-group">
         <label>Ürün Resmi:</label>
         <input type="file" name="image" class="form-control" />
-    </div>
-    <br />
-    <div class="form-group">
-        <img src="@Model.ImagePath" alt="Ürün Resmi" style="width: 450px; height:225px; display: block;" />
+    </div> <br />
 
+    <div class="form-group">
+        <img src="@Model.ImagePath" alt="Ürün Resmi" style="width: 450px; height: 225px; display: block;" />
     </div>
 
     <button type="submit" class="btn btn-primary">Güncelle</button>
     <a asp-action="Index" class="btn btn-secondary">İptal</a>
 </form>
 
-
- <style>
-
-.form-group img {
-    max-width: 100%; /* Ensure the image doesn't overflow */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Image is a block element */
-    margin: 0 auto; /* Center the image */
-}
-
-</style>
-
-
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
     <script>
+        // İndirim oranı değiştiğinde, indirimli fiyatı hesaplayın
+        document.querySelector('[asp-for="DiscountRate"]').addEventListener('input', function () {
+            const productPrice = parseFloat(document.querySelector('[asp-for="ProductPrice"]').value);
+            const discountRate = parseFloat(this.value);
+            let discountedPrice = productPrice;
+
+            if (!isNaN(discountRate) && discountRate >= 0 && discountRate <= 100) {
+                discountedPrice = productPrice - (productPrice * discountRate / 100);
+            }
+
+            // İndirimli fiyatı güncelleyin
+            document.getElementById('discountedPrice').value = discountedPrice.toFixed(2);
+        });
+
+        // Beden Ekleme
+        document.getElementById('add-size').addEventListener('click', function () {
+            const sizeContainer = document.getElementById('size-container');
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group mb-2';
+
+            inputGroup.innerHTML = `
+                <input type="text" class="form-control" name="ProductSizes" placeholder="Beden giriniz" required>
+                <button type="button" class="btn btn-danger remove-size">Sil</button>
+            `;
+            sizeContainer.appendChild(inputGroup);
+        });
+
+        // Beden Silme
+        document.getElementById('size-container').addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-size')) {
+                e.target.parentElement.remove();
+            }
+        });
+    </script>
+    <script>
+        // Beden Ekleme
+        document.getElementById('add-size').addEventListener('click', function () {
+            const sizeContainer = document.getElementById('size-container');
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group mb-2';
+
+            inputGroup.innerHTML = `
+                <input type="text" class="form-control" name="ProductSizes" placeholder="Beden giriniz" required>
+                <button type="button" class="btn btn-danger remove-size">Sil</button>
+            `;
+            sizeContainer.appendChild(inputGroup);
+        });
+
+        // Beden Silme
+        document.getElementById('size-container').addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-size')) {
+                e.target.parentElement.remove();
+            }
+        });
+
+        // Form Gönderimi Öncesi Validasyon
         document.querySelector('form').addEventListener('submit', function (e) {
             const requiredFields = document.querySelectorAll('[required]');
             let valid = true;
@@ -93,6 +157,7 @@
                 }
             });
 
+            // Eğer geçersizse formu gönderme
             if (!valid) e.preventDefault();
         });
     </script>

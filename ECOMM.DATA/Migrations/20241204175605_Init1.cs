@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ECOMM.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class Init4 : Migration
+    public partial class Init1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -268,37 +268,6 @@ namespace ECOMM.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Products",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductName = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
-                    ProductDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Size = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GuidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateDeleted = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsActive = table.Column<bool>(type: "bit", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SubCategories",
                 columns: table => new
                 {
@@ -325,6 +294,45 @@ namespace ECOMM.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductTitle = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ProductName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DiscountRate = table.Column<double>(type: "float", nullable: true),
+                    ProductDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    ProductSizes = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StockQuantity = table.Column<int>(type: "int", nullable: false),
+                    FavouritesId = table.Column<int>(type: "int", nullable: true),
+                    GuidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateDeleted = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Products_Favourites_FavouritesId",
+                        column: x => x.FavouritesId,
+                        principalTable: "Favourites",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Comments",
                 columns: table => new
                 {
@@ -334,7 +342,6 @@ namespace ECOMM.Data.Migrations
                     AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     DateCommented = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    ProductId1 = table.Column<int>(type: "int", nullable: true),
                     GuidId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     DateCreated = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DateUpdated = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -354,35 +361,6 @@ namespace ECOMM.Data.Migrations
                     table.ForeignKey(
                         name: "FK_Comments_Products_ProductId",
                         column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Comments_Products_ProductId1",
-                        column: x => x.ProductId1,
-                        principalTable: "Products",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FavouritesProduct",
-                columns: table => new
-                {
-                    FavouritedById = table.Column<int>(type: "int", nullable: false),
-                    ProductsId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FavouritesProduct", x => new { x.FavouritedById, x.ProductsId });
-                    table.ForeignKey(
-                        name: "FK_FavouritesProduct_Favourites_FavouritedById",
-                        column: x => x.FavouritedById,
-                        principalTable: "Favourites",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_FavouritesProduct_Products_ProductsId",
-                        column: x => x.ProductsId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -470,19 +448,9 @@ namespace ECOMM.Data.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comments_ProductId1",
-                table: "Comments",
-                column: "ProductId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Favourites_UserId",
                 table: "Favourites",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FavouritesProduct_ProductsId",
-                table: "FavouritesProduct",
-                column: "ProductsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_OrdersId",
@@ -508,6 +476,11 @@ namespace ECOMM.Data.Migrations
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_FavouritesId",
+                table: "Products",
+                column: "FavouritesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_SubCategories_CategoryId",
@@ -540,9 +513,6 @@ namespace ECOMM.Data.Migrations
                 name: "Comments");
 
             migrationBuilder.DropTable(
-                name: "FavouritesProduct");
-
-            migrationBuilder.DropTable(
                 name: "OrderItems");
 
             migrationBuilder.DropTable(
@@ -552,19 +522,19 @@ namespace ECOMM.Data.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Favourites");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Favourites");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
         }
     }
 }

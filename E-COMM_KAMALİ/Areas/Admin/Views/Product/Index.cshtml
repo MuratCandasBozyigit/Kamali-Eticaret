@@ -19,6 +19,7 @@
                     <th>Resim</th>
                     <th>Ürün Adı</th>
                     <th>Başlık</th>
+                    <th>Beden</th>
                     <th>Açıklama</th>
                     <th>Fiyat</th>
                     <th>Kategori</th>
@@ -55,6 +56,7 @@
                     },
                     { data: 'productName', title: 'Ürün Adı' },
                     { data: 'productTitle', title: 'Başlık' },
+                      { data: 'productSize', title: 'Beden' },
                     {
                         data: 'productDescription', title: 'Açıklama', render: function (data) {
                             return data.length > 150 ? data.substring(0, 150) + "..." : data;

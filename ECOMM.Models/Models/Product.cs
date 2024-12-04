@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -6,30 +7,38 @@ namespace ECOMM.Core.Models
 {
     public class Product : BaseModel
     {
+        [Required, MaxLength(100)]
         public string ProductTitle { get; set; }
 
-        public string Size { get; set; }
-
-        [MaxLength(11, ErrorMessage = "Ürün adı en fazla 11 karakter olmalıdır.")]
+        [Required, MaxLength(100)]
         public string ProductName { get; set; }
+
+        [Required]
+        public decimal ProductPrice { get; set; }
+
+        [NotMapped]
+        public decimal DiscountedPrice => DiscountRate.HasValue
+            ? Math.Round(ProductPrice - (ProductPrice * (decimal)DiscountRate.Value / 100), 2)
+            : ProductPrice;
+
+        public double? DiscountRate { get; set; } // Yüzde indirim oranı (opsiyonel)
+
+        [Required]
         public string ProductDescription { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")] // Hassasiyeti belirleme
-        public decimal ProductPrice { get; set; } // Ürün fiyatı için decimal kullanıyoruz
-
-        public string? ImagePath { get; set; }
-
-        public virtual ICollection<Favourites> FavouritedBy { get; set; } // Ürünü favorilerine ekleyen kullanıcılar
-
-        public Product()
-        {
-            FavouritedBy = new List<Favourites>();
-        }
+        public string ImagePath { get; set; } // Ürün görsel yolu
 
         public int CategoryId { get; set; }
-        public Category Category { get; set; }
 
-       //public ICollection<Category> Categories { get; set; }
-        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
+        [ForeignKey("CategoryId")]
+        public Category Category { get; set; } // Kategori ilişkisi
+
+        [Required]
+        public List<string> ProductSizes { get; set; } = new List<string>(); // Ürün beden bilgisi
+
+        public int StockQuantity { get; set; } // Toplam stok bilgisi
+
+        [NotMapped]
+        public Dictionary<string, int> SizeStock { get; set; } = new Dictionary<string, int>(); // Beden bazlı stok bilgisi
     }
 }

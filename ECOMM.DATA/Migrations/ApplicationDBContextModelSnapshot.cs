@@ -61,16 +61,11 @@ namespace ECOMM.Data.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("ProductId");
-
-                    b.HasIndex("ProductId1");
 
                     b.ToTable("Comments");
                 });
@@ -319,10 +314,17 @@ namespace ECOMM.Data.Migrations
                     b.Property<DateTime>("DateUpdated")
                         .HasColumnType("datetime2");
 
+                    b.Property<double?>("DiscountRate")
+                        .HasColumnType("float");
+
+                    b.Property<int?>("FavouritesId")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("GuidId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImagePath")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
@@ -337,18 +339,29 @@ namespace ECOMM.Data.Migrations
 
                     b.Property<string>("ProductName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<decimal>("ProductPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ProductTitle")
+                    b.Property<string>("ProductSizes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProductTitle")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("StockQuantity")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("FavouritesId");
 
                     b.ToTable("Products");
                 });
@@ -463,21 +476,6 @@ namespace ECOMM.Data.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("FavouritesProduct", b =>
-                {
-                    b.Property<int>("FavouritedById")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.HasKey("FavouritedById", "ProductsId");
-
-                    b.HasIndex("ProductsId");
-
-                    b.ToTable("FavouritesProduct");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -600,10 +598,6 @@ namespace ECOMM.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ECOMM.Core.Models.Product", null)
-                        .WithMany("Comments")
-                        .HasForeignKey("ProductId1");
-
                     b.Navigation("Author");
 
                     b.Navigation("Product");
@@ -677,6 +671,10 @@ namespace ECOMM.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ECOMM.Core.Models.Favourites", null)
+                        .WithMany("Products")
+                        .HasForeignKey("FavouritesId");
+
                     b.Navigation("Category");
                 });
 
@@ -689,21 +687,6 @@ namespace ECOMM.Data.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("FavouritesProduct", b =>
-                {
-                    b.HasOne("ECOMM.Core.Models.Favourites", null)
-                        .WithMany()
-                        .HasForeignKey("FavouritedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ECOMM.Core.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -769,14 +752,14 @@ namespace ECOMM.Data.Migrations
                     b.Navigation("SubCategories");
                 });
 
+            modelBuilder.Entity("ECOMM.Core.Models.Favourites", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("ECOMM.Core.Models.Orders", b =>
                 {
                     b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("ECOMM.Core.Models.Product", b =>
-                {
-                    b.Navigation("Comments");
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.User", b =>
