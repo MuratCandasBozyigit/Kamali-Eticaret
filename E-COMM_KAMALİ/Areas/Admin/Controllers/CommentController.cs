@@ -22,5 +22,11 @@ namespace E_COMM_KAMALİ.Areas.Admin.Controllers
         {
             return View();
         }
+
+        [HttpGet("GetAll")]
+        public Task<IActionResult> GetAll(int id) {
+
+           
+        }
     }
 }
