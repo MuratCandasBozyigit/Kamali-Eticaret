@@ -40,6 +40,10 @@
                     <p class="new-price">Price: <span>@Model.Product.Price.ToString("C")</span></p>
                 </div>
 
+                <div class="product-price">
+                
+                </div>
+                
                 <div class="product-router">
                     <ul>
                         <li>
@@ -64,6 +68,7 @@
                 <div class="product-detail">
                     <h2>Özellikler:</h2>
                     <p>@(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)</p>
+                    <p>@(string.IsNullOrWhiteSpace(Model.Product.ProductSize) ? "Beden mevcut değil." : Model.Product.ProductSize)</p>
                 </div>
 
 

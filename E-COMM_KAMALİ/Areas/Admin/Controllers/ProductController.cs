@@ -117,6 +117,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             await _productService.AddAsync(Product); // Asenkron olarak ekle
             return RedirectToAction("Index"); // Başarılı ekleme sonrası Index'e yönlendir
         }
+
         [HttpGet("GetAllProductsAsync")]
         public async Task<IActionResult> GetAllProductsAsync()
         {
@@ -181,6 +182,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
                 ProductName = product.ProductName,
+                ProductSize = product.ProductSize,
                 ProductDescription = product.ProductDescription,
                 ProductPrice = (decimal)product.ProductPrice,
                 ImagePath = product.ImagePath,
@@ -207,6 +209,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             // Yalnızca gerekli bilgileri güncelle
             productToUpdate.ProductTitle = viewModel.ProductTitle;
             productToUpdate.ProductDescription = viewModel.ProductDescription;
+            productToUpdate.ProductSize = viewModel.ProductSize;
             productToUpdate.ProductPrice = viewModel.ProductPrice;
             productToUpdate.CategoryId = viewModel.CategoryId; // Ana kategoriyi güncelle
 
@@ -227,8 +230,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             await _productService.UpdateAsync(productToUpdate); // Ürünü güncelle
             return RedirectToAction("Index"); // Başarılı güncelleme sonrası Index'e yönlendir
         }
-
-
 
         #endregion
 

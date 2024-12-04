@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOMM.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241203194003_Init4")]
-    partial class Init4
+    [Migration("20241204145749_Inıt0.1")]
+    partial class Inıt01
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -346,11 +346,11 @@ namespace ECOMM.Data.Migrations
                     b.Property<decimal>("ProductPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("ProductTitle")
+                    b.Property<string>("ProductSize")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Size")
+                    b.Property<string>("ProductTitle")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
