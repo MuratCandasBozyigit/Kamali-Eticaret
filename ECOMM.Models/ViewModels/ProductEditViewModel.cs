@@ -13,7 +13,7 @@ namespace ECOMM.Core.ViewModels
         public string ProductTitle { get; set; } 
         public string ProductDescription { get; set; } 
         public decimal ProductPrice { get; set; }
-        public string ProductSize { get; set; }
+        public List<string> ProductSizes { get; set; }
         public string ImagePath { get; set; }
         public int CategoryId { get; set; } 
         public string CategoryName { get; set; }
@@ -21,7 +21,7 @@ namespace ECOMM.Core.ViewModels
 
         public void UpdateProductInfo(Product product)
         {
-            product.ProductSize = this.ProductSize;
+            product.ProductSizes = this.ProductSizes;
             product.ProductName = this.ProductName;
             product.ProductTitle = this.ProductTitle;
             product.ProductDescription = this.ProductDescription;

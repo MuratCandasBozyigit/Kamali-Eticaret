@@ -15,70 +15,83 @@
         <input asp-for="ProductTitle" class="form-control" required />
         <span asp-validation-for="ProductTitle" class="text-danger"></span>
     </div>  <br />
+
     <div class="form-group">
         <label asp-for="ProductName">Ürün Adı:</label>
         <input asp-for="ProductName" class="form-control" required />
         <span asp-validation-for="ProductName" class="text-danger"></span>
     </div>  <br />
+
     <div class="form-group">
         <label asp-for="ProductPrice">Ürün Fiyatı:</label>
         <input asp-for="ProductPrice" class="form-control" type="number" step="0.01" required />
         <span asp-validation-for="ProductPrice" class="text-danger"></span>
     </div>  <br />
+
     <div class="form-group">
-        <label asp-for="ProductSize">Ürün Bedeni:</label>
-        <input asp-for="ProductSize" class="form-control"@*  type="number" step="0.01" *@ required />
-        <span asp-validation-for="ProductSize" class="text-danger"></span>
-    </div>  <br />
+        <label>Ürün Bedeni:</label>
+        <div id="size-container">
+            @foreach (var size in Model.ProductSizes)
+            {
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" name="ProductSizes" value="@size" required />
+                    <button type="button" class="btn btn-danger remove-size">Sil</button>
+                </div>
+            }
+        </div>
+        <button type="button" id="add-size" class="btn btn-secondary">Beden Ekle</button>
+    </div> <br />
+
     <div class="form-group">
         <label asp-for="ProductDescription">Ürün Açıklaması:</label>
         <textarea asp-for="ProductDescription" class="form-control" rows="4" required></textarea>
         <span asp-validation-for="ProductDescription" class="text-danger"></span>
-    </div>
+    </div> <br />
 
-    <br />
     <div class="form-group">
         <label asp-for="CategoryId">Kategori:</label>
-        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))" required>
+        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))" required>
             <option value="">-- Kategori Seçin --</option>
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
-    </div>
+    </div> <br />
 
-    <br />
     <div class="form-group">
         <label>Ürün Resmi:</label>
         <input type="file" name="image" class="form-control" />
-    </div>
-    <br />
-    <div class="form-group">
-        <img src="@Model.ImagePath" alt="Ürün Resmi" style="width: 450px; height:225px; display: block;" />
+    </div> <br />
 
+    <div class="form-group">
+        <img src="@Model.ImagePath" alt="Ürün Resmi" style="width: 450px; height: 225px; display: block;" />
     </div>
 
     <button type="submit" class="btn btn-primary">Güncelle</button>
     <a asp-action="Index" class="btn btn-secondary">İptal</a>
 </form>
 
-
- <style>
-
-.form-group img {
-    max-width: 100%; /* Ensure the image doesn't overflow */
-    height: auto; /* Maintain aspect ratio */
-    display: block; /* Image is a block element */
-    margin: 0 auto; /* Center the image */
-}
-
-</style>
-
-
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-
     <script>
+        // Beden Ekleme
+        document.getElementById('add-size').addEventListener('click', function () {
+            const sizeContainer = document.getElementById('size-container');
+            const inputGroup = document.createElement('div');
+            inputGroup.className = 'input-group mb-2';
+
+            inputGroup.innerHTML = `
+                <input type="text" class="form-control" name="ProductSizes" placeholder="Beden giriniz" required>
+                <button type="button" class="btn btn-danger remove-size">Sil</button>
+            `;
+            sizeContainer.appendChild(inputGroup);
+        });
+
+        // Beden Silme
+        document.getElementById('size-container').addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-size')) {
+                e.target.parentElement.remove();
+            }
+        });
+
+        // Form Gönderimi Öncesi Validasyon
         document.querySelector('form').addEventListener('submit', function (e) {
             const requiredFields = document.querySelectorAll('[required]');
             let valid = true;
@@ -98,6 +111,7 @@
                 }
             });
 
+            // Eğer geçersizse formu gönderme
             if (!valid) e.preventDefault();
         });
     </script>

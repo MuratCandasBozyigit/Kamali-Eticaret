@@ -58,8 +58,9 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             public List<Product> Products { get; set; }
             public List<Category> Categories { get; set; }
             public int TotalCount { get; set; }
-            public int PageSize { get; set; } = 6; // Sayfada gösterilecek ürün sayısı
-            public int CurrentPage { get; set; } = 1; // Mevcut sayfa
+            public int PageSize { get; set; } = 6;
+            public int CurrentPage { get; set; } = 1;
+            public List<string> ProductSizes { get; set; } = new List<string>();
             public int TotalPages => (int)Math.Ceiling((double)TotalCount / PageSize);
         }
 
@@ -85,38 +86,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-
-        [HttpGet("Create")]
-        public async Task<IActionResult> Create()
-        {
-            var categories = await _categoryService.GetAllAsync(); // Asenkron olarak bekle
-            var viewModel = new HomeViewModel
-            {
-                Categories = categories.ToList() // Kategorileri listeye çevir
-            };
-
-            return View(viewModel);
-        }
-
-        [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromForm] Product Product, IFormFile image)
-        {
-            if (image != null && image.Length > 0)
-            {
-                var fileName = Path.GetFileName(image.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await image.CopyToAsync(stream); // Asenkron kopyalama
-                }
-
-                Product.ImagePath = "/images/" + fileName;
-            }
-
-            await _productService.AddAsync(Product); // Asenkron olarak ekle
-            return RedirectToAction("Index"); // Başarılı ekleme sonrası Index'e yönlendir
-        }
 
         [HttpGet("GetAllProductsAsync")]
         public async Task<IActionResult> GetAllProductsAsync()
@@ -166,6 +135,52 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
+        [HttpGet("Create")]
+        public async Task<IActionResult> Create()
+        {
+            var categories = await _categoryService.GetAllAsync();
+            var viewModel = new ProductEditViewModel
+            {
+                Categories = categories.Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.ParentCategoryName
+                }).ToList()
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost("Create")]
+        public async Task<IActionResult> Create(Product product, IFormFile image, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock, double? DiscountRate)
+        {
+            if (!ProductSizes.Any() || SizeStock == null || !SizeStock.Any())
+            {
+                ModelState.AddModelError("ProductSizes", "En az bir beden ve stok bilgisi eklemelisiniz.");
+                return View();
+            }
+
+            if (image != null && image.Length > 0)
+            {
+                var fileName = Path.GetFileName(image.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+
+                product.ImagePath = "/images/" + fileName;
+            }
+
+            product.ProductSizes = ProductSizes;
+            product.SizeStock = SizeStock;
+            product.DiscountRate = DiscountRate;
+
+            await _productService.AddAsync(product);
+            return RedirectToAction("Index");
+        }
+
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
@@ -182,23 +197,23 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
                 ProductName = product.ProductName,
-                ProductSize = product.ProductSize,
+                ProductSizes = product.ProductSizes,
                 ProductDescription = product.ProductDescription,
-                ProductPrice = (decimal)product.ProductPrice,
+                ProductPrice = product.ProductPrice,
                 ImagePath = product.ImagePath,
-                CategoryId = product.Category?.Id ?? 0, // CategoryId ayarla
+                CategoryId = product.CategoryId,
                 Categories = categories.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.ParentCategoryName
-                }).ToList() // Buraya ToList ekliyoruz
+                }).ToList()
             };
 
             return View(viewModel);
         }
 
         [HttpPost("Edit/{id}")]
-        public async Task<IActionResult> Edit(ProductEditViewModel viewModel, IFormFile image)
+        public async Task<IActionResult> Edit(ProductEditViewModel viewModel, IFormFile image, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock)
         {
             var productToUpdate = await _productService.GetByIdAsync(viewModel.ProductId);
             if (productToUpdate == null)
@@ -206,14 +221,15 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            // Yalnızca gerekli bilgileri güncelle
             productToUpdate.ProductTitle = viewModel.ProductTitle;
+            productToUpdate.ProductName = viewModel.ProductName;
             productToUpdate.ProductDescription = viewModel.ProductDescription;
-            productToUpdate.ProductSize = viewModel.ProductSize;
             productToUpdate.ProductPrice = viewModel.ProductPrice;
-            productToUpdate.CategoryId = viewModel.CategoryId; // Ana kategoriyi güncelle
+            productToUpdate.CategoryId = viewModel.CategoryId;
+            productToUpdate.ProductSizes = ProductSizes;
+            productToUpdate.SizeStock = SizeStock;
+            productToUpdate.DateUpdated = DateTime.UtcNow;
 
-            // Resim güncelleme işlemi
             if (image != null && image.Length > 0)
             {
                 var fileName = Path.GetFileName(image.FileName);
@@ -224,16 +240,17 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                     await image.CopyToAsync(stream);
                 }
 
-                productToUpdate.ImagePath = "/images/" + fileName; // Resim yolunu güncelle
+                productToUpdate.ImagePath = "/images/" + fileName;
             }
 
-            await _productService.UpdateAsync(productToUpdate); // Ürünü güncelle
-            return RedirectToAction("Index"); // Başarılı güncelleme sonrası Index'e yönlendir
+            await _productService.UpdateAsync(productToUpdate);
+            return RedirectToAction("Index");
         }
 
         #endregion
-
     }
+
+
 }
 
 
