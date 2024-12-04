@@ -798,7 +798,7 @@ body {
             color: darkgoldenrod;
         }
 
-    Kolonları daha düzenli yap
+ 
     .col-lg-3, .col-md-6 {
         width: 50%;
         margin-bottom: 20px;
@@ -1291,7 +1291,7 @@ body {
     .icon-box {
         background-color: #f9f9f9;
         border-radius: 8px;
-        padding:4 4 4 4;
+        padding: 4px 4px 4px 4px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         text-align: center;
         margin-bottom: 5px;
@@ -1412,115 +1412,3 @@ body {
     }
 }
 
-/*#region YorumSatırı */
-
-/*@media (max-width: 767px) {
-    .product-card {
-        width: 95%;*/ /* Kartın genişliği, esnek olması için %100 yapıldı */
-/*max-width: 250px;*/ /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
-/*height: 470px;*/ /* Kartın yüksekliği */
-/*font-display: swap;
-        margin: 0 auto;
-    }
-
-    .product-image {
-        width: 100%;*/ /* Kartın genişliğine uyum sağlar */
-/*height: 135px;*/ /* Sabit resim yüksekliği */
-/*object-fit: cover;*/ /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
-/*object-position: center;*/ /* Resmin ortalanmasını sağlar */
-/*}*/
-
-
-/* Butonlar arasında biraz boşluk bırakmak için */
-/*.col-auto {
-        display: flex;
-        align-items: center;
-    }
-
-
-
-    #company-services .row {
-        display: flex;*/ /* Flexbox düzeni */
-/*flex-wrap: wrap;*/ /* Satır taşmaları için sarma */
-/*justify-content: center;*/ /* Ortalama */
-/*}
-
-    #company-services .col-lg-3 {
-        flex: 1 0 45%;*/ /* Kolon genişliği mobilde %45 */
-/*max-width: 45%;*/ /* Maksimum genişlik */
-/*padding: 5px;*/ /* Daha az dış boşluk */
-/*}
-
-    #company-services .icon-box {
-        width: 105%;*/ /* Tam genişlik */
-/*height: 120px;*/ /* Sabit yükseklik */
-/*padding: 10px;*/
-/* İçerik için boşluk */
-/*margin: 5px auto;*/ /* Kartlar arasında az boşluk */
-/*box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);*/ /* Hafif gölge */
-/*display: flex;*/ /* İçerikleri hizalamak için flexbox */
-/*flex-direction: column;*/ /* İçerikleri dikey hizala */
-/*align-items: center;*/ /* Yatayda ortala */
-
-/*justify-content: center;*/ /* Dikeyde ortala */
-/*box-sizing: border-box;*/ /* İçerik boyutlandırmayı dahil et */
-/*overflow: hidden;*/ /* Taşmaları gizle */
-/*}
-
-    #company-services .icon-box-content h3 {
-        font-size: 14px;*/ /* Daha küçük başlık */
-/*margin-bottom: 5px;*/ /* Daha az başlık altı boşluk */
-/*text-align: center;*/ /* Metni ortala */
-/*white-space: nowrap;*/ /* Uzun başlıklar için tek satır */
-/*overflow: hidden;*/ /* Taşmayı gizle */
-/*text-overflow: ellipsis;*/ /* Uzun başlıkların sonunda '...' göster */
-/*}
-
-    #company-services .icon-box-content p {
-        font-size: 12px;*/ /* Daha küçük açıklama */
-/*line-height: 1.2;*/ /* Daha sıkı satır yüksekliği */
-/*text-align: center;*/ /* Metni ortala */
-/*white-space: normal;*/ /* Metni satır sonuna göre böl */
-/*}
-
-    .footer-logo {
-        max-width: 150px;
-        margin-bottom: 20px;*/ /* Logo altındaki boşluk */
-/*}
-
-    .footer-menu,
-    .footer-title,
-    .list-unstyled {
-        text-align: center;
-    }*/
-
-/* Footer menü kolonları alt alta dizilir */
-/*.footer-top-area .row {
-        display: block;
-        text-align: center;
-    }*/
-
-/* Footer öğeleri arasındaki mesafeyi arttırma */
-/*.footer-top-area .col-lg-3 {
-        margin-bottom: 20px;
-    }*/
-
-/* Sosyal medya ikonları daha büyük ve merkezi hizalanmış */
-/*.social-links ul {
-        justify-content: center;
-    }
-
-    .social-links svg {
-        width: 25px;
-        height: 25px;
-        margin: 0 10px;*/ /* İkonlar arasında daha fazla mesafe */
-/*}*/
-
-/* Footer alt kısmı dağılmasın, merkezi hizalanmış olsun */
-/*.footer-bottom-area {
-        text-align: center;
-        padding: 10px;
-    }
-}*/
-
-/*#endregion */
