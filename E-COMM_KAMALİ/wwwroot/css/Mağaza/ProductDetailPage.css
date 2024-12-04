@@ -1,4 +1,6 @@
-﻿/* Genel Stiller */
+﻿/*#region ÜRÜNDETAYI */
+
+/* Genel Stiller */
 body {
     font-family: 'Open Sans', sans-serif;
     margin: 0;
@@ -319,6 +321,7 @@ body {
     .read-more {
         font-size: 1.1rem;
     }
+
     .purchase-info {
         display: flex;
         flex-direction: column;
@@ -326,18 +329,383 @@ body {
         justify-content: center;
         text-align: center;
         height: 100%; /* Sayfa yüksekliği kadar */
-        margin-top:0px ;
-    }
-    .purchase-info .btn {
-        justify-content: center;
-        padding: 8px 20px;
-        font-size: 0.9rem;
-        margin: 10px 0;
+        margin-top: 0px;
     }
 
-    .purchase-info .form-control {
-        width: 80%;
+        .purchase-info .btn {
+            justify-content: center;
+            padding: 8px 20px;
+            font-size: 0.9rem;
+            margin: 10px 0;
+        }
+
+        .purchase-info .form-control {
+            width: 80%;
+            font-size: 14px;
+            margin: 10px 0;
+        }
+}
+
+
+/*#endregion */
+
+
+/*#region ÜrünlerListesi */
+/*#region Normal */
+
+.product-card {
+    width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
+    max-width: 300px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
+    height: 550px; /* Kartın yüksekliği */
+    margin: 0 auto;
+}
+
+.product-image {
+    width: 100%; /* Kartın genişliğine uyum sağlar */
+    height: 165px; /* Sabit resim yüksekliği */
+    object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
+    object-position: center; /* Resmin ortalanmasını sağlar */
+}
+
+.card-title {
+    margin-bottom: 5px; /* Başlık ve açıklama arasındaki boşluk */
+}
+
+
+
+.fa-cart-shopping {
+    width: 20px; /* Sabit ikon genişliği */
+    /* Sabit ikon yüksekliği */
+    transition: transform 0.3s ease-in-out; /* Geçiş süresini kontrol et */
+    padding: 0; /* Yanlış padding hatasını düzelttim */
+    display: inline-block; /* İkonun çevresindeki alanı düzenle */
+    align-items: center; /* Dikey olarak ortala */
+    justify-content: center;
+    vertical-align: middle; /* Dikey hizalamayı ortalar */
+}
+
+.btn-hover {
+    position: relative; /* İkonun sabit durması için */
+    display: inline-flex; /* İkonun ve metnin aynı hizada kalmasını sağla */
+    align-items: center; /* Dikey olarak ortala */
+    justify-content: center; /* Yatay olarak ortala */
+    width: auto; /* Sabit genişlik ayarı isteğe bağlı */
+    height: 50px; /* Sabit yükseklik */
+    font-size: 15px;
+    background-color: rgb(237, 233, 221); /* Normal durumdaki arka plan */
+    color: black; /* Normal durumdaki yazı rengi */
+    border: none; /* Kenar çizgisini kaldır */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Yumuşak geçiş efekti */
+}
+
+    .btn-hover:hover {
+        margin-top: 0; /* Hover durumunda margin-top kullanılmamalı */
+        font-weight: 500;
+        font-size: 20px;
+        background-color: rgb(224, 219, 202); /* Hover durumunda arka plan rengi */
+        color: black; /* Hover durumunda yazı rengi */
+    }
+
+        .btn-hover:hover .fa-cart-shopping {
+            transform: scale(1.1); /* Çok küçük bir büyüme sağla */
+        }
+
+.all_products {
+    position: relative; /* Sabitleme yapar */
+    top: 0; /* Üst kısmına hizalar */
+    right: 0; /* Sağ kısmına hizalar */
+    color: black;
+    font-weight: bold;
+    font-size: 20px;
+    text-decoration: underline;
+    margin: 0;
+    transition: transform 0.3s ease; /* Yumuşak geçiş ekler */
+}
+
+    .all_products:hover {
+        color: black;
+        font-weight: bolder;
+        text-decoration: none;
+    }
+
+.row {
+    position: relative; /* .all_products öğesinin doğru konumlanabilmesi için row elementine relative ekleriz */
+}
+
+
+/*#endregion */
+/*#region Responsive */
+
+@media (max-width: 980px) {
+
+ 
+    /* Ürün Listesi Bölümü */
+
+
+    .col-10 {
+        width: 100%; /* Ürün başlığını tüm genişlikte kullan */
+        margin-bottom: 20px; /* Alt boşluk */
+    }
+
+    /*.all_products {
+        text-align: center;
         font-size: 14px;
-        margin: 10px 0;
+        color: #007bff;
+        cursor: pointer;
+        margin-bottom: 20px;*/ /* Alt boşluk */
+    /*}*/
+
+    .product-card {
+        font-size: 25px;
+        max-width: 370px;
+        width: 100%;
+        border-radius: 8px; /* Kart köşeleri yuvarla */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+        margin-bottom: 10px; /* Alt boşluk */
+    }
+
+    .product-image {
+        width: 100%; /* Resimler tüm kart alanını kapsar */
+        height: 180px; /* Sabit yükseklik */
+        object-fit: cover; /* Resmin kutuya uyumlu şekilde kesilmesi */
+    }
+
+    .card-body {
+        padding: 10px; /* İç padding */
+    }
+
+    .card-title {
+        font-size: 23px; /* Başlık font boyutunu küçült */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .card-text {
+        font-size: 17px; /* Fiyat yazısının font boyutunu küçült */
+        color: black;
+        font-weight: bolder; /* Fiyatı mavi renk yap */
+    }
+
+    .btn-primary {
+        font-size: 12px; /* Buton boyutunu küçült */
+        padding: 6px 12px; /* İç padding */
+    }
+
+    .fav-btn button {
+        font-size: 12px; /* Favori butonunun font boyutu */
+    }
+
+    .form-control {
+        width: 60px; /* Genişlik daraltıldı */
+        font-size: 14px; /* Font boyutunu küçült */
+    }
+
+    .product-card h5, .product-card h6 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+  
+}
+
+@media (max-width: 769px) {
+
+    .product-image {
+        width: 100%;
+        height: 165px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .product-card {
+        margin-top: 5px;
+        width: 100%;
+        max-width: 370px;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    .fav-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        transition: all 0.3s ease;
+    }
+
+        .fav-btn button:hover {
+            transform: scale(1.1);
+            background-color: #f0f0f0;
+        }
+}
+
+@media (max-width: 322px) {
+
+    .product-card {
+        width: 100%;
+        max-width: 280px; /* Kartın daha küçük olması için genişlik sınırını küçültüyoruz */
+        height: 350px; /* Kartın yüksekliğini küçültüyoruz */
+        margin: 10px auto;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 90px; /* Resmin daha küçük olmasını sağlıyoruz */
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .fav-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 3px;
+    }
+
+    /* Buton boyutlarını küçültme */
+    .btn-hover {
+        font-size: 10px; /* Buton fontunu daha küçük yapıyoruz */
+        height: 30px; /* Butonun yüksekliğini küçültüyoruz */
+        width: auto;
+        padding: 5px 10px; /* Butonun yatay padding'ini küçültüyoruz */
+        background-color: rgb(237, 233, 221);
+        color: black;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+        .btn-hover:hover {
+            background-color: rgb(224, 219, 202);
+            transform: scale(1.1);
+            color: black;
+        }
+
+    /* Sepete Ekle ve Favoriler butonlarının boyutları */
+    .fav-btn button,
+    .product-card .btn {
+        font-size: 10px; /* Buton fontunu küçültüyoruz */
+        height: 28px; /* Butonun boyutunu küçültüyoruz */
+        padding: 5px 10px; /* Yatay padding'i azaltıyoruz */
+    }
+
+    /* Detaylar butonu */
+    .product-card .btn-primary {
+        font-size: 10px; /* Font boyutunu küçültüyoruz */
+        height: 28px;
+        padding: 5px 10px; /* Yatay padding */
+    }
+
+    /* Sepet Ekle butonu */
+    .fav-btn button {
+        font-size: 10px; /* Font boyutunu küçültüyoruz */
+        height: 28px;
+        padding: 5px 10px; /* Yatay padding */
+    }
+
+    .fa-cart-shopping, .fa-heart {
+        font-size: 14px; /* İkonları küçültüyoruz */
+    }
+
+    /* Ürün sayısının düzenlendiği input ve butonları küçültme */
+    .product-card form input[type="number"] {
+        width: 50px; /* Input alanını daraltıyoruz */
+        font-size: 12px; /* Font boyutunu küçültüyoruz */
+        height: 25px; /* Input yüksekliğini küçültüyoruz */
+        padding: 5px; /* Padding değeri küçültülüyor */
+    }
+
+    .product-card form button {
+        font-size: 10px; /* Buton fontunu küçültüyoruz */
+        height: 28px; /* Buton yüksekliğini küçültüyoruz */
+        padding: 5px 10px; /* Yatay padding'i küçültüyoruz */
+    }
+
+    .fa-cart-shopping {
+        font-size: 14px; /* Sepet ikonunu küçültüyoruz */
     }
 }
+
+@media(max-width:300px) {
+    .product-card {
+        margin-top: 5px;
+        width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
+        max-width: 370px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
+        height: 440px; /* Kartın yüksekliği */
+        margin: 0 auto;
+    }
+
+    .fav-btn {
+        display: flex;
+        justify-content: center; /* Yatayda ortalar */
+        align-items: center; /* Dikeyde ortalar */
+        padding-top: 1px;
+        padding-bottom: 1px;
+    }
+
+
+    .product-image {
+        width: 100%; /* Kartın genişliğine uyum sağlar */
+        height: 150px; /* Sabit resim yüksekliği */
+        object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
+        object-position: center; /* Resmin ortalanmasını sağlar */
+    }
+
+}
+
+@media (max-width: 240px) {
+    .card-title {
+        font-size: 13px;
+        font-weight: bolder;
+        text-transform: uppercase;
+    }
+
+
+    .product-card {
+        height: 320px;
+    }
+
+        .btn-hover,
+        .fav-btn button,
+        .product-card .btn,
+        .product-card .btn-primary {
+            font-size: 8px; /* Yazı boyutunu daha da küçültüyoruz */
+            height: 20px; /* Buton yüksekliğini daha kısa yapıyoruz */
+            padding: 3px 8px; /* Yatay ve dikey padding değerlerini küçültüyoruz */
+        }
+
+    .fav-btn {
+        padding: 2px; /* Buton çevresindeki boşluğu küçültüyoruz */
+    }
+
+    .fa-cart-shopping,
+    .fa-heart {
+        font-size: 10px; /* İkonların boyutunu daha da küçültüyoruz */
+    }
+
+    .product-card form input[type="number"] {
+        width: 40px; /* Input alanını daha da daraltıyoruz */
+        font-size: 10px; /* Input içindeki yazının boyutunu küçültüyoruz */
+        height: 20px; /* Input yüksekliğini daha da küçültüyoruz */
+        padding: 3px; /* İçerideki boşluğu azaltıyoruz */
+    }
+
+    .product-card form button {
+        font-size: 8px; /* Buton yazı boyutunu küçültüyoruz */
+        height: 20px; /* Buton yüksekliğini daha kısa yapıyoruz */
+        padding: 3px 8px; /* Yatay padding'i küçültüyoruz */
+    }
+
+    .product-card {
+        max-width: 200px; /* Ürün kartının genişliğini daha küçük yapıyoruz */
+    }
+
+    .product-image {
+        height: 70px; /* Ürün resmini daha kısa yapıyoruz */
+    }
+}
+/*#endregion */
+
+
+/*#endregion */
