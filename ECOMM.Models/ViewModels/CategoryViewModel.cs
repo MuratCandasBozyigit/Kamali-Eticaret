@@ -14,6 +14,7 @@ namespace ECOMM.Core.ViewModels
         public string ParentCategoryName { get; set; }
         public string ParentCategoryTag { get; set; }  // Add this line
         public string ParentCategoryDescription { get; set; }  // Add if needed
+        public string ProductSize { get; set; }
         public List<ProductViewModel> Products { get; set; }
     }
 

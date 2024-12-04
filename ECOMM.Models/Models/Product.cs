@@ -8,7 +8,7 @@ namespace ECOMM.Core.Models
     {
         public string ProductTitle { get; set; }
 
-        public string Size { get; set; }
+        public string ProductSize { get; set; }
 
         [MaxLength(11, ErrorMessage = "Ürün adı en fazla 11 karakter olmalıdır.")]
         public string ProductName { get; set; }
