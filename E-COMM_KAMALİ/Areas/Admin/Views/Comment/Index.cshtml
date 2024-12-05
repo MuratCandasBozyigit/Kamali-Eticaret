@@ -1,0 +1,61 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Yorum Yönetimi</h2>
+
+<table id="commentsTable" class="display" style="width:100%">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Yorum</th>
+            <th>Kullanıcı</th>
+            <th>Ürün</th>
+            <th>Tarih</th>
+            <th>Onay Durumu</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+</table>
+
+@section Scripts {
+        <script src="https://cdn.datatables.net/1.13.5/js/jquery.dataTables.min.js"></script>
+        <script>
+            $(document).ready(function () {
+                var table = $('#commentsTable').DataTable({
+                    ajax: {
+                        url: '/Admin/Comment/GetComments',
+                        dataSrc: 'data'
+                    },
+                    columns: [
+                        { data: 'id' },
+                        { data: 'content' },
+                        { data: 'authorName' },
+                        { data: 'productName' },
+                        { data: 'dateCommented', render: function (data) { return new Date(data).toLocaleDateString(); } },
+                        { data: 'isApproved', render: function (data) { return data ? "Onaylandı" : "Bekliyor"; } },
+                        {
+                            data: 'id',
+                            render: function (data) {
+                                return `
+                                    <button class="btn btn-success" onclick="approveComment(${data})">Onayla</button>
+                                    <button class="btn btn-danger" onclick="rejectComment(${data})">Reddet</button>`;
+                            }
+                        }
+                    ]
+                });
+
+                window.approveComment = function (id) {
+                    $.post(`/Admin/Comment/Approve/${id}`, function () {
+                        table.ajax.reload();
+                    });
+                };
+
+                window.rejectComment = function (id) {
+                    $.post(`/Admin/Comment/Reject/${id}`, function () {
+                        table.ajax.reload();
+                    });
+                };
+            });
+        </script>
+}
