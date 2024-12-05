@@ -39,38 +39,6 @@ public class ProfileController : Controller
         return View(viewModel);
     }
 
-    // Profil sayfası
-    //public async Task<IActionResult> Index()
-    //{
-    //    // Giriş yapmış kullanıcıyı al
-    //    var user = await _userManager.GetUserAsync(User);
-
-    //    if (user == null)
-    //    {
-    //        // Kullanıcı bulunamadıysa login sayfasına yönlendir
-    //        return RedirectToAction("Login", "Account");
-    //    }
-    //    if (!User.Identity.IsAuthenticated)
-    //    {
-    //        return RedirectToAction("Login", "Account");
-    //    }
-
-
-    //    // User bilgilerini ViewModel'e dönüştür
-    //    var viewModel = new ProfileViewModel
-    //    {
-    //       // UserName = user.UserName,
-    //        Email = user.Email,
-    //        FullName = user.FullName,
-    //        UserOrders = user.UserOrders
-
-    //        // Diğer alanları da buraya ekleyebilirsiniz
-    //    };
-
-    //    // Profil sayfasını view ile döndür
-    //    return View(viewModel);
-    //}
-
 
 
     [HttpPost]
@@ -114,7 +82,7 @@ public class ProfileController : Controller
             return Json(new { data = new List<object>() }); // Kullanıcı yoksa boş liste döndür
         }
 
-        // Kullanıcının yorumlarını al
+      
         var comments = await _commentService.GetUserCommentsAsync(user.Id); // UserId'ye göre yorumları al
         var result = comments.Select(c => new
         {
