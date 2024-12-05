@@ -17,6 +17,12 @@ namespace ECOMM.Business.Concrete
         {
             _commentRepository = commentsRepository;
         }
+
+        public async Task<IEnumerable<Comment>> GetPendingCommentsAsync()
+        {
+            return await _commentRepository.GetAllAsync(c => !c.IsApproved); // Onaylanmamış yorumlar
+        }
+
         public async Task<Comment> GetByIdAsync(int id)
         {
             return await _commentRepository.GetByIdAsync(id);
@@ -42,6 +48,23 @@ namespace ECOMM.Business.Concrete
             return await _commentRepository.DeleteAsync(id);
         }
 
+        public async Task ApproveCommentAsync(int id)
+        {
+            var comment = await _commentRepository.GetByIdAsync(id);
+            if (comment != null)
+            {
+                comment.IsApproved = true;
+                await _commentRepository.UpdateAsync(comment);
+            }
+        }
 
+        public async Task RejectCommentAsync(int id)
+        {
+            var comment = await _commentRepository.GetByIdAsync(id);
+            if (comment != null)
+            {
+                await _commentRepository.DeleteAsync(id);
+            }
+        }
     }
 }

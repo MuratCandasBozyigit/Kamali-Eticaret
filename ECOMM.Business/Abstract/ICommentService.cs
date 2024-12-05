@@ -9,6 +9,8 @@ namespace ECOMM.Business.Abstract
 {
     public interface ICommentService : IService<Comment>
     {
-
+        Task<IEnumerable<Comment>> GetPendingCommentsAsync();
+        Task ApproveCommentAsync(int id);
+        Task RejectCommentAsync(int id);
     }
 }

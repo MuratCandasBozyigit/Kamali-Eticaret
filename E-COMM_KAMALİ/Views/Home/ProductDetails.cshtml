@@ -157,8 +157,12 @@
     </div>
 </div>
 
-
-
+/*Yorum Kanksss*/
+<form asp-action="AddComment" method="post">
+    <textarea name="content" required placeholder="Yorumunuzu yazın"></textarea>
+    <input type="hidden" name="productId" value="@Model.ProductId" />
+    <button type="submit">Yorum Yap</button>
+</form>
 
 
 @section Scripts {

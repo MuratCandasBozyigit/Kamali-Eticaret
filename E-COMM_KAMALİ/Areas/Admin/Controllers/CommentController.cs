@@ -1,21 +1,19 @@
 ﻿using ECOMM.Business.Abstract;
+using ECOMM.Core.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace E_COMM_KAMALİ.Areas.Admin.Controllers
+namespace ECOMM.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CommentController : Controller
     {
-        private readonly ICommentService commentService;
-        private readonly IUserService userService;
-        private readonly IProductService productService;
-        private IOrderService orderService;
+        private readonly ICommentService _commentService;
 
-        public CommentController(IOrderService orderService, IProductService productService, IUserService userService, ICommentService commentService)
+        public CommentController(ICommentService commentService)
         {
-            this.orderService = orderService;
-            this.productService = productService;
-            this.userService = userService;
-            this.commentService = commentService;
+            _commentService = commentService;
         }
 
         public IActionResult Index()
@@ -23,10 +21,33 @@ namespace E_COMM_KAMALİ.Areas.Admin.Controllers
             return View();
         }
 
-        [HttpGet("GetAll")]
-        public Task<IActionResult> GetAll(int id) {
+        public async Task<IActionResult> GetComments()
+        {
+            var comments = await _commentService.GetPendingCommentsAsync();
+            var result = comments.Select(c => new
+            {
+                c.Id,
+                c.Content,
+                c.AuthorId,
+                AuthorName = c.Author?.UserName ?? "Unknown",
+                ProductName = c.Product?.ProductName ?? "Unknown",
+                c.DateCommented,
+                c.IsApproved
+            });
 
-           
+            return Json(new { data = result });
+        }
+
+        public async Task<IActionResult> Approve(int id)
+        {
+            await _commentService.ApproveCommentAsync(id);
+            return Ok();
+        }
+
+        public async Task<IActionResult> Reject(int id)
+        {
+            await _commentService.RejectCommentAsync(id);
+            return Ok();
         }
     }
 }
