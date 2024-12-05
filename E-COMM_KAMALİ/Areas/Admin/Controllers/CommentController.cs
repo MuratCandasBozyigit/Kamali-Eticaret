@@ -29,7 +29,8 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 c.Id,
                 c.Content,
                 c.AuthorId,
-                AuthorName = c.Author?.UserName ?? "Unknown",
+            //    AuthorName = c.Author?.UserName ?? "Unknown",
+                AuthorName = c.Author?.FullName ?? "Unknown",
                 ProductName = c.Product?.ProductName ?? "Unknown",
                 c.DateCommented,
                 c.IsApproved
