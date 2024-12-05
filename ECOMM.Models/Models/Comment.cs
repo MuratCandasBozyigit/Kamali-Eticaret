@@ -3,8 +3,9 @@
 public class Comment : BaseModel
 {
     public string? Content { get; set; } // Yorum içeriği
-    public string AuthorId { get; set; } // Yorumu yapan kullanıcının ID'si
+    public string? AuthorId { get; set; } // Yorumu yapan kullanıcının ID'si
     public User Author { get; set; } // Kullanıcı ilişkisi
+    public string? AuthorName { get; set; }
     public DateTime DateCommented { get; set; } = DateTime.Now; // Yorum tarihi
     public bool IsApproved { get; set; } = false; // Onay durumu
 

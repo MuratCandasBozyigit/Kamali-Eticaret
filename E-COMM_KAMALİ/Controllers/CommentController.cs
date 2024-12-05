@@ -26,6 +26,29 @@ namespace E_COMM_KAMALİ.Controllers
             return View();
         }
 
+        public async Task<IActionResult> AddComment(Comment comment)
+        {
+            if (comment == null)
+            {
+                return BadRequest("Yorum bilgisi eksik.");
+            }
+
+            if (!User.Identity.IsAuthenticated)
+            {
+                return Unauthorized();
+            }
+
+            var result = await commentService.AddAsync(comment);
+
+            if (result == null)
+            {
+                return NotFound("Yorum eklenemedi.");
+            }
+
+            return Ok("Yorum başarıyla eklendi.");
+        }
+
+
 
         public async Task<IActionResult> PendingComments()
         {

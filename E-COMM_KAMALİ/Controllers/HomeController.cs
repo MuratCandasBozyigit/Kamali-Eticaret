@@ -39,7 +39,59 @@ namespace E_COMM_KAMALİ.Controllers
             this.categoryService = categoryService;
         }
         #endregion
+        #region Comment
+        public async Task<IActionResult> AddComment(Comment comment)
+        {
+            if (comment == null)
+            {
+                return BadRequest("Yorum bilgisi eksik.");
+            }
+            if (!User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            // Kullanıcı ID'sini al
+            // Kullanıcı adını al
+            var userName = User.Identity.Name;
+            if (string.IsNullOrEmpty(userName))
+            {
+                return BadRequest("Kullanıcı adı alınamadı.");
+            }
 
+            comment.AuthorId = userName;
+            comment.DateCommented = DateTime.Now;
+
+            // Yorum ekleme işlemi
+            var result = await _commentService.AddAsync(comment);
+            if (result == null)
+            {
+                return BadRequest("Yorum eklenemedi.");
+            }
+
+            return Ok("Yorum başarıyla eklendi.");
+        }
+
+
+
+        public async Task<IActionResult> PendingComments()
+        {
+            var pendingComments = await _commentService.GetPendingCommentsAsync();
+            return View(pendingComments);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveComment(int id)
+        {
+            var comment = await _commentService.GetByIdAsync(id);
+            if (comment == null) return NotFound();
+
+            comment.IsApproved = true;
+            await _commentService.UpdateAsync(comment);
+
+            TempData["Message"] = "Yorum onaylandı.";
+            return RedirectToAction("PendingComments");
+        }
+        #endregion
         public async Task<IActionResult> Index(int page = 1)
         {
             var comments = await _commentService.GetAllAsync();
