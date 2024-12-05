@@ -70,6 +70,130 @@
             <p style="margin-top: 40px; font-weight: 600; text-align: center;">Henüz siparişiniz bulunmamaktadır.</p>
         }
     </div>
+
+    </br>
+    </br>
+    </br>
+    <table id="commentsTable" class="display" style="width:100%">
+        <h1>YORUMLARIM</h1>
+        <thead>
+            <tr>
+                <th>Yorum</th>
+                <th>Ürün</th>
+                <th>Tarih</th>
+                <th>Onay Durumu</th>
+            </tr>
+        </thead>
+    </table>
+    <!-- Yorumlar Bölümü -->
+   @*  <div style="margin-top: 30px; width: 100%;">
+        <h2 style="font-weight: bolder; text-align: center;">Yorumlarım</h2>
+        @if (Model.User?.Comments != null && Model.User.Comments.Any())
+        {
+            <div style="display: flex; justify-content: center;">
+                <table class="table table-bordered mt-3" style="width: auto;">
+                    <thead>
+                        <tr>
+                            <th>Yorum ID</th>
+                            <th>Yorum İçeriği</th>
+                            <th>Ürün Adı</th>
+                            <th>Yorum Tarihi</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var comment in Model.User.Comments)
+                        {
+                            <tr>
+                                <td>@comment.Id</td>
+                                <td>@comment.Content</td>
+                                <!-- ProductName'i almak için comment.Product.Name kullanılıyor -->
+                                <td>@comment.Product?.ProductName</td>
+                                <td>@comment.DateCommented.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (comment.IsApproved)
+                                    {
+                                        <span style="color: green;">Onaylandı</span>
+                                    }
+                                    else if (comment.IsApproved == false)
+                                    {
+                                        <span style="color: red;">Onaylanmadı</span>
+                                    }
+                                    else
+                                    {
+                                        <span style="color: orange;">Onay Bekliyor</span>
+                                    }
+
+
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p style="margin-top: 40px; font-weight: 600; text-align: center;">Henüz yorumunuz bulunmamaktadır.</p>
+        }
+    </div> *@
+
+
+    <!-- Yorumlar Bölümü -->
+@*     <div style="margin-top: 30px; width: 100%;">
+        <h2 style="font-weight: bolder; text-align: center;">Yorumlarım</h2>
+        @if (Model.User.Comments != null && Model.User.Comments.Any())
+        {
+            <div style="display: flex; justify-content: center;">
+                <table class="table table-bordered mt-3" style="width: auto;">
+                    <thead>
+                        <tr>
+                            <th>Yorum ID</th>
+                            <th>Yorum İçeriği</th>
+                            <th>Ürün Adı</th>
+                            <th>Yorum Tarihi</th>
+                            <th>Durum</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var comment in Model.User.Comments)
+                        {
+                            <tr>
+                                <td>@comment.Id</td>
+                                <td>@comment.Content</td>
+                                <td>@comment.ProductName</td>
+                                <td>@comment.DateCommented.ToString("dd/MM/yyyy")</td>
+                                <td>
+                                    @if (comment.IsApproved.HasValue)
+                                    {
+                                        @if (comment.IsApproved == true)
+                                        {
+                                            <span style="color: green;">Onaylandı</span>
+                                        }
+                                        else
+                                        {
+                                            <span style="color: red;">Onaylanmadı</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <span style="color: orange;">Onay Bekliyor</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p style="margin-top: 40px; font-weight: 600; text-align: center;">Henüz yorumunuz bulunmamaktadır.</p>
+        }
+    </div>
+ *@
+    </div>
 </section>
 
 <!-- Profil Düzenleme Modal -->
@@ -105,7 +229,27 @@
     </div>
 </div>
 
+
+
 @section Scripts {
+    <script>
+          
+        $(document).ready(function () {
+            var table = $('#commentsTable').DataTable({
+                ajax: {
+                    url: '/Profile/GetComments',
+                    dataSrc: 'data'
+                },
+                columns: [
+                    { data: 'content' },
+                    { data: 'productName' },
+                    { data: 'dateCommented', render: function (data) { return new Date(data).toLocaleDateString(); } },
+                    { data: 'isApproved', render: function (data) { return data ? "Onaylandı" : "Bekliyor"; } }
+                ]
+            });
+        });
+    </script>
+   
     <script>
         $(document).ready(function () {
             $("#editProfileForm").submit(function (event) {

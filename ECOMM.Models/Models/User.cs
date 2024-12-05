@@ -17,5 +17,8 @@ namespace ECOMM.Core.Models
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = new List<ApplicationUserRole>();
 
         public List<Orders> UserOrders { get; set; } = new List<Orders>();
+
+        //  public Comment Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

@@ -17,12 +17,12 @@ namespace ECOMM.Business.Configuration
             services.AddScoped<ICategoryService, CategoryService>();
             services.AddScoped<ISubCategoryService, SubCategoryService>();
             services.AddScoped<ICommentService, CommentService>();
-            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserService, UserService>(); services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ISessionService, SessionService>();
-            services.AddScoped<IFavouritesService,FavouritesService>();
+            services.AddScoped<IFavouritesService, FavouritesService>();
         }
 
         public static void RepositoryDI(this IServiceCollection services)
