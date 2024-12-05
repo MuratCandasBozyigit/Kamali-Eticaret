@@ -160,7 +160,7 @@
 /*Yorum Kanksss*/
 <form asp-action="AddComment" method="post">
     <textarea name="content" required placeholder="Yorumunuzu yazın"></textarea>
-    <input type="hidden" name="productId" value="@Model.ProductId" />
+    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
     <button type="submit">Yorum Yap</button>
 </form>
 
