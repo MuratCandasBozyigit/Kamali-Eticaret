@@ -5,9 +5,9 @@ using ECOMM.Core.Models;
 using ECOMM.Data.Shared.Abstract;
 using ECOMM.Data.Shared.Concrete;
 using ECOMM.Data;
-using Microsoft.EntityFrameworkCore;
 using ECOMM.Business.Abstract;
 using ECOMM.Business.Concrete;
+using Microsoft.AspNetCore.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,6 +54,10 @@ builder.Services.AddScoped<IRoleService, RoleService>();
 // Business ve Repository DI işlemleri
 builder.Services.BusinessDI();
 builder.Services.RepositoryDI();
+
+//// E-posta servisi kaydı
+//builder.Services.AddScoped<IEmailService, SmtpEmailService>();
+
 
 // Oturum (Session) yapılandırması
 builder.Services.AddDistributedMemoryCache(); // Oturum verilerini saklamak için bellek önbelleği ekleyin
@@ -105,5 +109,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}"
 );
 
-//app.MapRazorPages();
 app.Run();
