@@ -175,7 +175,7 @@
                                     <div class="review-item col-md-10 card">
                                         <blockquote>“@comment.Content”</blockquote>
                                         <div class="author-detail">
-                                            <div class="name text-dark text-uppercase pt-2">@comment.Author</div>
+                                            <div class="name text-dark text-uppercase pt-2">@comment.Author.</div>
                                             <div class="date text-muted">@comment.DateCommented.ToString("g")</div>
                                         </div>
                                     </div>
@@ -187,71 +187,6 @@
                             <div class="swiper-slide text-center d-flex justify-content-center">
                                 <div class="review-item col-md-10 card">
                                     <blockquote>“Henüz onaylanmış yorum yok”</blockquote>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                </div>
-
-                <!-- Sağ Chevron -->
-                <div class="swiper-icon swiper-arrow swiper-arrow-next position-absolute d-flex align-items-center">
-                    <svg class="chevron-right">
-                        <use xlink:href="#chevron-right" />
-                    </svg>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="swiper-pagination"></div>
-</section>
-
-
-<section id="testimonials" class="position-relative mb-4">
-    <div class="container">
-        <div class="row">
-            <div class="review-content position-relative">
-                <!-- Sol Chevron -->
-                <div class="swiper-icon swiper-arrow swiper-arrow-prev position-absolute d-flex align-items-center">
-                    <svg class="chevron-left">
-                        <use xlink:href="#chevron-left" />
-                    </svg>
-                </div>
-
-                <div class="swiper testimonial-swiper">
-                    <div class="swiper-wrapper">
-                        @if (Model.Comments != null && Model.Comments.Any())
-                        {
-                            var approvedComments = Model.Comments.Where(c => c.IsApproved).ToList();
-
-                            if (approvedComments.Any())
-                            {
-                                foreach (var comment in approvedComments)
-                                {
-                                    <div class="swiper-slide text-center d-flex justify-content-center">
-                                        <div class="review-item col-md-10 card">
-                                            <blockquote>“@comment.Content”</blockquote>
-                                            <div class="author-detail">
-                                                <div class="name text-dark text-uppercase pt-2">@comment.Author</div>
-                                                <div class="date text-muted">@comment.DateCommented.ToString("g")</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                            }
-                            else
-                            {
-                                <div class="swiper-slide text-center d-flex justify-content-center">
-                                    <div class="review-item col-md-10 card">
-                                        <blockquote>“Henüz onaylanmış yorum yok”</blockquote>
-                                    </div>
-                                </div>
-                            }
-                        }
-                        else
-                        {
-                            <div class="swiper-slide text-center d-flex justify-content-center">
-                                <div class="review-item col-md-10 card">
-                                    <blockquote>“Henüz yorum yok”</blockquote>
                                 </div>
                             </div>
                         }
@@ -332,24 +267,21 @@
     <!-- Swiper.js ve CSS Dosyalarını Ekleyin -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-        var swiper = new Swiper('.testimonial-swiper', {
-        // Slide'ların geçişi için gerekli ayarları burada yapıyoruz
-        slidesPerView: 1,  // Sadece 1 yorum göstermek için
-        spaceBetween: 10,   // Yorumlar arasındaki mesafe
-        navigation: {
-            nextEl: '.swiper-arrow-next',  // Sağ ok işareti
-            prevEl: '.swiper-arrow-prev',  // Sol ok işareti
-        },
-        autoplay: {
-            delay: 5000,  // 5 saniyede bir geçiş
-            disableOnInteraction: false,  // Kullanıcı etkileşimi sonrası autoplay'in durmaması için
-        },
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        loop: true,  // Sonsuz döngüde kaydırma
-    });
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var swiper = new Swiper('.testimonial-swiper', {
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-arrow-next',
+                    prevEl: '.swiper-arrow-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+            });
+        });
+    </script>
 
     <script>
         var swiper = new Swiper('.main-swiper', {
