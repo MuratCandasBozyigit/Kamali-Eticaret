@@ -107,34 +107,40 @@ namespace E_COMM_KAMALİ.Controllers
         #endregion
         public async Task<IActionResult> Index(int page = 1)
         {
-            var comments = await _commentService.GetAllAsync();
-            var commentsWithAuthors = comments.Select(c => new CommentViewModel
-            {
-                Content = c.Content,
-                Author = c.Author?.UserName ?? "Bilinmiyor",
-                DateCommented = c.DateCommented
-            }).ToList();
-
-            int pageSize = 4;
             try
             {
+                // Yorumları al ve yalnızca onaylı olanları filtrele
+                var comments = await _commentService.GetAllAsync();
+                var approvedComments = comments.Where(c => c.IsApproved).ToList();
+
+                // Yorumları ViewModel'e dönüştür
+                var commentsWithAuthors = approvedComments.Select(c => new CommentViewModel
+                {
+                    Content = c.Content,
+                    Author = c.Author?.UserName ?? "Bilinmiyor",  // Eğer Author null ise "Bilinmiyor" yaz
+                    DateCommented = c.DateCommented
+                }).ToList();
+
+                int pageSize = 4;  // Sayfa başına gösterilecek ürün sayısı
+
+                // Ürünleri al ve sayfalama işlemi yap
                 var products = await _productService.GetAllAsync();
                 var paginatedProducts = products.Skip((page - 1) * pageSize)
-                                                .Take(pageSize)
-                                                .ToList();
+                                                 .Take(pageSize)
+                                                 .ToList();
 
+                // ViewModel oluştur
                 var viewModel = new IndexViewModel
                 {
-                    Comments = commentsWithAuthors,
+                    Comments = commentsWithAuthors,  // Yorumları ViewModel'e atıyoruz
                     Products = paginatedProducts
                 };
 
+                // Sayfa bilgilerini View'a gönder
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = Math.Ceiling((double)products.Count() / pageSize);
 
-
-
-                // Tam sayfa görünüm döndür
+                // Sayfa görünümünü döndür
                 return View(viewModel);
             }
             catch (Exception ex)
