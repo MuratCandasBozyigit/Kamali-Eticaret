@@ -84,8 +84,6 @@ namespace E_COMM_KAMALİ.Controllers
             return Ok("Yorum onay bekliyor.");
         }
 
-
-
         public async Task<IActionResult> PendingComments()
         {
             var pendingComments = await _commentService.GetPendingCommentsAsync();
@@ -117,7 +115,8 @@ namespace E_COMM_KAMALİ.Controllers
                 var commentsWithAuthors = approvedComments.Select(c => new CommentViewModel
                 {
                     Content = c.Content,
-                    Author = c.Author?.UserName ?? "Bilinmiyor",  // Eğer Author null ise "Bilinmiyor" yaz
+                    AuthorName=c.AuthorName ??"Bilinmiyor",
+                    Author = c.Author?.FullName ?? "Bilinmiyor",  // Eğer Author null ise "Bilinmiyor" yaz
                     DateCommented = c.DateCommented
                 }).ToList();
 
@@ -126,14 +125,14 @@ namespace E_COMM_KAMALİ.Controllers
                 // Ürünleri al ve sayfalama işlemi yap
                 var products = await _productService.GetAllAsync();
                 var paginatedProducts = products.Skip((page - 1) * pageSize)
-                                                 .Take(pageSize)
-                                                 .ToList();
+                                                .Take(pageSize)
+                                                .ToList();
 
                 // ViewModel oluştur
                 var viewModel = new IndexViewModel
                 {
                     Comments = commentsWithAuthors,  // Yorumları ViewModel'e atıyoruz
-                    Products = paginatedProducts
+                    Products = paginatedProducts     // Ürünleri ViewModel'e atıyoruz
                 };
 
                 // Sayfa bilgilerini View'a gönder

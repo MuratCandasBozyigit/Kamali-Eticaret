@@ -39,8 +39,6 @@ public class ProfileController : Controller
         return View(viewModel);
     }
 
-
-
     [HttpPost]
     public async Task<IActionResult> Edit(ProfileViewModel model)
     {
