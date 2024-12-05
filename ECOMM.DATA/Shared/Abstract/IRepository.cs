@@ -10,6 +10,9 @@ namespace ECOMM.Data.Shared.Abstract
     public interface IRepository<T> where T : BaseModel
     {
         IQueryable<T> Query();
+        Task<IQueryable<T>> GetAllAsyncQueryComment(
+    Expression<Func<T, bool>> predicate = null,
+    Func<IQueryable<T>, IQueryable<T>> include = null);
         Task<IQueryable<T>> GetAllAsyncQuery();
         Task<IEnumerable<T>> GetAllAsync(); // Tüm verileri getirir
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate); // Şarta göre verileri getirir

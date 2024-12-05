@@ -1,5 +1,6 @@
 ﻿using ECOMM.Business.Abstract;
 using ECOMM.Core.Models;
+using Microsoft.EntityFrameworkCore;
 using ECOMM.Data.Shared.Abstract;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,13 @@ namespace ECOMM.Business.Concrete
 
         public async Task<IEnumerable<Comment>> GetPendingCommentsAsync()
         {
-            return await _commentRepository.GetAllAsync(c => !c.IsApproved); // Onaylanmamış yorumlar
+            return await _commentRepository.GetAllAsyncQueryComment(
+                c => !c.IsApproved,  // Filter for unapproved comments
+                include: q => q.Include(c => c.Author).Include(c => c.Product)  // Include Author and Product
+            );
         }
+
+
 
         public async Task<Comment> GetByIdAsync(int id)
         {

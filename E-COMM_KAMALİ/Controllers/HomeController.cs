@@ -81,7 +81,7 @@ namespace E_COMM_KAMALİ.Controllers
             // Yorum ekle
             await _commentService.AddAsync(comment);
 
-            return Ok("Yorum başarıyla eklendi.");
+            return Ok("Yorum onay bekliyor.");
         }
 
 
