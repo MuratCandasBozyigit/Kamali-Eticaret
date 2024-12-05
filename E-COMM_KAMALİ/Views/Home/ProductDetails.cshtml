@@ -93,7 +93,7 @@
     </div>
 </div>
 
-<div class="container mt-4">
+@*<div class="container mt-4">
     <div class="row justify-content-center align-items-center">
         <!-- Sol Yön Okları -->
            <div class="col-auto">
@@ -104,7 +104,7 @@
 
         <div class="col-10">
           @*   <h1 style=" text-align: center;"></h1> *@
-        @*     <p class="all_products" onclick="window.location.href='@Url.Action("Products", "Home")'">Tüm Ürünlerimiz</p> *@
+        @*     <p class="all_products" onclick="window.location.href='@Url.Action("Products", "Home")'">Tüm Ürünlerimiz</p>
             <div class="row g-3 justify-content-center">
 
 
@@ -112,7 +112,7 @@
                 @foreach (var product in Model.Products)
                 {
 
-                    <div class="col-6 @* col-md-3  *@col-lg-3 custom-col">
+                    <div class="col-6 @* col-md-3col-lg-3 custom-col">
 
                         <div class="card mb-3 product-card">
                             <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
@@ -155,7 +155,7 @@
             </a>
         </div> 
     </div>
-</div>
+</div>*@
 
 /*Yorum Kanksss*/
 <form asp-action="AddComment" method="post">
