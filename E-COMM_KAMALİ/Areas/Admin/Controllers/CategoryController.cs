@@ -11,6 +11,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
     [Route("Admin/[controller]")]
     public class CategoryController : Controller
     {
+        #region Services
         private readonly ICategoryService _categoryService;
         private readonly ISubCategoryService _subCategoryService;
 
@@ -18,7 +19,8 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         {
             _categoryService = categoryService;
             _subCategoryService = subCategoryService;
-        }
+        } 
+        #endregion
 
         #region Kategori İşlemleri
 
