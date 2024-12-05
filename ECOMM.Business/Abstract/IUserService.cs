@@ -16,5 +16,6 @@ namespace ECOMM.Business.Abstract
         Task<List<User>> GetAllUsersAsync();
         Task<User> DeleteUserAsync(string userId);
         Task<User> UpdateUserAsync(User user);
+        Task<User> GetUserByUserNameAsync(string userName);
     }
 }

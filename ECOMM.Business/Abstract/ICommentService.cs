@@ -12,5 +12,6 @@ namespace ECOMM.Business.Abstract
         Task<IEnumerable<Comment>> GetPendingCommentsAsync();
         Task ApproveCommentAsync(int id);
         Task RejectCommentAsync(int id);
+        Task<IEnumerable<Comment>> GetUserCommentsAsync(string userId);
     }
 }

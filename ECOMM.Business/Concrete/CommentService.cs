@@ -1,7 +1,9 @@
 ﻿using ECOMM.Business.Abstract;
 using ECOMM.Core.Models;
-using ECOMM.Data.Shared.Abstract;
+using Microsoft.EntityFrameworkCore;
+using ECOMM.Data.Shared.Abstract;using System.Linq.Expressions;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,8 +22,27 @@ namespace ECOMM.Business.Concrete
 
         public async Task<IEnumerable<Comment>> GetPendingCommentsAsync()
         {
-            return await _commentRepository.GetAllAsync(c => !c.IsApproved); // Onaylanmamış yorumlar
+            return await _commentRepository.GetAllAsyncQueryComment(
+                c => !c.IsApproved,  // Filter for unapproved comments
+                include: q => q.Include(c => c.Author).Include(c => c.Product)  // Include Author and Product
+            );
         }
+
+        public async Task<IEnumerable<Comment>> GetUserCommentsAsync(string userId)
+        {
+            var commentsQuery = await _commentRepository.GetAllAsyncQueryComment(
+                predicate: c => c.AuthorId == userId, // Yorumları kullanıcıya göre filtrele
+                include: query => query.Include(c => c.Product) // Yorumlar ile ilgili ürün bilgisini dahil et
+            );
+
+            // IQueryable üzerinde sorgu yapmamız gerektiği için ToListAsync() çağırarak veriyi alıyoruz
+            var comments = await commentsQuery.ToListAsync();
+
+            return comments;
+        }
+
+
+
 
         public async Task<Comment> GetByIdAsync(int id)
         {

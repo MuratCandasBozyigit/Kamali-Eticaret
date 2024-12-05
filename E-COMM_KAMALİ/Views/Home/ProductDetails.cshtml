@@ -1,4 +1,5 @@
 ﻿@model ECOMM.Core.ViewModels.ProductDetailPageViewModel
+
 @{
     ViewData["Title"] = "Ürün Detayı";
 }
@@ -158,12 +159,27 @@
 </div>*@
 
 /*Yorum Kanksss*/
-<form  asp-action="AddComment" method="post">
-    <textarea name="content" required placeholder="Yorumunuzu yazın"></textarea>
-    <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+
+    <form asp-action="AddComment" method="post">
+        <textarea name="content" required placeholder="Yorumunuzu yazın"></textarea>
+        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+        <button type="submit">Yorum Yap</button>
+    </form>
+
+
+
+
+
+ 
+@* <form method="post" action="/Home/AddComment">
+    <input type="hidden" name="productId" value="1" />
+    <label for="content">Yorum:</label>
+    <textarea id="content" name="content"></textarea>
+    <label for="userName">Kullanıcı Adı:</label>
+    <input id="userName" name="userName" type="text" />
     <button type="submit">Yorum Yap</button>
 </form>
-
+ *@
 
 @section Scripts {
     <script>

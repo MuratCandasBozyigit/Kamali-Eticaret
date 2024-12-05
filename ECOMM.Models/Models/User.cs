@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECOMM.Core.Models
 {
-    public class User :IdentityUser
+    public class User : IdentityUser
     {
 
         public string  FullName { get; set; }
@@ -17,5 +17,8 @@ namespace ECOMM.Core.Models
         public virtual ICollection<ApplicationUserRole> UserRoles { get; set; } = new List<ApplicationUserRole>();
 
         public List<Orders> UserOrders { get; set; } = new List<Orders>();
+
+        //  public Comment Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
     }
 }

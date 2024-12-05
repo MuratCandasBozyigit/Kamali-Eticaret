@@ -152,7 +152,6 @@
     </div>
 </div>
 
-
   </br>
   </br>
 <section id="testimonials" class="position-relative mb-4">
@@ -176,7 +175,7 @@
                                     <div class="review-item col-md-10 card">
                                         <blockquote>“@comment.Content”</blockquote>
                                         <div class="author-detail">
-                                            <div class="name text-dark text-uppercase pt-2">@comment.Author</div>
+                                            <div class="name text-dark text-uppercase pt-2">@comment.AuthorName</div>
                                             <div class="date text-muted">@comment.DateCommented.ToString("g")</div>
                                         </div>
                                     </div>
@@ -187,7 +186,7 @@
                         {
                             <div class="swiper-slide text-center d-flex justify-content-center">
                                 <div class="review-item col-md-10 card">
-                                    <blockquote>“Henüz yorum yok”</blockquote>
+                                    <blockquote>“Henüz onaylanmış yorum yok”</blockquote>
                                 </div>
                             </div>
                         }
@@ -268,6 +267,22 @@
     <!-- Swiper.js ve CSS Dosyalarını Ekleyin -->
     <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var swiper = new Swiper('.testimonial-swiper', {
+                loop: true,
+                navigation: {
+                    nextEl: '.swiper-arrow-next',
+                    prevEl: '.swiper-arrow-prev',
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+            });
+        });
+    </script>
+
     <script>
         var swiper = new Swiper('.main-swiper', {
             loop: true,

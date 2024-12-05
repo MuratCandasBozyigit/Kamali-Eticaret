@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using ECOMM.Core.ViewModels;
 using ECOMM.Core.Models;
 using ECOMM.Business.Concrete;
+using Microsoft.AspNetCore.Identity; 
+//using Microsoft.AspNet.Identity;
 //public static class HttpRequestExtensions
 //{
 //    public static bool IsAjaxRequest(this HttpRequest request)
@@ -21,6 +23,8 @@ namespace E_COMM_KAMALİ.Controllers
     {
         #region Servisler 
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<User> _userManager;
+
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
         // private readonly IFavouritesService _favouritesService;
@@ -37,41 +41,48 @@ namespace E_COMM_KAMALİ.Controllers
             _commentService = commentService;
             _userService = userService;
             this.categoryService = categoryService;
+        
         }
         #endregion
         #region Comment
-        public async Task<IActionResult> AddComment(Comment comment)
+        [HttpPost]
+        public async Task<IActionResult> AddComment(string productId, string content)
         {
-            if (comment == null)
-            {
-                return BadRequest("Yorum bilgisi eksik.");
-            }
-            if (!User.Identity.IsAuthenticated)
+            // Kullanıcının kimliği doğrulandıysa User.Identity.Name ile al
+            var userName = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(userName))
             {
                 return RedirectToAction("Login", "Account");
             }
-            // Kullanıcı ID'sini al
-            // Kullanıcı adını al
-            var userName = User.Identity.Name;
-            if (string.IsNullOrEmpty(userName))
+
+            // Kullanıcıyı UserService ile bul
+            var user = await _userService.GetUserByUserNameAsync(userName);
+
+            if (user == null)
             {
-                return BadRequest("Kullanıcı adı alınamadı.");
+                // Eğer kullanıcı bulunamazsa, hata mesajı döndür
+                return BadRequest("Kullanıcı bulunamadı.");
             }
 
-            comment.AuthorId = userName;
-            comment.DateCommented = DateTime.Now;
+            // Kullanıcı adı ya da tam adı al
+            var fullName = user.FullName ?? user.UserName; // FullName yoksa UserName kullan
 
-            // Yorum ekleme işlemi
-            var result = await _commentService.AddAsync(comment);
-            if (result == null)
+            // Yeni yorum oluştur
+            var comment = new Comment
             {
-                return BadRequest("Yorum eklenemedi.");
-            }
+                Content = content,
+                AuthorId = user.Id,
+                AuthorName = fullName, // Tam adı kullanıyoruz
+                ProductId = int.Parse(productId),
+                DateCommented = DateTime.Now
+            };
 
-            return Ok("Yorum başarıyla eklendi.");
+            // Yorum ekle
+            await _commentService.AddAsync(comment);
+
+            return Ok("Yorum onay bekliyor.");
         }
-
-
 
         public async Task<IActionResult> PendingComments()
         {
@@ -94,34 +105,41 @@ namespace E_COMM_KAMALİ.Controllers
         #endregion
         public async Task<IActionResult> Index(int page = 1)
         {
-            var comments = await _commentService.GetAllAsync();
-            var commentsWithAuthors = comments.Select(c => new CommentViewModel
-            {
-                Content = c.Content,
-                Author = c.Author?.UserName ?? "Bilinmiyor",
-                DateCommented = c.DateCommented
-            }).ToList();
-
-            int pageSize = 4;
             try
             {
+                // Yorumları al ve yalnızca onaylı olanları filtrele
+                var comments = await _commentService.GetAllAsync();
+                var approvedComments = comments.Where(c => c.IsApproved).ToList();
+
+                // Yorumları ViewModel'e dönüştür
+                var commentsWithAuthors = approvedComments.Select(c => new CommentViewModel
+                {
+                    Content = c.Content,
+                    AuthorName=c.AuthorName ??"Bilinmiyor",
+                    Author = c.Author?.FullName ?? "Bilinmiyor",  // Eğer Author null ise "Bilinmiyor" yaz
+                    DateCommented = c.DateCommented
+                }).ToList();
+
+                int pageSize = 4;  // Sayfa başına gösterilecek ürün sayısı
+
+                // Ürünleri al ve sayfalama işlemi yap
                 var products = await _productService.GetAllAsync();
                 var paginatedProducts = products.Skip((page - 1) * pageSize)
                                                 .Take(pageSize)
                                                 .ToList();
 
+                // ViewModel oluştur
                 var viewModel = new IndexViewModel
                 {
-                    Comments = commentsWithAuthors,
-                    Products = paginatedProducts
+                    Comments = commentsWithAuthors,  // Yorumları ViewModel'e atıyoruz
+                    Products = paginatedProducts     // Ürünleri ViewModel'e atıyoruz
                 };
 
+                // Sayfa bilgilerini View'a gönder
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = Math.Ceiling((double)products.Count() / pageSize);
 
-
-
-                // Tam sayfa görünüm döndür
+                // Sayfa görünümünü döndür
                 return View(viewModel);
             }
             catch (Exception ex)
@@ -130,6 +148,7 @@ namespace E_COMM_KAMALİ.Controllers
                 return StatusCode(500, "Ürünler yüklenirken bir hata oluştu.");
             }
         }
+
         public async Task<IActionResult> Products(int productId, int categoryId)
         {
             try
@@ -179,7 +198,6 @@ namespace E_COMM_KAMALİ.Controllers
             return View(categories);
         }
 
-
         public async Task<IActionResult> ProductDetails(int productId, int categoryId)
         {
             var category = await _productService.GetByCategoryIdAsync(categoryId);
@@ -226,11 +244,6 @@ namespace E_COMM_KAMALİ.Controllers
 
             return View(viewModel);
         }
-
-
-
-
-
 
         #region s
 

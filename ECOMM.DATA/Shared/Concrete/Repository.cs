@@ -31,6 +31,27 @@ namespace ECOMM.Data.Shared.Concrete
         {
             return await Task.FromResult(_context.Set<T>()); // IQueryable döndürme
         }
+        public async Task<IQueryable<T>> GetAllAsyncQueryComment(
+    Expression<Func<T, bool>> predicate = null,
+    Func<IQueryable<T>, IQueryable<T>> include = null)
+        {
+            IQueryable<T> query = _context.Set<T>();
+
+            // Apply the filter predicate if provided
+            if (predicate != null)
+            {
+                query = query.Where(predicate);
+            }
+
+            // Apply the include logic if provided
+            if (include != null)
+            {
+                query = include(query);
+            }
+
+            return query;
+        }
+
 
         public async Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate)
         {
