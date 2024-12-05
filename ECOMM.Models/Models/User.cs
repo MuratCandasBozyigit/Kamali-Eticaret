@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ECOMM.Core.Models
 {
-    public class User :IdentityUser
+    public class User : IdentityUser
     {
 
         public string  FullName { get; set; }

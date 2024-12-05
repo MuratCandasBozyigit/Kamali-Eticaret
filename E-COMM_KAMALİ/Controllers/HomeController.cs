@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using ECOMM.Core.ViewModels;
 using ECOMM.Core.Models;
 using ECOMM.Business.Concrete;
+using Microsoft.AspNetCore.Identity; 
+//using Microsoft.AspNet.Identity;
 //public static class HttpRequestExtensions
 //{
 //    public static bool IsAjaxRequest(this HttpRequest request)
@@ -21,6 +23,8 @@ namespace E_COMM_KAMALİ.Controllers
     {
         #region Servisler 
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<User> _userManager;
+
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
         // private readonly IFavouritesService _favouritesService;
@@ -37,36 +41,45 @@ namespace E_COMM_KAMALİ.Controllers
             _commentService = commentService;
             _userService = userService;
             this.categoryService = categoryService;
+        
         }
         #endregion
         #region Comment
-        public async Task<IActionResult> AddComment(Comment comment)
+        [HttpPost]
+        public async Task<IActionResult> AddComment(string productId, string content)
         {
-            if (comment == null)
-            {
-                return BadRequest("Yorum bilgisi eksik.");
-            }
-            if (!User.Identity.IsAuthenticated)
+            // Kullanıcının kimliği doğrulandıysa User.Identity.Name ile al
+            var userName = User.Identity.Name;
+
+            if (string.IsNullOrEmpty(userName))
             {
                 return RedirectToAction("Login", "Account");
             }
-            // Kullanıcı ID'sini al
-            // Kullanıcı adını al
-            var userName = User.Identity.Name;
-            if (string.IsNullOrEmpty(userName))
+
+            // Kullanıcıyı UserService ile bul
+            var user = await _userService.GetUserByUserNameAsync(userName);
+
+            if (user == null)
             {
-                return BadRequest("Kullanıcı adı alınamadı.");
+                // Eğer kullanıcı bulunamazsa, hata mesajı döndür
+                return BadRequest("Kullanıcı bulunamadı.");
             }
 
-            comment.AuthorId = userName;
-            comment.DateCommented = DateTime.Now;
+            // Kullanıcı adı ya da tam adı al
+            var fullName = user.FullName ?? user.UserName; // FullName yoksa UserName kullan
 
-            // Yorum ekleme işlemi
-            var result = await _commentService.AddAsync(comment);
-            if (result == null)
+            // Yeni yorum oluştur
+            var comment = new Comment
             {
-                return BadRequest("Yorum eklenemedi.");
-            }
+                Content = content,
+                AuthorId = user.Id,
+                AuthorName = fullName, // Tam adı kullanıyoruz
+                ProductId = int.Parse(productId),
+                DateCommented = DateTime.Now
+            };
+
+            // Yorum ekle
+            await _commentService.AddAsync(comment);
 
             return Ok("Yorum başarıyla eklendi.");
         }

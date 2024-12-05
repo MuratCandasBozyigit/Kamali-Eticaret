@@ -10,6 +10,7 @@ namespace ECOMM.Core.ViewModels
     {
         public string Content { get; set; }
         public string Author { get; set; }
+        public bool IsApproved { get; set; } = false;
         public DateTime DateCommented { get; set; }
     }
 

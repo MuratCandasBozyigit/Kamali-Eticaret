@@ -1,5 +1,6 @@
 ﻿using ECOMM.Business.Abstract;
 using ECOMM.Business.Concrete;
+using ECOMM.Core.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using static ECOMM.Web.Areas.Admin.Controllers.ProductController;
