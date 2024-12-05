@@ -152,7 +152,6 @@
     </div>
 </div>
 
-
   </br>
   </br>
 <section id="testimonials" class="position-relative mb-4">
@@ -165,47 +164,47 @@
                         <use xlink:href="#chevron-left" />
                     </svg>
                 </div>
-           
-                    <div class="swiper testimonial-swiper">
-                        <div class="swiper-wrapper">
-                            @if (Model.Comments != null && Model.Comments.Any())
+
+                <div class="swiper testimonial-swiper">
+                    <div class="swiper-wrapper">
+                        @if (Model.Comments != null && Model.Comments.Any())
+                        {
+                            var approvedComments = Model.Comments.Where(c => c.IsApproved).ToList();
+
+                            if (approvedComments.Any())
                             {
-                                foreach (var comment in Model.Comments)
-                                {
-                                    // Check if the comment is approved
-                                    if (comment.IsApproved)
-                                    {
-                                        <div class="swiper-slide text-center d-flex justify-content-center">
-                                            <div class="review-item col-md-10 card">
-                                                <blockquote>“@comment.Content”</blockquote>
-                                                <div class="author-detail">
-                                                    <div class="name text-dark text-uppercase pt-2">@comment.Author</div>
-                                                    <div class="date text-muted">@comment.DateCommented.ToString("g")</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                else
+                                foreach (var comment in approvedComments)
                                 {
                                     <div class="swiper-slide text-center d-flex justify-content-center">
                                         <div class="review-item col-md-10 card">
-                                            <blockquote>“Henüz onaylanmış yorum yok”</blockquote>
+                                            <blockquote>“@comment.Content”</blockquote>
+                                            <div class="author-detail">
+                                                <div class="name text-dark text-uppercase pt-2">@comment.Author</div>
+                                                <div class="date text-muted">@comment.DateCommented.ToString("g")</div>
+                                            </div>
                                         </div>
                                     </div>
-                                }
                                 }
                             }
                             else
                             {
                                 <div class="swiper-slide text-center d-flex justify-content-center">
                                     <div class="review-item col-md-10 card">
-                                        <blockquote>“Henüz  yorum yok”</blockquote>
+                                        <blockquote>“Henüz onaylanmış yorum yok”</blockquote>
                                     </div>
                                 </div>
                             }
-                        </div>
+                        }
+                        else
+                        {
+                            <div class="swiper-slide text-center d-flex justify-content-center">
+                                <div class="review-item col-md-10 card">
+                                    <blockquote>“Henüz yorum yok”</blockquote>
+                                </div>
+                            </div>
+                        }
                     </div>
-            
+                </div>
 
                 <!-- Sağ Chevron -->
                 <div class="swiper-icon swiper-arrow swiper-arrow-next position-absolute d-flex align-items-center">

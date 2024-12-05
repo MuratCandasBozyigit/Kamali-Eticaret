@@ -143,6 +143,7 @@ namespace E_COMM_KAMALİ.Controllers
                 return StatusCode(500, "Ürünler yüklenirken bir hata oluştu.");
             }
         }
+
         public async Task<IActionResult> Products(int productId, int categoryId)
         {
             try
@@ -192,7 +193,6 @@ namespace E_COMM_KAMALİ.Controllers
             return View(categories);
         }
 
-
         public async Task<IActionResult> ProductDetails(int productId, int categoryId)
         {
             var category = await _productService.GetByCategoryIdAsync(categoryId);
@@ -239,11 +239,6 @@ namespace E_COMM_KAMALİ.Controllers
 
             return View(viewModel);
         }
-
-
-
-
-
 
         #region s
 
