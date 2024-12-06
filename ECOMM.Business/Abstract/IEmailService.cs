@@ -9,9 +9,11 @@ namespace ECOMM.Business.Abstract
 {
     public interface IEmailService
     {
-        Task SendEmailAsync(string toEmail, string subject, string body);
+        Task SendVerificationCodeAsync(string email, string verificationCode);
+    //    Task SendEmailAsync(string toEmail, string subject, string body);
         Task AddVerificationCodeAsync(EmailVerification emailVerification);
         Task<EmailVerification> GetVerificationCodeAsync(string code);
+        Task MarkCodeAsUsedAsync(string verificationCode);
     }
 
 }
