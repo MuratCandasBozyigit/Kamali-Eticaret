@@ -13,6 +13,7 @@ namespace ECOMM.Core.Models
         public string VerificationCode { get; set; }
         public DateTime CreatedAt { get; set; } // Kodu oluşturma zamanı
         public DateTime ExpirationTime { get; set; } // Kodun geçerlilik süresi
+        public bool IsUsed { get; set; }
     }
 
 }

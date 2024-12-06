@@ -37,8 +37,8 @@ builder.Services.AddIdentity<User, ApplicationRole>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 8;
-    options.Password.RequireUppercase = false;
-    options.Password.RequireLowercase = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
     options.User.RequireUniqueEmail = true;
     options.SignIn.RequireConfirmedPhoneNumber = false;
     options.SignIn.RequireConfirmedEmail = false;
