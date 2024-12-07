@@ -1,0 +1,33 @@
+﻿@model ECOMM.Core.ViewModels.VerifyCodeViewModel
+
+@{
+    ViewData["Title"] = "Doğrulama Kodu";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form method="post" asp-action="VerifyCode">
+    <div class="form-group">
+        <label for="Email">E-posta Adresi</label>
+        <input type="email" id="Email" name="Email" class="form-control" value="@Model.Email" readonly />
+    </div>
+    <div class="form-group">
+        <label for="VerificationCode">Doğrulama Kodu</label>
+        <input type="text" id="VerificationCode" name="VerificationCode" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Doğrula</button>
+</form>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success mt-3">
+        @TempData["Message"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger mt-3">
+        @TempData["Error"]
+    </div>
+}
