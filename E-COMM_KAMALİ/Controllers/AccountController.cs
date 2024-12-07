@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using ECOMM.Core.Models;
 using System.Threading.Tasks;
 using ECOMM.Business.Abstract;
-using Microsoft.EntityFrameworkCore;
 using System;
+using ECOMM.Business.Concrete;
 
 namespace ECOMM.Web.Controllers
 {
@@ -28,14 +28,10 @@ namespace ECOMM.Web.Controllers
 
         private string GenerateVerificationCode()
         {
-            var random = new System.Security.Cryptography.RNGCryptoServiceProvider();
-            byte[] byteArray = new byte[4];
-            random.GetBytes(byteArray);
-            int number = BitConverter.ToInt32(byteArray, 0) & 0x7FFFFFFF;
-            return (number % 1000000).ToString("D6"); // 6 haneli doğrulama kodu
+            var random = new Random();
+            return random.Next(100000, 999999).ToString(); // 6 haneli kod
         }
 
-        // Doğrulama kodu gönderme
         [HttpPost]
         public async Task<IActionResult> SendVerificationCode(string email)
         {
@@ -53,7 +49,7 @@ namespace ECOMM.Web.Controllers
             }
 
             var code = GenerateVerificationCode();
-            var emailVerification = new EmailVerification
+            var emailVerification = new Business.Concrete.EmailVerification
             {
                 UserId = user.Id,
                 VerificationCode = code,
@@ -65,73 +61,54 @@ namespace ECOMM.Web.Controllers
             await _emailService.AddVerificationCodeAsync(emailVerification);
             await _emailService.SendVerificationCodeAsync(email, code);
 
-            return RedirectToAction("VerifyCode", new { email });
+            TempData["Email"] = email;
+            return RedirectToAction("VerifyCode");
         }
-        // Kod doğrulama
+
+        [HttpGet]
+        public IActionResult VerifyCode()
+        {
+            return View(new VerifyCodeViewModel { Email = TempData["Email"]?.ToString() });
+        }
+
         [HttpPost]
         public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var emailVerification = await _emailService.GetVerificationCodeAsync(model.VerificationCode);
-                if (emailVerification != null)
+                if (emailVerification != null && emailVerification.ExpirationTime > DateTime.Now && !emailVerification.IsUsed)
                 {
                     await _emailService.MarkCodeAsUsedAsync(model.VerificationCode);
 
                     var user = await _userManager.FindByEmailAsync(model.Email);
-                    if (user != null && !user.EmailConfirmed)
+                    if (user != null)
                     {
-                        user.EmailConfirmed = true;
-                        await _userManager.UpdateAsync(user);
+                        TempData["Email"] = model.Email;
+
+                        // Kullanıcı doğrulandıktan sonra işlem yönlendirmesi
+                        if (!user.EmailConfirmed)
+                        {
+                            user.EmailConfirmed = true;
+                            await _userManager.UpdateAsync(user);
+                        }
+
+                        // Şifre değişikliği için yönlendirme kontrolü
+                        if (TempData["ChangePassword"]?.ToString() == "true")
+                        {
+                            return RedirectToAction("ChangePassword", new { username = user.Email });
+                        }
+
+                        return RedirectToAction("Login");
                     }
+                }
 
-                    await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Geçersiz veya süresi dolmuş doğrulama kodu.");
-                }
+                ModelState.AddModelError("", "Geçersiz veya süresi dolmuş doğrulama kodu.");
             }
 
             return View(model);
         }
-        // Email ile giriş yapılacak sayfa
-        public IActionResult VerifyEmail()
-        {
-            return View();
-        }
 
-        [HttpPost]
-        public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
-                {
-                    var code = GenerateVerificationCode();
-                    var emailVerification = new EmailVerification
-                    {
-                        UserId = user.Id,
-                        VerificationCode = code,
-                        CreatedAt = DateTime.Now,
-                        ExpirationTime = DateTime.Now.AddMinutes(15),
-                        IsUsed = false
-                    };
-
-                    await _emailService.AddVerificationCodeAsync(emailVerification);
-                    await _emailService.SendVerificationCodeAsync(model.Email, code);
-
-                    return RedirectToAction("VerifyCode", new { email = model.Email });
-                }
-                else
-                {
-                    ModelState.AddModelError("", "E-posta adresi bulunamadı.");
-                }
-            }
-            return View(model);
-        }
         #endregion
 
         #region Account
@@ -144,21 +121,20 @@ namespace ECOMM.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-
                 if (user == null)
                 {
                     ModelState.AddModelError("", "E-posta adresi bulunamadı.");
                     return View(model);
                 }
 
-                // Kullanıcının e-posta doğrulaması yapılmamışsa giriş yapılmasın
                 if (!user.EmailConfirmed)
                 {
-                    ModelState.AddModelError("", "Hesabınız henüz doğrulanmadı. Lütfen e-posta adresinizi doğrulayın.");
-                    return View(model);
+                    await SendVerificationCode(user.Email);
+                    TempData["Message"] = "Lütfen e-posta doğrulama kodunu girin.";
+                    return RedirectToAction("VerifyCode");
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
@@ -166,6 +142,7 @@ namespace ECOMM.Web.Controllers
 
                 ModelState.AddModelError("", "E-posta veya şifre yanlış.");
             }
+
             return View(model);
         }
 
@@ -180,13 +157,14 @@ namespace ECOMM.Web.Controllers
                 {
                     FullName = model.Name,
                     Email = model.Email,
-                    UserName = model.Email,
+                    UserName = model.Email
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Login", "Account");
+                    TempData["Email"] = model.Email;
+                    return RedirectToAction("SendVerificationCode", new { email = model.Email });
                 }
 
                 foreach (var error in result.Errors)
@@ -197,22 +175,13 @@ namespace ECOMM.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        }
-
-       
-  
-
-        // Şifre değiştirme
         public IActionResult ChangePassword(string username)
         {
             if (string.IsNullOrEmpty(username))
             {
-                return RedirectToAction("VerifyEmail", "Account");
+                return RedirectToAction("VerifyCode");
             }
+
             return View(new ChangePasswordViewModel { Email = username });
         }
 
@@ -222,35 +191,33 @@ namespace ECOMM.Web.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user != null)
+                if (user == null)
                 {
-                    var result = await _userManager.RemovePasswordAsync(user);
-                    if (result.Succeeded)
-                    {
-                        result = await _userManager.AddPasswordAsync(user, model.NewPassword);
-                        return RedirectToAction("Login", "Account");
-                    }
-                    else
-                    {
-                        foreach (var error in result.Errors)
-                        {
-                            ModelState.AddModelError("", error.Description);
-                        }
-                    }
+                    ModelState.AddModelError("", "Kullanıcı bulunamadı.");
                     return View(model);
                 }
-                else
+
+                var removeResult = await _userManager.RemovePasswordAsync(user);
+                if (removeResult.Succeeded)
                 {
-                    ModelState.AddModelError("", "Email bulunamadı.");
-                    return View(model);
+                    var addResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
+                    if (addResult.Succeeded)
+                    {
+                        TempData["Message"] = "Şifre başarıyla değiştirildi.";
+                        return RedirectToAction("Login");
+                    }
                 }
+
+                ModelState.AddModelError("", "Şifre değiştirilemedi.");
             }
-            ModelState.AddModelError("", "Bir şeyler ters gitti. Tekrar deneyin.");
+
             return View(model);
         }
-
-      
-
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
         #endregion
     }
 }
