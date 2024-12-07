@@ -31,7 +31,23 @@
     }
 
     <button type="submit" class="btn btn-primary">Doğrula</button>
+
+  
 </form>
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+    if (!string.IsNullOrEmpty(successMessage))
+    {
+        <div class="alert alert-success">
+            @successMessage
+        </div>
+    }
+}
+<form method="post" asp-controller="Account" asp-action="SendVerificationCode">
+    <input type="hidden" name="email" value="@Model.Email" /> <!-- Email adresini gizli alanda taşıyoruz -->
+    <button type="submit">Yeniden Kod Gönder</button>
+</form>
+
 
 @section Scripts {
     @{

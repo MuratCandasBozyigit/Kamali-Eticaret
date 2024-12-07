@@ -61,7 +61,8 @@ namespace ECOMM.Web.Controllers
 
             await _emailService.AddVerificationCodeAsync(emailVerification);
             await _emailService.SendVerificationCodeAsync(email, code);
-
+            // Kullanıcıya bir başarı mesajı göndermek için TempData'yı kullanıyoruz
+            TempData["SuccessMessage"] = "Kod gönderildi! Lütfen e-posta kutunuzu kontrol edin.";
             TempData["Email"] = email;
             return RedirectToAction("VerifyCode");
         }
