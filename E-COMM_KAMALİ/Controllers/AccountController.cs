@@ -66,61 +66,54 @@ namespace ECOMM.Web.Controllers
             TempData["Email"] = email;
             return RedirectToAction("VerifyCode");
         }
-        [HttpGet]
 
+        [HttpGet]
         public IActionResult VerifyCode()
         {
             return View(new VerifyCodeViewModel { Email = TempData["Email"]?.ToString() });
         }
 
         [HttpPost]
-        public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
+        public async Task<IActionResult> VerifyCode(string verificationCode)
         {
-            if (ModelState.IsValid)
+            if (TempData["UserId"] == null)
             {
-                // Veritabanında doğrulama kodunu kontrol et
-                var emailVerification = await _emailService.GetVerificationCodeAsync(model.VerificationCode);
-
-                if (emailVerification != null)
-                {
-                    // Kodun süresi dolmuş mu?
-                    if (emailVerification.ExpirationTime < DateTime.Now)
-                    {
-                        ModelState.AddModelError("", "Doğrulama kodu süresi dolmuş.");
-                    }
-                    else
-                    {
-                        // Kod geçerli, kullanılmadı
-                        await _emailService.MarkCodeAsUsedAsync(model.VerificationCode); // Kullanıldı olarak işaretle
-
-                        var user = await _userManager.FindByEmailAsync(model.Email);
-                        if (user != null)
-                        {
-                            // Kullanıcı doğrulandıktan sonra işlem yönlendirmesi
-                            if (!user.EmailConfirmed)
-                            {
-                                user.EmailConfirmed = true;
-                                await _userManager.UpdateAsync(user);
-                            }
-
-                            // Şifre değişikliği için yönlendirme kontrolü
-                            if (TempData["ChangePassword"]?.ToString() == "true")
-                            {
-                                return RedirectToAction("ChangePassword", new { username = user.Email });
-                            }
-
-                            // Başarılı doğrulama sonrasında ana sayfaya yönlendir
-                            return RedirectToAction("Index", "Home");
-                        }
-                    }
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Geçersiz doğrulama kodu.");
-                }
+                return RedirectToAction("Login"); // Giriş yapılmadan doğrulama sayfasına gelinemez
             }
 
-            return View(model);
+            var userId = (string)TempData["UserId"];
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Geçersiz kullanıcı.");
+                return RedirectToAction("Login");
+            }
+
+            // Veritabanında doğrulama kodunu ara
+            var emailVerification = await _emailService.GetVerificationCodeAsync(user.Id);
+
+            if (emailVerification == null || emailVerification.IsUsed || emailVerification.VerificationCode != verificationCode)
+            {
+                ModelState.AddModelError("", "Geçersiz veya kullanılmış doğrulama kodu.");
+                return View(); // Kod yanlışsa, tekrar giriş yapılabilir
+            }
+
+            if (emailVerification.ExpirationTime < DateTime.Now)
+            {
+                ModelState.AddModelError("", "Doğrulama kodu süresi dolmuş.");
+                return View(); // Kodun süresi dolmuşsa tekrar giriş yapılabilir
+            }
+
+            // Kod doğrulandıysa, kullanıcıyı giriş yapmış say
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            // Kodun kullanıldığını işaretle
+            emailVerification.IsUsed = true;
+            await _emailService.UpdateVerificationCodeAsync(emailVerification);
+
+            // Anasayfaya yönlendir
+            return RedirectToAction("Index", "Home");
         }
 
 
@@ -130,7 +123,7 @@ namespace ECOMM.Web.Controllers
 
         public IActionResult Login() => View();
 
-      
+
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -144,7 +137,8 @@ namespace ECOMM.Web.Controllers
                     return View(model);
                 }
 
-                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
+                // Şifreyi kontrol et, ancak oturum açma işlemi yapma
+                var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
                 if (result.Succeeded)
                 {
                     // Her girişte yeni doğrulama kodu gönder
@@ -158,11 +152,15 @@ namespace ECOMM.Web.Controllers
                         IsUsed = false
                     };
 
+                    // Veritabanına doğrulama kodunu ekle
                     await _emailService.AddVerificationCodeAsync(emailVerification);
+                    // Kullanıcıya doğrulama kodunu gönder
                     await _emailService.SendVerificationCodeAsync(user.Email, code);
 
+                    // Kullanıcı bilgilerini geçici veri olarak tut
+                    TempData["UserId"] = user.Id;
+
                     // Doğrulama sayfasına yönlendir
-                    TempData["Email"] = user.Email;
                     return RedirectToAction("VerifyCode");
                 }
 
@@ -170,6 +168,7 @@ namespace ECOMM.Web.Controllers
             }
             return View(model);
         }
+
 
         public IActionResult Register() => View();
 
