@@ -8,26 +8,33 @@
 
 <form method="post" asp-action="VerifyCode">
     <div class="form-group">
-        <label for="Email">E-posta Adresi</label>
-        <input type="email" id="Email" name="Email" class="form-control" value="@Model.Email" readonly />
+        <label for="Email">E-posta</label>
+        <input type="email" class="form-control" id="Email" name="Email" asp-for="Email" />
+        <span asp-validation-for="Email" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label for="VerificationCode">Doğrulama Kodu</label>
-        <input type="text" id="VerificationCode" name="VerificationCode" class="form-control" required />
+        <input type="text" class="form-control" id="VerificationCode" name="VerificationCode" asp-for="VerificationCode" />
+        <span asp-validation-for="VerificationCode" class="text-danger"></span>
     </div>
+
+    <!-- ModelState hatalarını global olarak göster -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+    }
+
     <button type="submit" class="btn btn-primary">Doğrula</button>
 </form>
 
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-success mt-3">
-        @TempData["Message"]
-    </div>
-}
-
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger mt-3">
-        @TempData["Error"]
-    </div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
