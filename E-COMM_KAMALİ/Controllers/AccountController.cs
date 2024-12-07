@@ -1,4 +1,7 @@
-﻿using ECOMM.Core.ViewModels;
+﻿
+
+
+using ECOMM.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using ECOMM.Core.Models;
@@ -88,7 +91,7 @@ namespace ECOMM.Web.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> VerifyCode(string verificationCode)
+        public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
         {
             if (!ModelState.IsValid)  // Model geçerli değilse, hata mesajlarını göster
             {

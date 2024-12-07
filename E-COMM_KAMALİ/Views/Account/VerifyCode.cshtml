@@ -9,7 +9,7 @@
 <form method="post" asp-action="VerifyCode">
     <div class="form-group">
         <label for="Email">E-posta</label>
-        <input type="email" class="form-control" id="Email" name="Email" asp-for="Email" />
+        <input type="email" class="form-control" id="Email" name="Email" asp-for="Email" readonly required />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
 
@@ -19,38 +19,39 @@
         <span asp-validation-for="VerificationCode" class="text-danger"></span>
     </div>
 
-    <!-- ModelState hatalarını global olarak göster -->
-    @if (!ViewData.ModelState.IsValid)
-    {
-        <div class="alert alert-danger">
-            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-            {
-                <p>@error.ErrorMessage</p>
-            }
-        </div>
-    }
-
     <button type="submit" class="btn btn-primary">Doğrula</button>
-
-  
 </form>
-@{
-    var successMessage = TempData["SuccessMessage"] as string;
-    if (!string.IsNullOrEmpty(successMessage))
-    {
-        <div class="alert alert-success">
-            @successMessage
-        </div>
-    }
-}
+
+
 <form method="post" asp-controller="Account" asp-action="SendVerificationCode">
-    <input type="hidden" name="email" value="@Model.Email" /> <!-- Email adresini gizli alanda taşıyoruz -->
-    <button type="submit">Yeniden Kod Gönder</button>
+    <input type="hidden" name="email" value="@Model.Email" />
+    <button type="submit" class="btn btn-secondary">Yeniden Kod Gönder</button>
 </form>
-
-
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @Html.Partial("_ValidationScriptsPartial")
+
+    <script>
+        document.querySelector("form").onsubmit = function (event) {
+            const codeInput = document.getElementById("VerificationCode");
+            const emailInput = document.getElementById("Email");
+            let isValid = true;
+
+            // E-posta kontrolü
+            if (emailInput.value === "") {
+                isValid = false;
+                alert("E-posta adresi gereklidir.");
+            }
+
+            // Doğrulama kodu kontrolü
+            const codePattern = /^\d{6}$/;
+            if (!codePattern.test(codeInput.value)) {
+                isValid = false;
+                alert("Doğrulama kodu 6 haneli bir sayı olmalıdır.");
+            }
+
+            if (!isValid) {
+                event.preventDefault(); // Formun gönderilmesini engelle
+            }
+        };
+    </script>
 }

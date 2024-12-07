@@ -71,14 +71,28 @@ namespace ECOMM.Business.Concrete
         }
 
         // Veritabanından doğrulama kodunu getiren metod
-        public async Task<EmailVerification> GetVerificationCodeAsync(string verificationCode)
+        public async Task<EmailVerification> GetVerificationCodeAsync(string userId, string verificationCode)
         {
-            // Veritabanından doğrulama kodunu getiriyoruz.
             var verification = await _context.EmailVerifications
-                .FirstOrDefaultAsync(v => v.VerificationCode == verificationCode && !v.IsUsed);
+                .FirstOrDefaultAsync(v => v.UserId == userId && v.VerificationCode == verificationCode && !v.IsUsed);
 
             return verification;
         }
+
+
+        // Doğrulama kodunu "kullanılmış" olarak işaretleyen metod
+        public async Task MarkCodeAsUsedAsync(string verificationCode)
+        {
+            var verification = await _context.EmailVerifications
+                .FirstOrDefaultAsync(v => v.VerificationCode == verificationCode);
+
+            if (verification != null)
+            {
+                verification.IsUsed = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+
 
         // Veritabanından doğrulama kodunu güncelletyen metod
         public async Task UpdateVerificationCodeAsync(EmailVerification emailVerification)
@@ -97,29 +111,14 @@ namespace ECOMM.Business.Concrete
             }
         }
 
-        // Doğrulama kodunu "kullanılmış" olarak işaretleyen metod
-        public async Task MarkCodeAsUsedAsync(string verificationCode)
-        {
-            var verification = await _context.EmailVerifications
-                .FirstOrDefaultAsync(v => v.VerificationCode == verificationCode);
-
-            if (verification != null)
-            {
-                verification.IsUsed = true;
-                await _context.SaveChangesAsync();
-            }
-        }
     }
-
-  
-
 
     // Email servisi için abstract sınıf (arayüz)
     public interface IEmailService
     {
         Task SendVerificationCodeAsync(string email, string verificationCode);
         Task AddVerificationCodeAsync(EmailVerification verification);
-        Task<EmailVerification> GetVerificationCodeAsync(string verificationCode);
+        Task<EmailVerification> GetVerificationCodeAsync(string userId, string verificationCode);
         Task MarkCodeAsUsedAsync(string verificationCode);
         Task UpdateVerificationCodeAsync(EmailVerification emailVerification);
     }

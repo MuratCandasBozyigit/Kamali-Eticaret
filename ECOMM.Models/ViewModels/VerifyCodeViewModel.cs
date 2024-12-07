@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ECOMM.Core.ViewModels
 {
     public class VerifyCodeViewModel
     {
+        [Required(ErrorMessage = "E-posta adresi gereklidir.")]
+        [EmailAddress(ErrorMessage = "Geçerli bir e-posta adresi girin.")]
         public string Email { get; set; }
 
-        [Required]
-        [StringLength(6, MinimumLength = 6, ErrorMessage = "Kod 6 haneli olmalıdır.")]
-        [RegularExpression(@"^\d{6}$", ErrorMessage = "Kod sadece rakamlardan oluşmalıdır.")]
+        [Required(ErrorMessage = "Doğrulama kodu gereklidir.")]
+        [RegularExpression(@"^\d{6}$", ErrorMessage = "Doğrulama kodu 6 haneli bir sayı olmalıdır.")]
         public string VerificationCode { get; set; }
     }
 }
