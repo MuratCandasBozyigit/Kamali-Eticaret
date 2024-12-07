@@ -23,8 +23,11 @@ builder.Services.AddControllersWithViews();
 // Cookie ayarları
 builder.Services.ConfigureApplicationCookie(options =>
 {
+    options.Cookie.HttpOnly = true;  // Cookie'yi güvenli hale getirin
+    options.Cookie.SameSite = SameSiteMode.Strict;
     options.AccessDeniedPath = "/account/login";
     options.LoginPath = "/account/login";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
 });
 
 // Veritabanı bağlantısı için SQL Server kullanımı
