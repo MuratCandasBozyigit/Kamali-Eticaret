@@ -64,7 +64,6 @@ namespace ECOMM.Web.Controllers
             TempData["Email"] = email;
             return RedirectToAction("VerifyCode");
         }
-
         [HttpGet]
         public IActionResult VerifyCode()
         {
@@ -84,8 +83,6 @@ namespace ECOMM.Web.Controllers
                     var user = await _userManager.FindByEmailAsync(model.Email);
                     if (user != null)
                     {
-                        TempData["Email"] = model.Email;
-
                         // Kullanıcı doğrulandıktan sonra işlem yönlendirmesi
                         if (!user.EmailConfirmed)
                         {
@@ -99,7 +96,8 @@ namespace ECOMM.Web.Controllers
                             return RedirectToAction("ChangePassword", new { username = user.Email });
                         }
 
-                        return RedirectToAction("Login");
+                        // Başarılı doğrulama sonrasında ana sayfaya yönlendir
+                        return RedirectToAction("Index", "Home");
                     }
                 }
 
@@ -109,6 +107,7 @@ namespace ECOMM.Web.Controllers
             return View(model);
         }
 
+
         #endregion
 
         #region Account
@@ -116,33 +115,43 @@ namespace ECOMM.Web.Controllers
         public IActionResult Login() => View();
 
         [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
+
                 if (user == null)
                 {
                     ModelState.AddModelError("", "E-posta adresi bulunamadı.");
                     return View(model);
                 }
 
-                if (!user.EmailConfirmed)
-                {
-                    await SendVerificationCode(user.Email);
-                    TempData["Message"] = "Lütfen e-posta doğrulama kodunu girin.";
-                    return RedirectToAction("VerifyCode");
-                }
-
-                var result = await _signInManager.PasswordSignInAsync(user, model.Password, model.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    // Her girişte yeni doğrulama kodu gönder
+                    var code = GenerateVerificationCode();
+                    var emailVerification = new Business.Concrete.EmailVerification
+                    {
+                        UserId = user.Id,
+                        VerificationCode = code,
+                        CreatedAt = DateTime.Now,
+                        ExpirationTime = DateTime.Now.AddMinutes(15),
+                        IsUsed = false
+                    };
+
+                    await _emailService.AddVerificationCodeAsync(emailVerification);
+                    await _emailService.SendVerificationCodeAsync(user.Email, code);
+
+                    // Doğrulama sayfasına yönlendir
+                    TempData["Email"] = user.Email;
+                    return RedirectToAction("VerifyCode");
                 }
 
                 ModelState.AddModelError("", "E-posta veya şifre yanlış.");
             }
-
             return View(model);
         }
 
