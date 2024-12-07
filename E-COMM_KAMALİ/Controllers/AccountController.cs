@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ECOMM.Business.Abstract;
 using System;
 using ECOMM.Business.Concrete;
+using ECOMM.Data.Migrations;
 
 namespace ECOMM.Web.Controllers
 {
@@ -65,6 +66,7 @@ namespace ECOMM.Web.Controllers
             return RedirectToAction("VerifyCode");
         }
         [HttpGet]
+
         public IActionResult VerifyCode()
         {
             return View(new VerifyCodeViewModel { Email = TempData["Email"]?.ToString() });
@@ -127,7 +129,7 @@ namespace ECOMM.Web.Controllers
 
         public IActionResult Login() => View();
 
-        [HttpPost]
+      
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
@@ -235,6 +237,7 @@ namespace ECOMM.Web.Controllers
 
             return View(model);
         }
+
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
