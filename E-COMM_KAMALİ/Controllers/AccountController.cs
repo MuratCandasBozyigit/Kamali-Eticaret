@@ -49,7 +49,7 @@ namespace ECOMM.Web.Controllers
             }
 
             var code = GenerateVerificationCode();
-            var emailVerification = new Business.Concrete.EmailVerification
+            var emailVerification = new EmailVerification
             {
                 UserId = user.Id,
                 VerificationCode = code,
@@ -75,33 +75,46 @@ namespace ECOMM.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Veritabanında doğrulama kodunu kontrol et
                 var emailVerification = await _emailService.GetVerificationCodeAsync(model.VerificationCode);
-                if (emailVerification != null && emailVerification.ExpirationTime > DateTime.Now && !emailVerification.IsUsed)
+
+                if (emailVerification != null)
                 {
-                    await _emailService.MarkCodeAsUsedAsync(model.VerificationCode);
-
-                    var user = await _userManager.FindByEmailAsync(model.Email);
-                    if (user != null)
+                    // Kodun süresi dolmuş mu?
+                    if (emailVerification.ExpirationTime < DateTime.Now)
                     {
-                        // Kullanıcı doğrulandıktan sonra işlem yönlendirmesi
-                        if (!user.EmailConfirmed)
-                        {
-                            user.EmailConfirmed = true;
-                            await _userManager.UpdateAsync(user);
-                        }
+                        ModelState.AddModelError("", "Doğrulama kodu süresi dolmuş.");
+                    }
+                    else
+                    {
+                        // Kod geçerli, kullanılmadı
+                        await _emailService.MarkCodeAsUsedAsync(model.VerificationCode); // Kullanıldı olarak işaretle
 
-                        // Şifre değişikliği için yönlendirme kontrolü
-                        if (TempData["ChangePassword"]?.ToString() == "true")
+                        var user = await _userManager.FindByEmailAsync(model.Email);
+                        if (user != null)
                         {
-                            return RedirectToAction("ChangePassword", new { username = user.Email });
-                        }
+                            // Kullanıcı doğrulandıktan sonra işlem yönlendirmesi
+                            if (!user.EmailConfirmed)
+                            {
+                                user.EmailConfirmed = true;
+                                await _userManager.UpdateAsync(user);
+                            }
 
-                        // Başarılı doğrulama sonrasında ana sayfaya yönlendir
-                        return RedirectToAction("Index", "Home");
+                            // Şifre değişikliği için yönlendirme kontrolü
+                            if (TempData["ChangePassword"]?.ToString() == "true")
+                            {
+                                return RedirectToAction("ChangePassword", new { username = user.Email });
+                            }
+
+                            // Başarılı doğrulama sonrasında ana sayfaya yönlendir
+                            return RedirectToAction("Index", "Home");
+                        }
                     }
                 }
-
-                ModelState.AddModelError("", "Geçersiz veya süresi dolmuş doğrulama kodu.");
+                else
+                {
+                    ModelState.AddModelError("", "Geçersiz doğrulama kodu.");
+                }
             }
 
             return View(model);
@@ -133,7 +146,7 @@ namespace ECOMM.Web.Controllers
                 {
                     // Her girişte yeni doğrulama kodu gönder
                     var code = GenerateVerificationCode();
-                    var emailVerification = new Business.Concrete.EmailVerification
+                    var emailVerification = new EmailVerification
                     {
                         UserId = user.Id,
                         VerificationCode = code,

@@ -3,19 +3,29 @@ using ECOMM.Core.Models;
 using MimeKit;
 using MailKit.Net.Smtp;
 using MailKit.Security;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Threading.Tasks;
+using ECOMM.Data;
 
 namespace ECOMM.Business.Concrete
 {
     public class EmailService : IEmailService
     {
+        private readonly ApplicationDBContext _context;
+
         // SMTP ayarları sabit olarak burada tanımlanıyor
         private const string SmtpServer = "smtp.gmail.com";
         private const int SmtpPort = 587;
         private const string SmtpUser = "cayperisi33@gmail.com";
         private const string SmtpPassword = "ujmwpsmddumwpzeb";
         private const string FromEmail = "cayperisi33@gmail.com";
+
+        // EmailService constructor - Inject ApplicationDbContext
+        public EmailService(ApplicationDBContext context)
+        {
+            _context = context;
+        }
 
         // Doğrulama kodunu gönderen metod
         public async Task SendVerificationCodeAsync(string email, string verificationCode)
@@ -53,48 +63,39 @@ namespace ECOMM.Business.Concrete
         }
 
         // Doğrulama kodunu veritabanına ekleyen metod
-        public async Task AddVerificationCodeAsync(EmailVerification verification)
+        public async Task AddVerificationCodeAsync(Core.Models.EmailVerification verification)
         {
-            // Örnek olarak bir doğrulama kodunu kaydetme
-            Console.WriteLine("Doğrulama kodu veritabanına kaydedildi:");
-            Console.WriteLine($"Kod: {verification.VerificationCode}");
-            Console.WriteLine($"Email: {verification.Email}");
-            Console.WriteLine($"Expiration: {verification.ExpirationTime}");
+            // Veritabanına doğrulama kodunu kaydediyoruz.
+            await _context.EmailVerifications.AddAsync(verification);
+            await _context.SaveChangesAsync();
         }
 
         // Veritabanından doğrulama kodunu getiren metod
         public async Task<EmailVerification> GetVerificationCodeAsync(string verificationCode)
         {
-            // Örnek olarak doğrulama kodunu veritabanından getirme
-            Console.WriteLine($"Doğrulama kodu '{verificationCode}' getirildi.");
-            return new EmailVerification
-            {
-                VerificationCode = verificationCode,
-                Email = "test@example.com",
-                ExpirationTime = DateTime.Now.AddMinutes(5),
-                IsUsed = false
-            };
+            // Veritabanından doğrulama kodunu getiriyoruz.
+            var verification = await _context.EmailVerifications
+                .FirstOrDefaultAsync(v => v.VerificationCode == verificationCode && !v.IsUsed);
+
+            return verification;
         }
 
         // Doğrulama kodunu "kullanılmış" olarak işaretleyen metod
         public async Task MarkCodeAsUsedAsync(string verificationCode)
         {
-            // Örnek olarak doğrulama kodunu kullanılmış olarak işaretleme
-            Console.WriteLine($"Doğrulama kodu '{verificationCode}' kullanıldı olarak işaretlendi.");
+            var verification = await _context.EmailVerifications
+                .FirstOrDefaultAsync(v => v.VerificationCode == verificationCode);
+
+            if (verification != null)
+            {
+                verification.IsUsed = true;
+                await _context.SaveChangesAsync();
+            }
         }
     }
 
-    // Email doğrulama için model sınıfı
-    public class EmailVerification
-    {
-        public int Id { get; set; }
-        public string UserId { get; set; } // Kullanıcıya ait ID
-         public DateTime CreatedAt { get; set; } // Kodu oluşturma zamanı
-        public string VerificationCode { get; set; }
-        public string Email { get; set; }
-        public DateTime ExpirationTime { get; set; }
-        public bool IsUsed { get; set; }
-    }
+  
+
 
     // Email servisi için abstract sınıf (arayüz)
     public interface IEmailService
@@ -104,4 +105,5 @@ namespace ECOMM.Business.Concrete
         Task<EmailVerification> GetVerificationCodeAsync(string verificationCode);
         Task MarkCodeAsUsedAsync(string verificationCode);
     }
+
 }
