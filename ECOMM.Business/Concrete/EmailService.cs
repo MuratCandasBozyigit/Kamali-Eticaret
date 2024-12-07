@@ -80,6 +80,23 @@ namespace ECOMM.Business.Concrete
             return verification;
         }
 
+        // Veritabanından doğrulama kodunu güncelletyen metod
+        public async Task UpdateVerificationCodeAsync(EmailVerification emailVerification)
+        {
+            // Veritabanında ilgili doğrulama kodunu bul
+            var verification = await _context.EmailVerifications
+                .FirstOrDefaultAsync(v => v.UserId == emailVerification.UserId && v.VerificationCode == emailVerification.VerificationCode);
+
+            if (verification != null)
+            {
+                // Doğrulama kodunun durumunu güncelle
+                verification.IsUsed = emailVerification.IsUsed;
+
+                // Değişiklikleri kaydet
+                await _context.SaveChangesAsync();
+            }
+        }
+
         // Doğrulama kodunu "kullanılmış" olarak işaretleyen metod
         public async Task MarkCodeAsUsedAsync(string verificationCode)
         {
@@ -104,6 +121,7 @@ namespace ECOMM.Business.Concrete
         Task AddVerificationCodeAsync(EmailVerification verification);
         Task<EmailVerification> GetVerificationCodeAsync(string verificationCode);
         Task MarkCodeAsUsedAsync(string verificationCode);
+        Task UpdateVerificationCodeAsync(EmailVerification emailVerification);
     }
 
 }
