@@ -70,14 +70,35 @@ namespace ECOMM.Business.Concrete
             await _context.SaveChangesAsync();
         }
 
-        // Veritabanından doğrulama kodunu getiren metod
+        //// Veritabanından doğrulama kodunu getiren metod
+        //public async Task<EmailVerification> GetVerificationCodeAsync(string userId, string verificationCode)
+        //{
+        //    var verification = await _context.EmailVerifications
+        //        .FirstOrDefaultAsync(v => v.UserId == userId && v.VerificationCode == verificationCode && !v.IsUsed);
+
+        //    return verification;
+        //}
+
         public async Task<EmailVerification> GetVerificationCodeAsync(string userId, string verificationCode)
         {
+            Console.WriteLine($"UserId: {userId}, VerificationCode: {verificationCode}");
+
             var verification = await _context.EmailVerifications
                 .FirstOrDefaultAsync(v => v.UserId == userId && v.VerificationCode == verificationCode && !v.IsUsed);
 
+            if (verification == null)
+            {
+                Console.WriteLine("No matching verification found in the database.");
+            }
+            else
+            {
+                Console.WriteLine($"Found verification: {verification.VerificationCode}, ExpirationTime: {verification.ExpirationTime}");
+            }
+
             return verification;
         }
+
+
 
 
         // Doğrulama kodunu "kullanılmış" olarak işaretleyen metod

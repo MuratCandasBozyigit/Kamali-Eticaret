@@ -2,15 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using ECOMM.Core.Models;
-using System.Threading.Tasks;
-using ECOMM.Business.Abstract;
-using System;
 using ECOMM.Business.Concrete;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECOMM.Web.Controllers
 {
     public class AccountController : Controller
     {
+        #region BİTTİ
         #region Services
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -68,10 +67,10 @@ namespace ECOMM.Web.Controllers
             HttpContext.Session.SetString("SuccessMessage", "Kod gönderildi! Lütfen e-posta kutunuzu kontrol edin.");
 
             return RedirectToAction("VerifyCode");
-        } 
+        }
         #endregion
 
-        #region ŞifreDeğişme
+        #region ŞifreDeğişmeKodGönderme
         [HttpPost]
         public async Task<IActionResult> SendVerificationCodeForChangePassword(string email)
         {
@@ -102,9 +101,8 @@ namespace ECOMM.Web.Controllers
             };
 
             await _emailService.AddVerificationCodeAsync(emailVerification);
-            await _emailService.SendVerificationCodeAsync(email, code); // Kullanıcıya doğrulama kodunu gönder
+            await _emailService.SendVerificationCodeAsync(email, code);
 
-            // E-posta ve başarı mesajını Session'a kaydediyoruz
             HttpContext.Session.SetString("Email", email);
             TempData["SuccessMessage"] = "Kod gönderildi! Lütfen e-posta kutunuzu kontrol edin.";
 
@@ -163,68 +161,7 @@ namespace ECOMM.Web.Controllers
         }
         #endregion
 
-        #region ŞifreDeğişmeKodDoğrulama
 
-        [HttpGet]
-        public IActionResult VerifyCodeForChangePassword()
-        {
-            string email = HttpContext.Session.GetString("Email");
-
-            if (string.IsNullOrEmpty(email))
-            {
-                // Log or debug here
-                Console.WriteLine("Email is null or empty.");
-            }
-            else
-            {
-                Console.WriteLine("Email: " + email);
-            }
-
-
-            // Ensure that the model is passed with the email
-            var model = new ChangePasswordViewModel { Email = email };
-            return View(model);
-        }
-
-
-
-
-
-        [HttpPost]
-        public async Task<IActionResult> VerifyCodeForChangePassword(VerifyCodeViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Retrieve the verification record from the database using email and verification code
-                var verification = await _emailService.GetVerificationCodeAsync(model.Email, model.VerificationCode);
-
-                // If the verification code is not found or the code doesn't match
-                if (verification == null || verification.VerificationCode != model.VerificationCode)
-                {
-                    ModelState.AddModelError("", "Geçersiz veya süresi dolmuş doğrulama kodu.");
-                    return View(model);
-                }
-
-                // Check if the verification code has expired
-                if (verification.ExpirationTime < DateTime.Now)
-                {
-                    ModelState.AddModelError("", "Doğrulama kodu süresi dolmuş.");
-                    return View(model);
-                }
-
-                // Mark the verification code as used
-                verification.IsUsed = true;
-                await _emailService.UpdateVerificationCodeAsync(verification);
-
-                // Redirect to the ChangePassword page
-                return RedirectToAction("ChangePassword", new { email = model.Email });
-            }
-
-            return View(model);
-        }
-
-
-        #endregion
         #region MailDoğrulama
         public IActionResult VerifyEmail()
         {
@@ -281,6 +218,7 @@ namespace ECOMM.Web.Controllers
         #endregion
 
         #region Account
+
         #region Login
 
         public IActionResult Login() => View();
@@ -363,15 +301,76 @@ namespace ECOMM.Web.Controllers
         }
         #endregion
 
-        #region ChangPwd
+        #region Logout
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+        #endregion
+        #endregion
+        #endregion
+
+        #region HatalıYerler
+        #region ŞifreDeğişmeKodDoğrulama
 
         [HttpGet]
-        public IActionResult ChangePassword(string email)
+        public IActionResult VerifyCodeForChangePassword()
         {
-            var user = _userManager.FindByEmailAsync(email).Result;
+            string email = HttpContext.Session.GetString("Email");
+
+            if (string.IsNullOrEmpty(email))
+            {
+                Console.WriteLine("Email is null or empty.");
+                return RedirectToAction("Login"); // Redirect to login if email is missing
+            }
+
+            var model = new VerifyCodeViewModel { Email = email };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyCodeForChangePassword(VerifyCodeViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
             if (user == null)
             {
                 ModelState.AddModelError("", "Kullanıcı bulunamadı.");
+                return View(model);
+            }
+
+            var verificationRecord = await _emailService.GetVerificationCodeAsync(user.Id, model.VerificationCode);
+            if (verificationRecord == null || verificationRecord.IsUsed || verificationRecord.ExpirationTime < DateTime.Now)
+            {
+                ModelState.AddModelError("", "Geçersiz veya süresi dolmuş doğrulama kodu.");
+                return View(model);
+            }
+
+            verificationRecord.IsUsed = true;
+            await _emailService.UpdateVerificationCodeAsync(verificationRecord);
+
+            // Kullanıcı giriş yaptırmadan, şifre değiştirme ekranına yönlendir
+            TempData["Email"] = model.Email;
+            return RedirectToAction("ChangePassword");
+        }
+
+
+        #endregion
+
+        #region ChangPwd
+
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            var email = TempData["Email"] as string;
+
+            if (string.IsNullOrEmpty(email))
+            {
                 return RedirectToAction("Login");
             }
 
@@ -379,44 +378,43 @@ namespace ECOMM.Web.Controllers
         }
 
 
+
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var user = await _userManager.FindByEmailAsync(model.Email);
-                if (user == null)
-                {
-                    ModelState.AddModelError("", "Kullanıcı bulunamadı.");
-                    return View(model);
-                }
-
-                var removeResult = await _userManager.RemovePasswordAsync(user);
-                if (removeResult.Succeeded)
-                {
-                    var addResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
-                    if (addResult.Succeeded)
-                    {
-                        TempData["Message"] = "Şifre başarıyla değiştirildi.";
-                        return RedirectToAction("Login");
-                    }
-                }
-
-                ModelState.AddModelError("", "Şifre değiştirilemedi.");
+                return View(model);
             }
 
-            return View(model);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Kullanıcı bulunamadı.");
+                return View(model);
+            }
+
+            var removeResult = await _userManager.RemovePasswordAsync(user);
+            if (!removeResult.Succeeded)
+            {
+                ModelState.AddModelError("", "Eski şifre kaldırılırken bir hata oluştu.");
+                return View(model);
+            }
+
+            var addResult = await _userManager.AddPasswordAsync(user, model.NewPassword);
+            if (!addResult.Succeeded)
+            {
+                ModelState.AddModelError("", "Yeni şifre belirlenirken bir hata oluştu.");
+                return View(model);
+            }
+
+            TempData["Message"] = "Şifre başarıyla değiştirildi.";
+            return RedirectToAction("Login");
         }
 
+
         #endregion
 
-        #region Logout
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
-        } 
-        #endregion
         #endregion
     }
 }
