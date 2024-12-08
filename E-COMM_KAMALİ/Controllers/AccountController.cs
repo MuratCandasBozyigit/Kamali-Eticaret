@@ -25,6 +25,7 @@ namespace ECOMM.Web.Controllers
         #endregion
 
         #region Email Verification
+
         #region SendVerification
         private string GenerateVerificationCode()
         {
@@ -114,6 +115,7 @@ namespace ECOMM.Web.Controllers
         #endregion
 
         #region VerifyCode
+
         #region KodDoğrulama
         [HttpGet]
         public IActionResult VerifyCode()
@@ -160,19 +162,33 @@ namespace ECOMM.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
         #endregion
+
         #region ŞifreDeğişmeKodDoğrulama
+
         [HttpGet]
         public IActionResult VerifyCodeForChangePassword()
         {
-            var email = HttpContext.Session.GetString("Email");
+            string email = HttpContext.Session.GetString("Email");
+
             if (string.IsNullOrEmpty(email))
             {
-                return RedirectToAction("Login"); // E-posta adresi bulunamazsa login sayfasına yönlendir
+                // Log or debug here
+                Console.WriteLine("Email is null or empty.");
+            }
+            else
+            {
+                Console.WriteLine("Email: " + email);
             }
 
-            ViewBag.Email = email;
-            return View();
+
+            // Ensure that the model is passed with the email
+            var model = new ChangePasswordViewModel { Email = email };
+            return View(model);
         }
+
+
+
+
 
         [HttpPost]
         public async Task<IActionResult> VerifyCodeForChangePassword(VerifyCodeViewModel model)
@@ -214,6 +230,7 @@ namespace ECOMM.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
         {
@@ -226,6 +243,9 @@ namespace ECOMM.Web.Controllers
                     ModelState.AddModelError("", "Kullanıcı bulunamadı.");
                     return View(model);
                 }
+
+                // Set the email to session
+                HttpContext.Session.SetString("Email", model.Email);
 
                 // Doğrulama kodu oluşturuyoruz
                 var code = GenerateVerificationCode(); // Kendi kod oluşturma metodunuzu kullanın
@@ -254,6 +274,7 @@ namespace ECOMM.Web.Controllers
             // Eğer model geçerli değilse formu yeniden göster
             return View(model);
         }
+
 
         #endregion
         #endregion
@@ -343,7 +364,7 @@ namespace ECOMM.Web.Controllers
         #endregion
 
         #region ChangPwd
-     
+
         [HttpGet]
         public IActionResult ChangePassword(string email)
         {
@@ -356,6 +377,7 @@ namespace ECOMM.Web.Controllers
 
             return View(new ChangePasswordViewModel { Email = email });
         }
+
 
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
