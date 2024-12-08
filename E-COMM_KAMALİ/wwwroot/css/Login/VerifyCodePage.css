@@ -1,19 +1,83 @@
-﻿body {
-
+﻿/* Genel ayarlar */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7; /* Açık gri arka plan */
+    margin: 0;
+    padding: 20px;
 }
 
-
-.form-control{
-    justify-content:center;
-    align-content:center;
-    align-items:center;
-    justify-items:center;
+/* Başlık stil ayarları */
+h2 {
+    text-align: center;
+    color: #333; /* Koyu gri renk */
+    margin-bottom: 20px;
 }
 
-.btn{
-    margin-top:15px;
+/* Form grubu stil ayarları */
+.form-group {
+    margin-bottom: 15px; /* Her form grubunun altına boşluk */
 }
 
-.btn-secondary{
-margin-top:5px;
+/* Etiket stil ayarları */
+label {
+    display: block; /* Label'ları blok elementi yaparak alt alta sıralama */
+    margin-bottom: 5px; /* Label ve input arasında boşluk */
+    font-weight: bold; /* Kalın yazı */
+}
+
+/* Girdi alanları için stil ayarları */
+input[type="email"],
+input[type="text"] {
+    width: 100%; /* Genişliği %100 yap */
+    padding: 10px; /* İçerik ile kenar arasında boşluk */
+    border: 1px solid #ccc; /* Gri kenarlık */
+    border-radius: 4px; /* Yuvarlatılmış köşeler */
+    box-sizing: border-box; /* Padding ve kenarlık dahil genişlik hesaplama */
+}
+
+/* Geçersiz input için stil ayarları */
+.text-danger {
+    color: red; /* Hata mesajları için kırmızı renk */
+    font-size: 0.875em; /* Hata mesajı yazı boyutu */
+}
+
+/* Buton stil ayarları */
+.btn {
+    background-color: #007bff; /* Mavi arka plan rengi */
+    color: white; /* Beyaz yazı rengi */
+    padding: 10px 15px; /* Buton içi boşluk */
+    border: none; /* Kenarlık yok */
+    border-radius: 4px; /* Yuvarlatılmış köşeler */
+    cursor: pointer; /* İmleç değişimi */
+    transition: background-color 0.3s; /* Arka plan renginin geçiş süresi */
+}
+
+    /* Buton üzerine gelindiğinde */
+    .btn:hover {
+        background-color: #0056b3; /* Koyu mavi arka plan */
+    }
+
+/* İkinci buton için stil ayarları */
+.btn-secondary {
+    background-color: #6c757d; /* Gri arka plan rengi */
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268; /* Koyu gri arka plan */
+    }
+
+/* Responsive tasarım ayarları */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Küçük ekranlarda daha az padding */
+    }
+
+    .form-group {
+        margin-bottom: 10px; /* Daha az boşluk */
+    }
+
+    .btn {
+        width: 100%; /* Butonları %100 genişlikte yap */
+        margin-top: 10px; /* Üstte biraz boşluk */
+    }
 }
