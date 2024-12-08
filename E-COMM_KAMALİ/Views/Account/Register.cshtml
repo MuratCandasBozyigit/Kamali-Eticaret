@@ -5,7 +5,12 @@
     Layout = "/Views/Shared/_AccountLayout.cshtml";
 }
 <link rel="stylesheet" href="~/css/Login/RegisterView.css">
-
+<style>
+    input[type="checkbox"] {
+        width: 15px; /* Genişlik */
+        height: 15px; /* Yükseklik */
+    }
+</style>
 <div class="session">
     <div class="left">
         <!-- Buraya arka plan resmi otomatik olarak uygulanacak -->
@@ -18,32 +23,32 @@
         <div class="floating-label">
             <label asp-for="Name">İsim:</label>
             <input asp-for="Name" class="form-control" type="text" id="name" required />
-
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="floating-label">
             <label asp-for="Email">Email:</label>
             <input asp-for="Email" class="form-control" type="text" id="email" required />
-
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
         <div class="floating-label">
             <label asp-for="Password">Şifre:</label>
             <input asp-for="Password" class="form-control" type="password" id="password" required />
-
             <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
         <div class="floating-label">
             <label asp-for="ConfirmPassword">Şifre Tekrar:</label>
             <input asp-for="ConfirmPassword" class="form-control" type="password" id="confirmPassword" required />
-
             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
         </div>
+
+        <div>
+            <input type="checkbox" onclick="togglePasswordVisibility()"> Şifreyi Göster
+        </div>
+
         </br>
-      
         <button type="submit" class="btn btn-success p-2 w-100">Kayıt Ol</button>
         <p class="text-center mt-2">
             Zaten Hesabınız varmı ?
@@ -54,3 +59,22 @@
         </div>
     </form>
 </div>
+
+@section Scripts {
+    <script>
+        function togglePasswordVisibility() {
+            // Password ve Confirm Password alanlarını seçiyoruz
+            var password = document.getElementById("password");
+            var confirmPassword = document.getElementById("confirmPassword");
+
+            // Checkbox durumuna göre şifre alanlarının tipini değiştiriyoruz
+            if (password.type === "password") {
+                password.type = "text";
+                confirmPassword.type = "text";
+            } else {
+                password.type = "password";
+                confirmPassword.type = "password";
+            }
+        }
+    </script>
+}

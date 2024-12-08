@@ -10,7 +10,7 @@ namespace ECOMM.Web.Controllers
 {
     public class AccountController : Controller
     {
-        #region BİTTİ
+      
         #region Services
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
@@ -427,6 +427,6 @@ namespace ECOMM.Web.Controllers
         }
         #endregion
         #endregion
-        #endregion
+      
     }
 }
