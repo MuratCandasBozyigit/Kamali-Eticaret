@@ -31,7 +31,6 @@ namespace ECOMM.Web.Controllers
             var random = new Random();
             return random.Next(100000, 999999).ToString(); // 6 haneli kod
         }
-
         [HttpPost]
         public async Task<IActionResult> SendVerificationCode(string email)
         {
@@ -68,6 +67,14 @@ namespace ECOMM.Web.Controllers
             return RedirectToAction("VerifyCode");
         }
 
+
+
+
+
+
+
+
+        #region VerifyCode
         [HttpGet]
         public IActionResult VerifyCode()
         {
@@ -83,9 +90,6 @@ namespace ECOMM.Web.Controllers
 
             return View(new VerifyCodeViewModel { Email = email });
         }
-
-
-
 
         [HttpPost]
         public async Task<IActionResult> VerifyCode(VerifyCodeViewModel model)
@@ -116,11 +120,12 @@ namespace ECOMM.Web.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-
+        #endregion
 
         #endregion
 
         #region Account
+        #region Login
 
         public IActionResult Login() => View();
 
@@ -166,6 +171,7 @@ namespace ECOMM.Web.Controllers
             return View(model);
         }
 
+        #endregion
 
 
         public IActionResult Register() => View();
@@ -185,8 +191,10 @@ namespace ECOMM.Web.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    TempData["Email"] = model.Email;  // E-posta bilgisi kayıt sonrası TempData'ya aktarılır
-                    return RedirectToAction("SendVerificationCode", new { email = model.Email });
+                    TempData["Email"] = model.Email;  // E-posta bilgisini TempData'ya taşıyoruz
+
+                    // Burada SendVerificationCode metodunu doğrudan çağırıyoruz
+                    return await SendVerificationCode(model.Email);
                 }
 
                 foreach (var error in result.Errors)
@@ -194,17 +202,8 @@ namespace ECOMM.Web.Controllers
                     ModelState.AddModelError("", error.Description);
                 }
             }
+
             return View(model);
-        }
-
-        public IActionResult ChangePassword(string username)
-        {
-            if (string.IsNullOrEmpty(username))
-            {
-                return RedirectToAction("VerifyCode");
-            }
-
-            return View(new ChangePasswordViewModel { Email = username });
         }
 
         [HttpPost]
