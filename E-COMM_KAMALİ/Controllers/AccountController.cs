@@ -1,7 +1,4 @@
-﻿
-
-
-using ECOMM.Core.ViewModels;
+﻿using ECOMM.Core.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using ECOMM.Core.Models;
