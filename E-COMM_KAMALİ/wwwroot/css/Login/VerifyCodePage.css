@@ -1,2 +1,19 @@
 ﻿body {
+
+}
+
+
+.form-control{
+    justify-content:center;
+    align-content:center;
+    align-items:center;
+    justify-items:center;
+}
+
+.btn{
+    margin-top:15px;
+}
+
+.btn-secondary{
+margin-top:5px;
 }
