@@ -7,9 +7,15 @@
 
 <link rel="stylesheet" href="~/css/Login/Login.css" />
 
+<style>
+    input[type="checkbox"] {
+      
+        width: 15px; /* Genişlik */
+        height: 15px; /* Yükseklik */
+    }
+</style>
 <div class="session">
     <div class="left">
-    
     </div>
     <div class="log-in">
         <h4> <span>KAMALİ E TİCARET</span></h4>
@@ -22,14 +28,15 @@
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="floating-label">
-                <input asp-for="Password" type="password" placeholder="Password" class="form-control" required autocomplete="off" />
+                <input asp-for="Password" type="password" placeholder="Password" class="form-control" id="myInput" required autocomplete="off" />
+                <input type="checkbox" onclick="myFunction()">  Şifreyi Göster
                 <label asp-for="Password" class="form-label"></label>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-check mb-3">
                 <label class="form-check-label">
-                    <input asp-for="RememberMe" class="form-check-input" />
-                    @Html.DisplayNameFor(a => a.RememberMe)
+                    <input asp-for="RememberMe" class="form-check-input" />  @Html.DisplayNameFor(a => a.RememberMe)
+                  
                 </label>
             </div>
             <button type="submit" class="btn btn-primary w-100">Log in</button>
@@ -42,3 +49,17 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+                                function myFunction() {
+          var x = document.getElementById("myInput");
+          if (x.type === "password") {
+            x.type = "text";
+          } else {
+            x.type = "password";
+          }
+        }
+
+    </script>
+}

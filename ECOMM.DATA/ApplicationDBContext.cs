@@ -19,6 +19,7 @@ namespace ECOMM.Data
         public DbSet<Orders> Orders { get; set; }
         public DbSet<OrderItem> OrderItems{ get; set; }
         public DbSet<User>Users {  get; set; }
+        public DbSet<EmailVerification> EmailVerifications { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Orders>()
