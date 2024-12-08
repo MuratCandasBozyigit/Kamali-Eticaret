@@ -26,7 +26,11 @@ namespace ECOMM.Data
             .HasOne(o => o.User)
             .WithMany()
             .HasForeignKey(o => o.UserId);
-
+            modelBuilder.Entity<Orders>()
+       .HasOne(o => o.User) // User ilişkisini kur
+       .WithMany(u => u.UserOrders) // User'ın birden fazla order'ı olabilir
+       .HasForeignKey(o => o.UserId) // doğru foreign key'i belirt
+       .IsRequired(); // Zo
             modelBuilder.Entity<OrderItem>()
                 .Property(oi => oi.Price)
                 .HasPrecision(18, 2);
