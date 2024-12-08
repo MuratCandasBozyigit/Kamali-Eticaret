@@ -25,12 +25,14 @@ namespace ECOMM.Web.Controllers
         #endregion
 
         #region Email Verification
-
+        #region SendVerification
         private string GenerateVerificationCode()
         {
             var random = new Random();
             return random.Next(100000, 999999).ToString(); // 6 haneli kod
         }
+
+        #region ŞifreGönder
         [HttpPost]
         public async Task<IActionResult> SendVerificationCode(string email)
         {
@@ -65,16 +67,54 @@ namespace ECOMM.Web.Controllers
             HttpContext.Session.SetString("SuccessMessage", "Kod gönderildi! Lütfen e-posta kutunuzu kontrol edin.");
 
             return RedirectToAction("VerifyCode");
+        } 
+        #endregion
+
+        #region ŞifreDeğişme
+        [HttpPost]
+        public async Task<IActionResult> SendVerificationCodeForChangePassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                ModelState.AddModelError("", "E-posta adresi geçersiz.");
+                return View();
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Kullanıcı bulunamadı.");
+                return View();
+            }
+
+            // Kod oluştur
+            var code = GenerateVerificationCode();
+
+            // Kod ve kullanıcı bilgileri ile verification kaydını oluşturuyoruz
+            var emailVerification = new EmailVerification
+            {
+                UserId = user.Id,
+                VerificationCode = code,
+                CreatedAt = DateTime.Now,
+                ExpirationTime = DateTime.Now.AddMinutes(15),
+                IsUsed = false
+            };
+
+            await _emailService.AddVerificationCodeAsync(emailVerification);
+            await _emailService.SendVerificationCodeAsync(email, code); // Kullanıcıya doğrulama kodunu gönder
+
+            // E-posta ve başarı mesajını Session'a kaydediyoruz
+            HttpContext.Session.SetString("Email", email);
+            TempData["SuccessMessage"] = "Kod gönderildi! Lütfen e-posta kutunuzu kontrol edin.";
+
+            return RedirectToAction("VerifyCodeForChangePassword"); // Kullanıcıyı doğrulama sayfasına yönlendir
         }
 
-
-
-
-
-
-
+        #endregion
+        #endregion
 
         #region VerifyCode
+        #region KodDoğrulama
         [HttpGet]
         public IActionResult VerifyCode()
         {
@@ -119,9 +159,104 @@ namespace ECOMM.Web.Controllers
             await _signInManager.SignInAsync(user, isPersistent: false);
             return RedirectToAction("Index", "Home");
         }
+        #endregion
+        #region ŞifreDeğişmeKodDoğrulama
+        [HttpGet]
+        public IActionResult VerifyCodeForChangePassword()
+        {
+            var email = HttpContext.Session.GetString("Email");
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login"); // E-posta adresi bulunamazsa login sayfasına yönlendir
+            }
+
+            ViewBag.Email = email;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> VerifyCodeForChangePassword(VerifyCodeViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Retrieve the verification record from the database using email and verification code
+                var verification = await _emailService.GetVerificationCodeAsync(model.Email, model.VerificationCode);
+
+                // If the verification code is not found or the code doesn't match
+                if (verification == null || verification.VerificationCode != model.VerificationCode)
+                {
+                    ModelState.AddModelError("", "Geçersiz veya süresi dolmuş doğrulama kodu.");
+                    return View(model);
+                }
+
+                // Check if the verification code has expired
+                if (verification.ExpirationTime < DateTime.Now)
+                {
+                    ModelState.AddModelError("", "Doğrulama kodu süresi dolmuş.");
+                    return View(model);
+                }
+
+                // Mark the verification code as used
+                verification.IsUsed = true;
+                await _emailService.UpdateVerificationCodeAsync(verification);
+
+                // Redirect to the ChangePassword page
+                return RedirectToAction("ChangePassword", new { email = model.Email });
+            }
+
+            return View(model);
+        }
+
 
         #endregion
+        #region MailDoğrulama
+        public IActionResult VerifyEmail()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> VerifyEmail(VerifyEmailViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // E-posta adresine göre kullanıcıyı buluyoruz
+                var user = await _userManager.FindByNameAsync(model.Email);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Kullanıcı bulunamadı.");
+                    return View(model);
+                }
 
+                // Doğrulama kodu oluşturuyoruz
+                var code = GenerateVerificationCode(); // Kendi kod oluşturma metodunuzu kullanın
+
+                // Doğrulama kodunu ve diğer bilgileri kaydediyoruz
+                var emailVerification = new EmailVerification
+                {
+                    UserId = user.Id,
+                    VerificationCode = code,
+                    CreatedAt = DateTime.Now,
+                    ExpirationTime = DateTime.Now.AddMinutes(15), // 15 dakika geçerlilik süresi
+                    IsUsed = false
+                };
+
+                // EmailVerification nesnesini veritabanına ekliyoruz
+                await _emailService.AddVerificationCodeAsync(emailVerification);
+
+                // Kullanıcıya doğrulama kodunu e-posta ile gönderiyoruz
+                await _emailService.SendVerificationCodeAsync(user.Email, code);
+
+                // Başarı mesajı ve yönlendirme
+                TempData["Message"] = "Doğrulama kodu e-posta adresinize gönderildi.";
+                return RedirectToAction("VerifyCodeForChangePassword", new { email = model.Email });
+            }
+
+            // Eğer model geçerli değilse formu yeniden göster
+            return View(model);
+        }
+
+        #endregion
+        #endregion
         #endregion
 
         #region Account
@@ -173,7 +308,7 @@ namespace ECOMM.Web.Controllers
 
         #endregion
 
-
+        #region Register
         public IActionResult Register() => View();
 
         [HttpPost]
@@ -205,6 +340,22 @@ namespace ECOMM.Web.Controllers
 
             return View(model);
         }
+        #endregion
+
+        #region ChangPwd
+     
+        [HttpGet]
+        public IActionResult ChangePassword(string email)
+        {
+            var user = _userManager.FindByEmailAsync(email).Result;
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Kullanıcı bulunamadı.");
+                return RedirectToAction("Login");
+            }
+
+            return View(new ChangePasswordViewModel { Email = email });
+        }
 
         [HttpPost]
         public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
@@ -235,11 +386,15 @@ namespace ECOMM.Web.Controllers
             return View(model);
         }
 
+        #endregion
+
+        #region Logout
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Home");
-        }
+        } 
+        #endregion
         #endregion
     }
 }
