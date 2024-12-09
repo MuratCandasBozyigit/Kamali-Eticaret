@@ -187,6 +187,9 @@ namespace ECOMM.Data.Migrations
                     b.Property<DateTime>("ExpirationTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<bool>("IsUsed")
+                        .HasColumnType("bit");
+
                     b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -319,14 +322,9 @@ namespace ECOMM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Orders");
                 });
@@ -690,14 +688,10 @@ namespace ECOMM.Data.Migrations
             modelBuilder.Entity("ECOMM.Core.Models.Orders", b =>
                 {
                     b.HasOne("ECOMM.Core.Models.User", "User")
-                        .WithMany()
+                        .WithMany("UserOrders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ECOMM.Core.Models.User", null)
-                        .WithMany("UserOrders")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });

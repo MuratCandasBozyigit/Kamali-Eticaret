@@ -43,7 +43,9 @@ namespace ECOMM.Data
                 .HasOne(c => c.Author)
                 .WithMany() // Eğer User ile Comment arasında bir koleksiyon ilişkisi yoksa
                 .HasForeignKey(c => c.AuthorId);
-
+            modelBuilder.Entity<Product>()
+    .Property(p => p.ProductPrice)
+    .HasColumnType("decimal(18,2)");
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.Product)
                 .WithMany() // Eğer Product ile Comment arasında bir koleksiyon ilişkisi yoksa
