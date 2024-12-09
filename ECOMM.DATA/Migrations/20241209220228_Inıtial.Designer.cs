@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECOMM.Data.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20241208210811_Inıt1")]
-    partial class Inıt1
+    [Migration("20241209220228_Inıtial")]
+    partial class Inıtial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -325,14 +325,9 @@ namespace ECOMM.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("UserId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Orders");
                 });
@@ -696,14 +691,10 @@ namespace ECOMM.Data.Migrations
             modelBuilder.Entity("ECOMM.Core.Models.Orders", b =>
                 {
                     b.HasOne("ECOMM.Core.Models.User", "User")
-                        .WithMany()
+                        .WithMany("UserOrders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ECOMM.Core.Models.User", null)
-                        .WithMany("UserOrders")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("User");
                 });
