@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 namespace ECOMM.Core.ViewModels
 {
     public class ProductEditViewModel
-    {
+    { 
         public Product Product { get; set; }
         public int ProductId { get; set; }
       public string ProductName { get; set; }

@@ -38,8 +38,20 @@
 
                 <!-- Ürün Fiyatı -->
                 <div class="product-price">
-                    <p class="new-price">Price: <span>@Model.Product.Price.ToString("C")</span></p>
+                    <p class="new-price">
+                        @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
+                        {
+                            <span class="old-price" style="text-decoration: line-through;">@Model.Product.Price.ToString("C")</span>
+                            <span class="discounted-price" style="color: red;">@Model.Product.DiscountedPrice.ToString("C")</span>
+                        }
+                        else
+                        {
+                            <span>@Model.Product.Price.ToString("C")</span>
+                        }
+                    </p>
                 </div>
+
+
 
                 <div class="product-price">
                 

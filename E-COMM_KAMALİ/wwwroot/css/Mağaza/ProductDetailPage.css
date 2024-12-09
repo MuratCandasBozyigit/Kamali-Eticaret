@@ -371,6 +371,15 @@ body {
     margin-bottom: 5px; /* Başlık ve açıklama arasındaki boşluk */
 }
 
+.old-price {
+    text-decoration: line-through;
+    color: gray;
+}
+
+.discounted-price {
+    color: red;
+    font-weight: bold;
+}
 
 
 .fa-cart-shopping {
