@@ -3,6 +3,7 @@ using ECOMM.Core.Models;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace ECOMM.Core.ViewModels
 {
     public class ProductEditViewModel
@@ -14,10 +15,15 @@ namespace ECOMM.Core.ViewModels
         public string ProductDescription { get; set; } 
         public decimal ProductPrice { get; set; }
         public double? DiscountRate { get; set; }
-        public List<string> ProductSizes { get; set; }
-        public string ImagePath { get; set; }
+        public List<string> ProductSizes { get; set; } = new List<string>();
+        public string ImagePath  { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
         public int CategoryId { get; set; } 
         public string CategoryName { get; set; }
+        [NotMapped]
+        public Dictionary<string, int> SizeStock { get; set; } = new Dictionary<string, int>(); // Beden bazlı stok bilgisi
         public IEnumerable<SelectListItem> Categories { get; set; }
 
         public void UpdateProductInfo(Product product)

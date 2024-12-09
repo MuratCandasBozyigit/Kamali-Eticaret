@@ -39,19 +39,26 @@
         <label>İndirimli Fiyat:</label>
         <input class="form-control" id="discountedPrice" type="text" readonly />
     </div>
-    <div class="form-group">
-        <label>Ürün Bedeni:</label>
-        <div id="size-container">
-            @foreach (var size in Model.ProductSizes)
+
+    <div id="size-container">
+        @if (Model.ProductSizes != null && Model.ProductSizes.Any())
+        {
+            foreach (var size in Model.ProductSizes)
             {
                 <div class="input-group mb-2">
                     <input type="text" class="form-control" name="ProductSizes" value="@size" required />
                     <button type="button" class="btn btn-danger remove-size">Sil</button>
                 </div>
             }
-        </div>
-        <button type="button" id="add-size" class="btn btn-secondary">Beden Ekle</button>
-    </div> <br />
+        }
+        else
+        {
+            <p>Henüz bir beden eklenmedi.</p>
+        }
+    </div>
+
+
+    <br />
 
     <div class="form-group">
         <label asp-for="ProductDescription">Ürün Açıklaması:</label>
@@ -71,9 +78,24 @@
         <label>Ürün Resmi:</label> 
         <input type="file" name="image" class="form-control" />
     </div> <br />
+    <div class="form-group">
+        <label>Ürün Resmi:</label>
+        <input type="file" name="image" class="form-control" />
+    </div> <br />
+      <div class="form-group">
+        <label>Ürün Resmi:</label> 
+        <input type="file" name="image" class="form-control" />
+    </div> <br />
+    <div class="form-group">
+        <label>Ürün Resmi:</label>
+        <input type="file" name="image" class="form-control" />
+    </div> <br />
 
     <div class="form-group">
         <img src="@Model.ImagePath" alt="Ürün Resmi" style="width: 450px; height: 225px; display: block;" />
+        <img src="@Model.ImagePath1" alt="Ürün Resmi" style="width: 450px; height: 225px; display: block;" />
+        <img src="@Model.ImagePath2" alt="Ürün Resmi" style="width: 450px; height: 225px; display: block;" />
+        <img src="@Model.ImagePath3" alt="Ürün Resmi" style="width: 450px; height: 225px; display: block;" />
     </div>
 
     <button type="submit" class="btn btn-primary">Güncelle</button>

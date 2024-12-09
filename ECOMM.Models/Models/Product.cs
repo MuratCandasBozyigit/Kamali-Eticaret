@@ -16,10 +16,17 @@ namespace ECOMM.Core.Models
         [Required]
         public decimal ProductPrice { get; set; }
 
+        //[NotMapped]
+        //public decimal DiscountedPrice => DiscountRate.HasValue
+        //    ? Math.Round(ProductPrice - (ProductPrice * (decimal)DiscountRate.Value / 100), 2)
+        //    : ProductPrice;
+
         [NotMapped]
-        public decimal DiscountedPrice => DiscountRate.HasValue
-            ? Math.Round(ProductPrice - (ProductPrice * (decimal)DiscountRate.Value / 100), 2)
-            : ProductPrice;
+        public decimal DiscountedPrice => DiscountRate.HasValue && DiscountRate > 0
+    ? ProductPrice - (ProductPrice * (decimal)DiscountRate / 100)
+    : ProductPrice;
+
+
 
         public double? DiscountRate { get; set; } // Yüzde indirim oranı (opsiyonel)
 
@@ -27,6 +34,9 @@ namespace ECOMM.Core.Models
         public string ProductDescription { get; set; }
 
         public string ImagePath { get; set; } // Ürün görsel yolu
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
 
         public int CategoryId { get; set; }
 

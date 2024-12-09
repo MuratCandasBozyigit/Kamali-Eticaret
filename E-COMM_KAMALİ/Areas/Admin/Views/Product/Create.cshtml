@@ -1,26 +1,25 @@
 ﻿@model ECOMM.Core.ViewModels.ProductEditViewModel
 
-
 <h2>Yeni Ürün Ekle</h2>
 
 <form asp-action="Create" asp-controller="Product" asp-area="Admin" enctype="multipart/form-data" method="post">
     <div class="form-group">
         <label for="ProductTitle">Ürün Başlığı</label>
-        <input type="text" class="form-control" id="ProductTitle" name="ProductTitle" required>
+        <input type="text" class="form-control" id="ProductTitle" name="ProductTitle" value="@Model.ProductTitle" required>
     </div>
 
     <div class="form-group">
         <label for="ProductName">Ürün Adı</label>
-        <input type="text" class="form-control" id="ProductName" name="ProductName" required>
+        <input type="text" class="form-control" id="ProductName" name="ProductName" value="@Model.ProductName" required>
     </div>
 
     <div class="form-group">
         <label for="ProductPrice">Ürün Fiyatı</label>
-        <input type="number" class="form-control" id="ProductPrice" name="ProductPrice" required min"0">
+        <input type="number" class="form-control" id="ProductPrice" name="ProductPrice" value="@Model.ProductPrice" required min="0">
     </div>
 
     <div class="form-group">
-        <label>Ürün Bedeni:</label>
+        <label>Ürün Bedenleri:</label>
         <div id="size-container">
             @foreach (var size in Model.ProductSizes ?? new List<string>())
             {
@@ -35,11 +34,11 @@
 
     <div class="form-group">
         <label for="ProductDescription">Ürün Açıklaması</label>
-        <textarea rows="10" cols="20" class="form-control" id="ProductDescription" name="ProductDescription" required placeholder="Ürün açıklamanızı buraya yazın..."></textarea>
+        <textarea rows="10" cols="20" class="form-control" id="ProductDescription" name="ProductDescription" required>@Model.ProductDescription</textarea>
     </div>
 
     <div class="form-group">
-        <label for="CategoryId" class="form-label">Kategori</label>
+        <label for="CategoryId">Kategori</label>
         <select class="form-control" id="CategoryId" name="CategoryId" required>
             <option value="">Kategori Seçin</option>
             @foreach (var category in Model.Categories)
@@ -49,60 +48,43 @@
         </select>
     </div>
 
-
     <div class="form-group">
-        <label for="Image" class="col-sm-3 col-form-label">Ürün Görseli</label>
-        <input type="file" class="form-control" id="Image" name="image">
+        <label for="Image1">Ürün Görseli 1</label>
+        <input type="file" class="form-control" id="Image1" name="Image1">
     </div>
-    </br>
-    <button type="submit" class="btn btn-primary">Kaydet</button>
+    <div class="form-group">
+        <label for="Image2">Ürün Görseli 2</label>
+        <input type="file" class="form-control" id="Image2" name="Image2">
+    </div>
+    <div class="form-group">
+        <label for="Image3">Ürün Görseli 3</label>
+        <input type="file" class="form-control" id="Image3" name="Image3">
+    </div>
+    <div class="form-group">
+        <label for="Image4">Ürün Görseli 4</label>
+        <input type="file" class="form-control" id="Image4" name="Image4">
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Kaydet</button>
 </form>
 
 @section Scripts {
     <script>
-        // Beden Ekleme
         document.getElementById('add-size').addEventListener('click', function () {
-            const sizeContainer = document.getElementById('size-container');
-            const inputGroup = document.createElement('div');
-            inputGroup.className = 'input-group mb-2';
-
-            inputGroup.innerHTML = `
-                <input type="text" class="form-control" name="ProductSizes" placeholder="Beden giriniz" required>
+            const container = document.getElementById('size-container');
+            const div = document.createElement('div');
+            div.classList.add('input-group', 'mb-2');
+            div.innerHTML = `
+                <input type="text" class="form-control" name="ProductSizes" placeholder="Beden" required>
                 <button type="button" class="btn btn-danger remove-size">Sil</button>
             `;
-
-            sizeContainer.appendChild(inputGroup);
+            container.appendChild(div);
         });
 
-        // Beden Silme
         document.getElementById('size-container').addEventListener('click', function (e) {
             if (e.target.classList.contains('remove-size')) {
                 e.target.parentElement.remove();
             }
-        });
-
-        // Form Gönderimi Öncesi Validasyon
-        document.querySelector('form').addEventListener('submit', function (e) {
-            const requiredFields = document.querySelectorAll('[required]');
-            let valid = true;
-
-            requiredFields.forEach(field => {
-                if (!field.value.trim()) {
-                    field.classList.add('is-invalid');
-                    const errorSpan = document.createElement('span');
-                    errorSpan.classList.add('text-danger');
-                    errorSpan.innerText = `${field.previousElementSibling.innerText} alanı boş bırakılamaz`;
-                    field.parentNode.appendChild(errorSpan);
-                    valid = false;
-                } else {
-                    field.classList.remove('is-invalid');
-                    const errorSpans = field.parentNode.querySelectorAll('.text-danger');
-                    errorSpans.forEach(span => span.remove());
-                }
-            });
-
-            // Eğer geçersizse formu gönderme
-            if (!valid) e.preventDefault();
         });
     </script>
 }

@@ -52,7 +52,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-
         public class HomeViewModel
         {
             public List<Product> Products { get; set; }
@@ -85,7 +84,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return StatusCode(500, $"Sunucu hatası: {ex.Message}");
             }
         }
-
 
         [HttpGet("GetAllProductsAsync")]
         public async Task<IActionResult> GetAllProductsAsync()
@@ -135,10 +133,11 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-        [HttpGet("Create")]
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             var categories = await _categoryService.GetAllAsync();
+
             var viewModel = new ProductEditViewModel
             {
                 Categories = categories.Select(c => new SelectListItem
@@ -150,34 +149,58 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
             return View(viewModel);
         }
-
-        [HttpPost("Create")]
-        public async Task<IActionResult> Create(Product product, IFormFile image, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock, double? DiscountRate)
+        [HttpPost]
+        public async Task<IActionResult> Create(ProductEditViewModel model, IFormFile Image1, IFormFile Image2, IFormFile Image3, IFormFile Image4)
         {
-            if (!ProductSizes.Any() || SizeStock == null || !SizeStock.Any())
+            if (!ModelState.IsValid)
             {
-                ModelState.AddModelError("ProductSizes", "En az bir beden ve stok bilgisi eklemelisiniz.");
-                return View();
-            }
-
-            if (image != null && image.Length > 0)
-            {
-                var fileName = Path.GetFileName(image.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                var categories = await _categoryService.GetAllAsync();
+                model.Categories = categories.Select(c => new SelectListItem
                 {
-                    await image.CopyToAsync(stream);
-                }
-
-                product.ImagePath = "/images/" + fileName;
+                    Value = c.Id.ToString(),
+                    Text = c.ParentCategoryName
+                }).ToList();
+                return View(model);
             }
 
-            product.ProductSizes = ProductSizes;
-            product.SizeStock = SizeStock;
-            product.DiscountRate = DiscountRate;
+            var product = new Product
+            {
+                ProductName = model.ProductName,
+                ProductTitle = model.ProductTitle,
+                ProductPrice = model.ProductPrice,
+                ProductDescription = model.ProductDescription,
+                CategoryId = model.CategoryId,
+                DiscountRate = model.DiscountRate,
+                ProductSizes = model.ProductSizes ?? new List<string>(),
+                SizeStock = model.SizeStock ?? new Dictionary<string, int>()
+            };
+
+            // Görselleri kaydetme işlemi
+            string[] imagePaths = new string[4];
+            var images = new[] { Image1, Image2, Image3, Image4 };
+            for (int i = 0; i < images.Length; i++)
+            {
+                if (images[i] != null && images[i].Length > 0)
+                {
+                    var fileName = Path.GetFileName(images[i].FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await images[i].CopyToAsync(stream);
+                    }
+
+                    imagePaths[i] = "/images/" + fileName;
+                }
+            }
+
+            product.ImagePath = imagePaths[0];
+            product.ImagePath1 = imagePaths[1];
+            product.ImagePath2 = imagePaths[2];
+            product.ImagePath3 = imagePaths[3];
 
             await _productService.AddAsync(product);
+
             return RedirectToAction("Index");
         }
 
@@ -195,18 +218,18 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             var viewModel = new ProductEditViewModel
             {
                 ProductId = product.Id,
-                ProductTitle = product.ProductTitle,
                 ProductName = product.ProductName,
-                ProductSizes = product.ProductSizes,
+                ProductTitle = product.ProductTitle,
                 ProductDescription = product.ProductDescription,
                 ProductPrice = product.ProductPrice,
-                ImagePath = product.ImagePath,
+                DiscountRate = product.DiscountRate,
+                ProductSizes = product.ProductSizes ?? new List<string>(), // Boş kontrolü
                 CategoryId = product.CategoryId,
-                Categories = categories.Select(c => new SelectListItem
+                Categories = _categoryService.GetAll().Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.ParentCategoryName
-                }).ToList()
+                })
             };
 
             return View(viewModel);
@@ -241,6 +264,9 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 }
 
                 productToUpdate.ImagePath = "/images/" + fileName;
+                productToUpdate.ImagePath1 = "/images/" + fileName;
+                productToUpdate.ImagePath2 = "/images/" + fileName;
+                productToUpdate.ImagePath3 = "/images/" + fileName;
             }
 
             await _productService.UpdateAsync(productToUpdate);
