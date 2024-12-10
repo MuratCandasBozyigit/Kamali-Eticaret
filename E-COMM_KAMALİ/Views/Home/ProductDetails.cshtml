@@ -28,34 +28,31 @@
                 <!-- Mağazaya Git Linki -->
                 <a asp-controller="Home" asp-action="Index" class="product-link">Visit store</a>
 
-                <!-- Ürün Değerlendirmesi -->
-                @*    <div class="product-rating">
-                @for (int i = 0; i < 5; i++)
-                {
-                <i class="fas fa-star @((i < Model.Product.Rating) ? "filled" : "")"></i>
-                }
-                </div> *@
 
-                <!-- Ürün Fiyatı -->
                 <div class="product-price">
-                    <p class="new-price">
-                        @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
-                        {
-                            <span class="old-price" style="text-decoration: line-through;">@Model.Product.Price.ToString("C")</span>
-                            <span class="discounted-price" style="color: red;">@Model.Product.DiscountedPrice.ToString("C")</span>
-                        }
-                        else
-                        {
-                            <span>@Model.Product.Price.ToString("C")</span>
-                        }
-                    </p>
+                    @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
+                    {
+                        <span class="old-price" style="text-decoration: line-through;">
+                            @Model.Product.Price.ToString("C")
+                        </span> 
+                       <br />
+                        <span class="discounted-price" style="color: red;">
+                            @(@Model.Product.Price - (@Model.Product.Price * (decimal)Model.Product.DiscountRate.Value / 100))
+                        </span>
+                    }
+                    else
+                    {
+                        <span>@Model.Product.Price.ToString("C")</span>
+                    }
                 </div>
 
 
 
-                <div class="product-price">
-                
-                </div>
+
+
+
+
+              
                 
                 <div class="product-router">
                     <ul>

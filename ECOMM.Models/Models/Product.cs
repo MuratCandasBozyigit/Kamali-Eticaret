@@ -16,12 +16,14 @@ namespace ECOMM.Core.Models
         [Required]
         public decimal ProductPrice { get; set; }
 
+        public double? DiscountRate { get; set; } // Yüzde indirim oranı (opsiyonel)
+
         [NotMapped]
         public decimal DiscountedPrice => DiscountRate.HasValue
             ? Math.Round(ProductPrice - (ProductPrice * (decimal)DiscountRate.Value / 100), 2)
             : ProductPrice;
 
-        public double? DiscountRate { get; set; } // Yüzde indirim oranı (opsiyonel)
+     
 
         [Required]
         public string ProductDescription { get; set; }
