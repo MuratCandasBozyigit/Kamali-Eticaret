@@ -52,7 +52,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             return View(model);
         }
 
-
         public class HomeViewModel
         {
             public List<Product> Products { get; set; }
@@ -85,7 +84,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return StatusCode(500, $"Sunucu hatası: {ex.Message}");
             }
         }
-
 
         [HttpGet("GetAllProductsAsync")]
         public async Task<IActionResult> GetAllProductsAsync()
@@ -139,7 +137,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             var categories = await _categoryService.GetAllAsync();
-            var viewModel = new ProductEditViewModel
+            var viewModel = new ProductCreateViewModel
             {
                 Categories = categories.Select(c => new SelectListItem
                 {
@@ -150,7 +148,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
             return View(viewModel);
         }
-
         [HttpPost("Create")]
         public async Task<IActionResult> Create(Product product, IFormFile image, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock, double? DiscountRate)
         {
@@ -160,25 +157,35 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return View();
             }
 
-            if (image != null && image.Length > 0)
+            try
             {
-                var fileName = Path.GetFileName(image.FileName);
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
-
-                using (var stream = new FileStream(filePath, FileMode.Create))
+                if (image != null && image.Length > 0)
                 {
-                    await image.CopyToAsync(stream);
+                    var fileName = Path.GetFileName(image.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    // Dosya yükleme işlemi
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+
+                    product.ImagePath = "/images/" + fileName;
                 }
 
-                product.ImagePath = "/images/" + fileName;
+                product.ProductSizes = ProductSizes;
+                product.SizeStock = SizeStock;
+                product.DiscountRate = DiscountRate;
+
+                await _productService.AddAsync(product);
+                return RedirectToAction("Index");
             }
-
-            product.ProductSizes = ProductSizes;
-            product.SizeStock = SizeStock;
-            product.DiscountRate = DiscountRate;
-
-            await _productService.AddAsync(product);
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);  // Log the exception message
+                ModelState.AddModelError("", "Bir hata oluştu. Lütfen tekrar deneyin.");
+                return View(product);
+            }
         }
 
         [HttpGet("Edit/{id}")]

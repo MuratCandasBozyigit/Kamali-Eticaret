@@ -205,6 +205,7 @@ namespace E_COMM_KAMALİ.Controllers
             {
                 ProductId = product.Id,
                 ProductName = product.ProductName,
+                ProductSize=string.Join("",product.ProductSizes),
                 Price = product.ProductPrice,
                 ImageUrl = product.ImagePath,
                 CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok"
@@ -228,6 +229,7 @@ namespace E_COMM_KAMALİ.Controllers
             {
                 ProductId = product.Id,
                 ProductName = product.ProductName,
+                ProductSize = string.Join("", product.ProductSizes),
                 ProductTitle = product.ProductTitle,
                 Price = product.ProductPrice,
                 ImageUrl = product.ImagePath,
