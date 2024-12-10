@@ -9,22 +9,21 @@ namespace ECOMM.Business.Concrete
     public class ProductService : Service<Product>,IProductService
     {
         private readonly IRepository<Product> _productRepository;
+
         private readonly ICategoryService _categoryService;
+
         public ProductService(IRepository<Product> productRepository) : base(productRepository)
         {
             _productRepository = productRepository;
         }
-        //public async Task<Product> GetByIdAsync(int id)
-        //{
-        //    return await _productRepository.GetByIdAsync(id).Include(p => p.Category)
-        //                .FirstOrDefaultAsync(p => p.Id == id);
-        //}
+       
         public async Task<Product> GetByIdAsync(int id)
         {
             return await _productRepository.Query()
                                            .Include(p => p.Category)
                                            .FirstOrDefaultAsync(p => p.Id == id);
         }
+
         public async Task<IEnumerable<Product>> GetPaginatedProductsAsync(int page, int pageSize)
         {
             return await _productRepository.Query()
@@ -65,6 +64,7 @@ namespace ECOMM.Business.Concrete
             var products = await _productRepository.GetAllAsync();
             return products.Where(p => p.Id == subCategoryId).ToList();
         }
+
         public async Task<List<ProductViewModel>> GetProductsByCategoryIdAsync(int categoryId)
         {
             // Kategorisine göre ürünleri alıyoruz
@@ -85,7 +85,6 @@ namespace ECOMM.Business.Concrete
             return filteredProducts; // Filtrelenmiş ürünleri döndürüyoruz
         }
 
-
         public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId)
         {
           var products = await _productRepository.GetAllAsync();
@@ -96,12 +95,14 @@ namespace ECOMM.Business.Concrete
         {
             var products = await _productRepository.GetAllAsyncQuery();
             return await products.Include(p => p.Category)
-                .Select(p => new ProductViewModel
+                .Select(static p => new ProductViewModel
                 {
                     ProductId = p.Id,
                     ImageUrl = p.ImagePath,
                     ProductName = p.ProductName,
                     ProductTitle = p.ProductTitle,
+                    ProductSize = string.Join(", ", p.ProductSizes),
+                    DiscountRate = p.DiscountRate,
                     ProductDescription = p.ProductDescription,
                     Price = p.ProductPrice,
                     Category = new CategoryViewModel
@@ -111,7 +112,11 @@ namespace ECOMM.Business.Concrete
                 }).ToListAsync();
         }
 
-
+        //public async Task<Product> GetByIdAsync(int id)
+        //{
+        //    return await _productRepository.GetByIdAsync(id).Include(p => p.Category)
+        //                .FirstOrDefaultAsync(p => p.Id == id);
+        //}
 
     }
 }
