@@ -64,13 +64,13 @@
                         }
                     },
                     {
-                        data: 'price', title: 'Fiyat', render: function (data) {
+                        data: 'discountedPrice', title: 'Fiyat', render: function (data) {
                             return data.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' });
                         }
                     },
                     {
                         data: 'discountRate',title: 'İndirim Yüzdesi',render: function(data, type, row) {
-                            return data !== null ? (data * 100).toFixed(2) + '%' : 'İndirim uygulanmadı';
+                            return data !== null ? (data * 1).toFixed(2) + '%' : 'İndirim uygulanmadı';
                         }
                     },
                         

@@ -196,15 +196,19 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-
             var categories = await _categoryService.GetAllAsync();
-
+            if (categories == null || !categories.Any())
+            {
+                ModelState.AddModelError("", "Kategori bilgisi bulunamadı.");
+                return View("Error");
+            }
             var viewModel = new ProductEditViewModel
             {
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
                 ProductName = product.ProductName,
-                ProductSizes = product.ProductSizes,
+                ProductSizes = product.ProductSizes ?? new List<string>(), // Null kontrolü
+                DiscountRate = product.DiscountRate,
                 ProductDescription = product.ProductDescription,
                 ProductPrice = product.ProductPrice,
                 ImagePath = product.ImagePath,
@@ -234,6 +238,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             productToUpdate.ProductPrice = viewModel.ProductPrice;
             productToUpdate.CategoryId = viewModel.CategoryId;
             productToUpdate.ProductSizes = ProductSizes;
+            productToUpdate.DiscountRate = viewModel.DiscountRate;
             productToUpdate.SizeStock = SizeStock;
             productToUpdate.DateUpdated = DateTime.UtcNow;
 

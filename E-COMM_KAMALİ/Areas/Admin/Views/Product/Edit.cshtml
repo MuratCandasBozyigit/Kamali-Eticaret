@@ -27,6 +27,7 @@
         <input asp-for="ProductPrice" class="form-control" type="number" step="0.01" required />
         <span asp-validation-for="ProductPrice" class="text-danger"></span>
     </div>  <br />
+
     <!-- İndirim Oranı -->
     <div class="form-group">
         <label asp-for="DiscountRate">İndirim Oranı (%):</label>
@@ -39,6 +40,7 @@
         <label>İndirimli Fiyat:</label>
         <input class="form-control" id="discountedPrice" type="text" readonly />
     </div>
+
     <div class="form-group">
         <label>Ürün Bedeni:</label>
         <div id="size-container">
@@ -61,7 +63,7 @@
 
     <div class="form-group">
         <label asp-for="CategoryId">Kategori:</label>
-        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Id", "Name"))" required>
+        <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))" required>
             <option value="">-- Kategori Seçin --</option>
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
