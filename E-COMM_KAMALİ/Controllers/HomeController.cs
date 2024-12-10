@@ -201,14 +201,16 @@ namespace E_COMM_KAMALİ.Controllers
         public async Task<IActionResult> ProductDetails(int productId, int categoryId)
         {
             var category = await _productService.GetByCategoryIdAsync(categoryId);
+
             var categoryRelatedProducts = category.Select(product => new ProductViewModel
             {
                 ProductId = product.Id,
                 ProductName = product.ProductName,
-                ProductSize=string.Join("",product.ProductSizes),
+                ProductSize = string.Join("", product.ProductSizes),
                 Price = product.ProductPrice,
                 ImageUrl = product.ImagePath,
-                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok"
+                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
+                DiscountRate = product.DiscountRate // DiscountRate'ı atıyoruz
             }).ToList();
 
             var comments = await _commentService.GetAllAsync();
@@ -234,7 +236,8 @@ namespace E_COMM_KAMALİ.Controllers
                 Price = product.ProductPrice,
                 ImageUrl = product.ImagePath,
                 CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
-                ProductDescription = product.ProductDescription
+                ProductDescription = product.ProductDescription,
+                DiscountRate = product.DiscountRate // DiscountRate'ı atıyoruz
             };
 
             var viewModel = new ProductDetailPageViewModel
@@ -246,6 +249,8 @@ namespace E_COMM_KAMALİ.Controllers
 
             return View(viewModel);
         }
+
+
 
         #region s
 
