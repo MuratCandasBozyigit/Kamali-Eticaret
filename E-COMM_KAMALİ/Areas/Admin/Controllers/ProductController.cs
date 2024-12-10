@@ -135,7 +135,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-        [HttpGet("Create")]
+        [HttpGet("Create")] 
         public async Task<IActionResult> Create()
         {
             var categories = await _categoryService.GetAllAsync();
