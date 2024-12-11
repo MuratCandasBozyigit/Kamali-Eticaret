@@ -22,6 +22,9 @@ namespace ECOMM.Core.ViewModels
            : Price;  // Burada ProductPrice yerine Price kullanıyoruz
         public decimal Price { get; set; }
         public string ImageUrl { get; set; }
+        public string ImageUrl1 { get; set; }
+        public string ImageUrl2 { get; set; }
+        public string ImageUrl3 { get; set; }
         public string ProductDescription { get; set; }
         public string ParentCategoryName { get; set; }
         public string CategoryName { get; set; }

@@ -17,6 +17,9 @@ namespace ECOMM.Core.ViewModels
         public decimal ProductPrice { get; set; }
         public double? DiscountRate { get; set; }
         public string ImagePath { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
         public List<string> ProductSizes { get; set; } = new List<string>();
 
 

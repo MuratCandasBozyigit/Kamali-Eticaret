@@ -170,7 +170,10 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                         await image.CopyToAsync(stream);
                     }
 
-                    product.ImagePath = "/images/" + fileName;
+                    product.ImagePath  = "/images/" + fileName;
+                    product.ImagePath1 = "/images/" + fileName;
+                    product.ImagePath2 = "/images/" + fileName;
+                    product.ImagePath3 = "/images/" + fileName;
                 }
 
                 product.ProductSizes = ProductSizes;
@@ -212,6 +215,9 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductDescription = product.ProductDescription,
                 ProductPrice = product.ProductPrice,
                 ImagePath = product.ImagePath,
+                ImagePath1 = product.ImagePath1,
+                ImagePath2 = product.ImagePath2,
+                ImagePath3 = product.ImagePath3,
                 CategoryId = product.CategoryId,
                 Categories = categories.Select(c => new SelectListItem
                 {
@@ -253,6 +259,9 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 }
 
                 productToUpdate.ImagePath = "/images/" + fileName;
+                productToUpdate.ImagePath1 = "/images/" + fileName;
+                productToUpdate.ImagePath2 = "/images/" + fileName;
+                productToUpdate.ImagePath3 = "/images/" + fileName;
             }
 
             await _productService.UpdateAsync(productToUpdate);

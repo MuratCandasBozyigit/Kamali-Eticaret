@@ -29,6 +29,9 @@ namespace ECOMM.Core.Models
         public string ProductDescription { get; set; }
 
         public string ImagePath { get; set; } // Ürün görsel yolu
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
 
         public int CategoryId { get; set; }
 

@@ -16,6 +16,9 @@ namespace ECOMM.Core.ViewModels
         public double? DiscountRate { get; set; }
         public List<string> ProductSizes { get; set; }
         public string ImagePath { get; set; }
+        public string ImagePath1 { get; set; }
+        public string ImagePath2 { get; set; }
+        public string ImagePath3 { get; set; }
         public int CategoryId { get; set; } 
         public string CategoryName { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
