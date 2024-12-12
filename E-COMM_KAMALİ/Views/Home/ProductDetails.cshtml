@@ -23,11 +23,8 @@
                 </br>             
                 <h2 class="product-title">@Model.Product.ProductTitle</h2>
 
-
-
                 <!-- Mağazaya Git Linki -->
                 <a asp-controller="Home" asp-action="Index" class="product-link">Visit store</a>
-
 
                 <div class="product-price">
                     @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
@@ -45,14 +42,6 @@
                         <span>@Model.Product.Price.ToString("C")</span>
                     }
                 </div>
-
-
-
-
-
-
-
-              
                 
                 <div class="product-router">
                     <ul>
@@ -71,16 +60,12 @@
                     </ul>
                 </div>
 
-
-
-
                 <!-- Ürün Detayı -->
                 <div class="product-detail">
                     <h2>Özellikler:</h2>
                     <p>@(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)</p>
                     <p>@(string.IsNullOrWhiteSpace(Model.Product.ProductSize) ? "Beden mevcut değil." : Model.Product.ProductSize)</p>
                 </div>
-
 
                 <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
                 <div class="purchase-info">
@@ -103,6 +88,56 @@
     </div>
 </div>
 
+
+
+<div style="padding: 20px; border: 1px solid #ddd; max-width: 800px; margin: 50px auto;">
+    <div class="comment">
+        <form asp-action="AddComment" method="post">
+            <textarea name="content" required placeholder="Yorumunuzu yazın... Giriş Yapmadan yorum yapılamaz."></textarea>
+            <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+            <button type="submit">Yorum Yap</button>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const productDetails = document.querySelectorAll('.product-detail');
+
+            productDetails.forEach(detail => {
+                const originalText = detail.innerHTML;
+                const truncatedText = originalText.substring(0, 150) + '...'; // Başlangıçta kısaltılmış metin
+
+                if (originalText.length > 150) {
+                    detail.innerHTML = truncatedText; // Kısaltılmış metni göster
+
+                    const readMoreBtn = document.createElement('span');
+                    readMoreBtn.className = 'read-more';
+                    readMoreBtn.textContent = 'Devamını Oku'; // Buton metni
+
+                    detail.appendChild(readMoreBtn); // Butonu metnin sonuna ekle
+
+                    readMoreBtn.addEventListener('click', () => {
+                        if (detail.classList.contains('expand')) {
+                            detail.classList.remove('expand'); // Kapat durumunda metni kısalt
+                            detail.innerHTML = truncatedText; // Kısaltılmış metni göster
+                            detail.appendChild(readMoreBtn); // Butonu tekrar ekle
+                            readMoreBtn.textContent = 'Devamını Oku';
+                        } else {
+                            detail.classList.add('expand'); // Devamını Oku açıldığında metni genişlet
+                            detail.innerHTML = originalText; // Tam metni göster
+                            detail.appendChild(readMoreBtn); // Butonu tekrar ekle
+                            readMoreBtn.textContent = 'Kapat';
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+}
 @*<div class="container mt-4">
     <div class="row justify-content-center align-items-center">
         <!-- Sol Yön Okları -->
@@ -114,7 +149,7 @@
 
         <div class="col-10">
           @*   <h1 style=" text-align: center;"></h1> *@
-        @*     <p class="all_products" onclick="window.location.href='@Url.Action("Products", "Home")'">Tüm Ürünlerimiz</p>
+@*     <p class="all_products" onclick="window.location.href='@Url.Action("Products", "Home")'">Tüm Ürünlerimiz</p>
             <div class="row g-3 justify-content-center">
 
 
@@ -166,63 +201,3 @@
         </div> 
     </div>
 </div>*@
-
-/*Yorum Kanksss*/
-
-    <form asp-action="AddComment" method="post">
-        <textarea name="content" required placeholder="Yorumunuzu yazın"></textarea>
-        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-        <button type="submit">Yorum Yap</button>
-    </form>
-
-
-
-
-
- 
-@* <form method="post" action="/Home/AddComment">
-    <input type="hidden" name="productId" value="1" />
-    <label for="content">Yorum:</label>
-    <textarea id="content" name="content"></textarea>
-    <label for="userName">Kullanıcı Adı:</label>
-    <input id="userName" name="userName" type="text" />
-    <button type="submit">Yorum Yap</button>
-</form>
- *@
-
-@section Scripts {
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const productDetails = document.querySelectorAll('.product-detail');
-
-            productDetails.forEach(detail => {
-                const originalText = detail.innerHTML;
-                const truncatedText = originalText.substring(0, 150) + '...'; // Başlangıçta kısaltılmış metin
-
-                if (originalText.length > 150) {
-                    detail.innerHTML = truncatedText; // Kısaltılmış metni göster
-
-                    const readMoreBtn = document.createElement('span');
-                    readMoreBtn.className = 'read-more';
-                    readMoreBtn.textContent = 'Devamını Oku'; // Buton metni
-
-                    detail.appendChild(readMoreBtn); // Butonu metnin sonuna ekle
-
-                    readMoreBtn.addEventListener('click', () => {
-                        if (detail.classList.contains('expand')) {
-                            detail.classList.remove('expand'); // Kapat durumunda metni kısalt
-                            detail.innerHTML = truncatedText; // Kısaltılmış metni göster
-                            detail.appendChild(readMoreBtn); // Butonu tekrar ekle
-                            readMoreBtn.textContent = 'Devamını Oku';
-                        } else {
-                            detail.classList.add('expand'); // Devamını Oku açıldığında metni genişlet
-                            detail.innerHTML = originalText; // Tam metni göster
-                            detail.appendChild(readMoreBtn); // Butonu tekrar ekle
-                            readMoreBtn.textContent = 'Kapat';
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-}
