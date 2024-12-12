@@ -148,13 +148,17 @@ namespace ECOMM.Web.Areas.Admin.Controllers
 
             return View(viewModel);
         }
+
         [HttpPost("Create")]
-        public async Task<IActionResult> Create(Product product, IFormFile image, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock, double? DiscountRate)
+        public async Task<IActionResult> Create(Product product, IFormFile image, IFormFile image1, IFormFile image2, IFormFile image3, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock, double? DiscountRate)
         {
-            if (!ProductSizes.Any() || SizeStock == null || !SizeStock.Any())
+            ProductSizes = ProductSizes ?? new List<string>();
+            SizeStock = SizeStock ?? new Dictionary<string, int>();
+
+            if (!ProductSizes.Any() || !SizeStock.Any())
             {
                 ModelState.AddModelError("ProductSizes", "En az bir beden ve stok bilgisi eklemelisiniz.");
-                return View();
+                return View(product);
             }
 
             try
@@ -164,14 +168,53 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                     var fileName = Path.GetFileName(image.FileName);
                     var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
 
-                    // Dosya yükleme işlemi
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
                         await image.CopyToAsync(stream);
                     }
 
                     product.ImagePath = "/images/" + fileName;
+                 
                 }
+                if (image1 != null && image1.Length > 0)
+                {
+                    var fileName = Path.GetFileName(image1.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await image1.CopyToAsync(stream);
+                    }
+
+                    product.ImagePath1 = "/images/" + fileName;
+                  
+                }
+                if (image2 != null && image2.Length > 0)
+                {
+                    var fileName = Path.GetFileName(image2.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await image2.CopyToAsync(stream);
+                    }
+
+                    product.ImagePath2 = "/images/" + fileName;
+                  
+                }
+                if (image3 != null && image3.Length > 0)
+                {
+                    var fileName = Path.GetFileName(image3.FileName);
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await image3.CopyToAsync(stream);
+                    }
+
+                    product.ImagePath3 = "/images/" + fileName;
+                }
+
 
                 product.ProductSizes = ProductSizes;
                 product.SizeStock = SizeStock;
@@ -187,6 +230,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 return View(product);
             }
         }
+
 
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
@@ -212,6 +256,9 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ProductDescription = product.ProductDescription,
                 ProductPrice = product.ProductPrice,
                 ImagePath = product.ImagePath,
+                ImagePath1 = product.ImagePath1,
+                ImagePath2 = product.ImagePath2,
+                ImagePath3 = product.ImagePath3,
                 CategoryId = product.CategoryId,
                 Categories = categories.Select(c => new SelectListItem
                 {
@@ -224,7 +271,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         }
 
         [HttpPost("Edit/{id}")]
-        public async Task<IActionResult> Edit(ProductEditViewModel viewModel, IFormFile image, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock)
+        public async Task<IActionResult> Edit(ProductEditViewModel viewModel, IFormFile image, IFormFile image1, IFormFile image2, IFormFile image3, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock)
         {
             var productToUpdate = await _productService.GetByIdAsync(viewModel.ProductId);
             if (productToUpdate == null)
@@ -237,9 +284,9 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             productToUpdate.ProductDescription = viewModel.ProductDescription;
             productToUpdate.ProductPrice = viewModel.ProductPrice;
             productToUpdate.CategoryId = viewModel.CategoryId;
-            productToUpdate.ProductSizes = ProductSizes;
+            productToUpdate.ProductSizes = ProductSizes ?? productToUpdate.ProductSizes;
             productToUpdate.DiscountRate = viewModel.DiscountRate;
-            productToUpdate.SizeStock = SizeStock;
+            productToUpdate.SizeStock = SizeStock ?? productToUpdate.SizeStock;
             productToUpdate.DateUpdated = DateTime.UtcNow;
 
             if (image != null && image.Length > 0)
@@ -253,6 +300,62 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 }
 
                 productToUpdate.ImagePath = "/images/" + fileName;
+              
+            }
+            else
+            {
+                productToUpdate.ImagePath = productToUpdate.ImagePath; // Var olan yolu koru
+            }
+
+
+            if (image1 != null && image1.Length > 0)
+            {
+                var fileName = Path.GetFileName(image1.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image1.CopyToAsync(stream);
+                }
+                productToUpdate.ImagePath1 = "/images/" + fileName;
+            
+            }
+            else
+            {
+                productToUpdate.ImagePath = productToUpdate.ImagePath; // Var olan yolu koru
+            }
+
+            if (image2 != null && image2.Length > 0)
+            {
+                var fileName = Path.GetFileName(image2.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image2.CopyToAsync(stream);
+                }
+
+                productToUpdate.ImagePath2 = "/images/" + fileName;
+            }
+            else
+            {
+                productToUpdate.ImagePath = productToUpdate.ImagePath; // Var olan yolu koru
+            }
+
+            if (image3 != null && image3.Length > 0)
+            {
+                var fileName = Path.GetFileName(image3.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await image3.CopyToAsync(stream);
+                }
+                productToUpdate.ImagePath3 = "/images/" + fileName;
+            }
+            else
+            {
+                productToUpdate.ImagePath = productToUpdate.ImagePath; // Var olan yolu koru
             }
 
             await _productService.UpdateAsync(productToUpdate);
