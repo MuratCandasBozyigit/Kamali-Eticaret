@@ -76,6 +76,7 @@ namespace ECOMM.Business.Concrete
                 {
                     ProductId = p.Id,
                     ProductName = p.ProductName,
+                    ProductSize = string.Join("",p.ProductSizes),
                     ProductDescription = p.ProductDescription,
                     Price = p.ProductPrice,
                     ImageUrl = p.ImagePath
@@ -99,6 +100,9 @@ namespace ECOMM.Business.Concrete
                 {
                     ProductId = p.Id,
                     ImageUrl = p.ImagePath,
+                    ImageUrl1 = p.ImagePath1,
+                    ImageUrl2 = p.ImagePath2,
+                    ImageUrl3 = p.ImagePath3,
                     ProductName = p.ProductName,
                     ProductTitle = p.ProductTitle,
                     ProductSize = string.Join(", ", p.ProductSizes),

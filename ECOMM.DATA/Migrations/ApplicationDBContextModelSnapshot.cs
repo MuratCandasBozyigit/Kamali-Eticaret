@@ -69,7 +69,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("ApplicationUserRoles");
+                    b.ToTable("ApplicationUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Category", b =>
@@ -112,7 +112,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Comment", b =>
@@ -170,7 +170,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.EmailVerification", b =>
@@ -200,7 +200,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("EmailVerifications");
+                    b.ToTable("EmailVerifications", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Favourites", b =>
@@ -237,7 +237,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Favourites");
+                    b.ToTable("Favourites", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.OrderItem", b =>
@@ -267,7 +267,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Orders", b =>
@@ -326,7 +326,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.Product", b =>
@@ -359,6 +359,18 @@ namespace ECOMM.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImagePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagePath3")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -398,7 +410,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasIndex("FavouritesId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.SubCategory", b =>
@@ -438,7 +450,7 @@ namespace ECOMM.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("SubCategories");
+                    b.ToTable("SubCategories", (string)null);
                 });
 
             modelBuilder.Entity("ECOMM.Core.Models.User", b =>
