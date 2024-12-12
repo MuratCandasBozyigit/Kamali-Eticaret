@@ -1,5 +1,4 @@
 ﻿@model ECOMM.Core.ViewModels.ProductDetailPageViewModel
-
 @{
     ViewData["Title"] = "Ürün Detayı";
 }
@@ -100,9 +99,70 @@
     </div>
 </div>
 
+<div class="container mt-4">
+    <div class="row justify-content-center align-items-center">
+        <!-- Previous Button -->
+        <div class="col-auto">
+            <button id="previousBtn" class="btn btn-light" onclick="loadProducts(ViewBag.CurrentPage - 1)"
+                    aria-label="Previous"
+            @* Disable the button if it's the first page *@
+            @(ViewBag.CurrentPage == 1 ? "disabled" : "")>
+                <span aria-hidden="true">&laquo;</span>
+            </button>
+        </div>
+
+        <div class="col-10">
+            <h1 style="text-align: center;">Ürünler</h1>
+            <div id="productList" class="row g-3 justify-content-center"></div>
+        </div>
+
+        <!-- Next Button -->
+        <div class="col-auto">
+            <button id="nextBtn" class="btn btn-light" onclick="loadProducts(ViewBag.CurrentPage + 1)"
+                    aria-label="Next"
+            @* Disable the button if it's the last page *@
+            @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")>
+                <span aria-hidden="true">&raquo;</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+
 
 
 @section Scripts {
+    <script>
+        // Function to load products
+        function loadProducts(page) {
+            $.ajax({
+                url: '@Url.Action("ProductDetails", "Home")', // Your controller and action URL
+                type: 'GET',
+                data: { page: page }, // Pass the current page as parameter
+                success: function (data) {
+                    // Update the product list
+                    $('#productList').html(data.productsHtml);
+
+                    // Update the ViewBag with new page information
+                    ViewBag.CurrentPage = data.currentPage;
+                    ViewBag.TotalPages = data.totalPages;
+
+                    // Enable/Disable buttons
+                    if (data.currentPage == 1) {
+                        $('#previousBtn').prop('disabled', true);
+                    } else {
+                        $('#previousBtn').prop('disabled', false);
+                    }
+
+                    if (data.currentPage == data.totalPages) {
+                        $('#nextBtn').prop('disabled', true);
+                    } else {
+                        $('#nextBtn').prop('disabled', false);
+                    }
+                }
+            });
+        }
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const productDetails = document.querySelectorAll('.product-detail');
@@ -138,66 +198,3 @@
         });
     </script>
 }
-@*<div class="container mt-4">
-    <div class="row justify-content-center align-items-center">
-        <!-- Sol Yön Okları -->
-           <div class="col-auto">
-            <a class="btn btn-light @(ViewBag.CurrentPage == 1 ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1 })" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </div> 
-
-        <div class="col-10">
-          @*   <h1 style=" text-align: center;"></h1> *@
-@*     <p class="all_products" onclick="window.location.href='@Url.Action("Products", "Home")'">Tüm Ürünlerimiz</p>
-            <div class="row g-3 justify-content-center">
-
-
-
-                @foreach (var product in Model.Products)
-                {
-
-                    <div class="col-6 @* col-md-3col-lg-3 custom-col">
-
-                        <div class="card mb-3 product-card">
-                            <img src="@product.ImagePath" class="card-img-top product-image" alt="Product Image" />
-                            <div class="card-body text-center">
-                                <h5 class="card-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@product.ProductName">
-                                    @product.ProductName
-                                </h5>
-                                <h6 style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@product.ProductTitle">
-                                    @product.ProductTitle
-                                </h6>
-
-                                <p class="card-text">@product.ProductPrice.ToString("C")</p>
-                                <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.Id" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
-                                <!-- Tek Form Yapısı -->
-                                <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
-                                    <input type="hidden" name="productId" value="@product.Id" />
-                                    <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
-                                    <button type="submit" class="btn btn-primary btn-hover mb-3">
-                                        <i class="fa-solid fa-cart-shopping "></i> Sepete Ekle
-                                    </button>
-                                </form>
-
-                                <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
-                                    <input type="hidden" name="productId" value="@product.Id" />
-                                    <button type="submit" class="btn btn-primary btn-hover mb-2">
-                                        <i class="fa-regular fa-heart"> </i>  Favoriler
-                                    </button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </div>
-        </div>
-
-          <!-- Sağ Yön Okları -->
-        <div class="col-auto">
-            <a class="btn btn-light @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "btn-hover")" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1 })" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </div> 
-    </div>
-</div>*@

@@ -1,0 +1,24 @@
+﻿@model List<ECOMM.Core.ViewModels.ProductViewModel>
+
+
+@foreach (var product in Model)
+{
+    <div class="col-6 col-md-3 custom-col">
+        <div class="card mb-3 product-card">
+            <img src="@product.ImageUrl" class="card-img-top product-image" alt="Product Image" />
+            <div class="card-body text-center">
+                <h5 class="card-title" title="@product.ProductName">@product.ProductName</h5>
+                <h6 title="@product.ProductTitle">@product.ProductTitle</h6>
+                <p class="card-text">@product.Price.ToString("C")</p>
+                <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
+                <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
+                    <input type="hidden" name="productId" value="@product.ProductId" />
+                    <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
+                    <button type="submit" class="btn btn-primary btn-hover mb-3">
+                        <i class="fa-solid fa-cart-shopping "></i> Sepete Ekle
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+}
