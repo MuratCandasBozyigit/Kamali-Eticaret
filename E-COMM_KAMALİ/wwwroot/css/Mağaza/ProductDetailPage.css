@@ -349,10 +349,63 @@ body {
 
 /*#endregion */
 
- 
+/*ÜrünSayfasıYorumYapmaCss*/
+/* Tüm ekranın ortasına yerleştirme */
+
+
+..comment {
+    position: relative; /* Yalnızca kendi kapsayıcısında konumlandır */
+    margin: 0 auto; /* Yatayda ortala */
+    width: 400px; /* Kutunun genişliği */
+    padding: 20px;
+    background-color: white; /* Beyaz arka plan */
+    border: 2px solid black; /* Keskin siyah kenar */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge */
+    font-family: 'Open Sans', sans-serif; /* Modern yazı tipi */
+    box-sizing: border-box;
+}
+
+/* Yorum yazma alanı */
+textarea {
+    width: 100%;
+    height: 120px;
+    padding: 10px;
+    border: 2px solid black;
+    font-size: 16px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    resize: none; /* Yeniden boyutlandırmayı kapat */
+}
+
+    textarea:focus {
+        border-color: #007bff; /* Mavi odak rengi */
+    }
+
+/* Buton stili */
+button {
+    width: 100%;
+    padding: 15px;
+    font-size: 16px;
+    color: white;
+    background-color: black;
+    border: none;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+    button:hover {
+        background-color: #444; /* Hover efekti */
+    }
+
+/* Placeholder renkleri */
+textarea::placeholder {
+    color: #888;
+}
+
+
 /*#region ÜrünlerListesi */
 /*#region Normal */
-
 .product-card {
     width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
     max-width: 300px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
@@ -715,6 +768,4 @@ body {
     }
 }
 /*#endregion */
-
-
 /*#endregion */
