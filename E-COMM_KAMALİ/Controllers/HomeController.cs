@@ -236,7 +236,7 @@ namespace E_COMM_KAMALİ.Controllers
             }
 
             // İlgili ürünleri al
-            var relatedProducts = await _productService.GetProductsByCategoryIdAsync(categoryId);
+            var relatedProducts = await _productService.GetProductsByCategoryIdAsync(categoryId); 
             // İlgili ürünleri ProductViewModel'e dönüştür
             var relatedProductViewModels = relatedProducts.Select(p => new ProductViewModel
             {
