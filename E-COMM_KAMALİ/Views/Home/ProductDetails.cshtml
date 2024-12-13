@@ -103,70 +103,75 @@
     <div class="row justify-content-center align-items-center">
         <!-- Previous Button -->
         <div class="col-auto">
-            <button id="previousBtn" class="btn btn-light" onclick="loadProducts(ViewBag.CurrentPage - 1)"
+            <button id="previousBtn" class="btn btn-light"
+                    onclick="loadProducts(ViewBag.CurrentPage - 1)"
                     aria-label="Previous"
-            @* Disable the button if it's the first page *@
             @(ViewBag.CurrentPage == 1 ? "disabled" : "")>
                 <span aria-hidden="true">&laquo;</span>
             </button>
         </div>
 
         <div class="col-10">
-            <h1 style="text-align: center;">Ürünler</h1>
-            <div id="productList" class="row g-3 justify-content-center"></div>
-        </div>
-       
-     @foreach (var product in Model.RelatedProducts)
+            <h1 class="text-center">Ürünler</h1>
+            <div id="productList" class="row g-3 justify-content-center">
+                @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
                 {
+                    foreach (var product in Model.RelatedProducts)
+                    {
+                        <div class="col-6 col-lg-3 custom-col">
+                            <div class="card mb-3 product-card">
+                                <img src="@product.ImageUrl" class="card-img-top product-image" alt="Product Image" />
+                                <div class="card-body text-center">
+                                    <h5 class="card-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@product.ProductName">
+                                        @product.ProductName
+                                    </h5>
+                                    <h6 style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@product.ProductTitle">
+                                        @product.ProductTitle
+                                    </h6>
+                                    <p class="card-text">@product.Price.ToString("C")</p>
+                                    <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
 
-                    <div class="col-6 @* col-md-3  *@col-lg-3 custom-col">
+                                    <!-- Add to Cart Form -->
+                                    <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
+                                        <input type="hidden" name="productId" value="@product.ProductId" />
+                                        <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
+                                        <button type="submit" class="btn btn-primary btn-hover mb-3">
+                                            <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                                        </button>
+                                    </form>
 
-                        <div class="card mb-3 product-card">
-                            <img src="@product.Product.ImagePath" class="card-img-top product-image" alt="Product Image" />
-                            <div class="card-body text-center">
-                                <h5 class="card-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@product.ProductName">
-                                    @product.ProductName
-                                </h5>
-                                <h6 style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="@product.ProductTitle">
-                                    @product.ProductTitle
-                                </h6>
-
-                                <p class="card-text">@product.Product.ProductPrice.ToString("C")</p>
-                                <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
-                                <!-- Tek Form Yapısı -->
-                                <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
-                                    <input type="hidden" name="productId" value="@product.ProductId" />
-                                    <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
-                                    <button type="submit" class="btn btn-primary btn-hover mb-3">
-                                        <i class="fa-solid fa-cart-shopping "></i> Sepete Ekle
-                                    </button>
-                                </form>
-
-                                <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
-                                    <input type="hidden" name="productId" value="@product.ProductId" />
-                                    <button type="submit" class="btn btn-primary btn-hover mb-2">
-                                        <i class="fa-regular fa-heart"> </i>  Favoriler
-                                    </button>
-                                </form>
+                                    <!-- Add to Favourites Form -->
+                                    <form asp-controller="Favourites" asp-action="AddToFavourites" method="post">
+                                        <input type="hidden" name="productId" value="@product.ProductId" />
+                                        <button type="submit" class="btn btn-primary btn-hover mb-2">
+                                            <i class="fa-regular fa-heart"></i> Favoriler
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
+                    }
+                }
+                else
+                {
+                    <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+                        <p style="font-weight: 900;font-size:25px;">İlgili ürün bulunamadı.</p>
                     </div>
                 }
+            </div>
+        </div>
 
         <!-- Next Button -->
         <div class="col-auto">
-            <button id="nextBtn" class="btn btn-light" onclick="loadProducts(ViewBag.CurrentPage + 1)"
+            <button id="nextBtn" class="btn btn-light"
+                    onclick="loadProducts(ViewBag.CurrentPage + 1)"
                     aria-label="Next"
-            @* Disable the button if it's the last page *@
             @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")>
                 <span aria-hidden="true">&raquo;</span>
             </button>
         </div>
     </div>
 </div>
-
-
-
 
 @section Scripts {
     <script>

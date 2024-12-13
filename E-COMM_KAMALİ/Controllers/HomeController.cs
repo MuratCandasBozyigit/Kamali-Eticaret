@@ -226,8 +226,7 @@ namespace E_COMM_KAMALİ.Controllers
                 DiscountRate = p.DiscountRate
             }).ToList();
 
-            // _ProductListPartial görselini render et
-            var productsHtml = await RenderViewToStringAsync("_ProductListPartial", paginatedProductViewModels);
+          
 
             // Seçilen ürünü al
             var product = await _productService.GetByIdAsync(productId);
@@ -287,38 +286,40 @@ namespace E_COMM_KAMALİ.Controllers
             return View(viewModel);
         }
 
+        #region YorumSatırı
 
-        public async Task<string> RenderViewToStringAsync(string viewName, object model)
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            var routeData = new RouteData();
-            routeData.Values.Add("controller", "Home");
-            routeData.Values.Add("action", "ProductDetails");
+        //public async Task<string> RenderViewToStringAsync(string viewName, object model)
+        //{
+        //    var httpContext = _httpContextAccessor.HttpContext;
+        //    var routeData = new RouteData();
+        //    routeData.Values.Add("controller", "Home");
+        //    routeData.Values.Add("action", "ProductDetails");
 
-            var actionDescriptor = _actionDescriptorCollectionProvider.ActionDescriptors.Items
-                .FirstOrDefault(a => a.RouteValues["controller"] == "Home" && a.RouteValues["action"] == "ProductDetails");
+        //    var actionDescriptor = _actionDescriptorCollectionProvider.ActionDescriptors.Items
+        //        .FirstOrDefault(a => a.RouteValues["controller"] == "Home" && a.RouteValues["action"] == "ProductDetails");
 
-            if (actionDescriptor == null)
-            {
-                throw new InvalidOperationException("ActionDescriptor not found.");
-            }
+        //    if (actionDescriptor == null)
+        //    {
+        //        throw new InvalidOperationException("ActionDescriptor not found.");
+        //    }
 
-            var actionContext = new ActionContext(httpContext, routeData, actionDescriptor);
+        //    var actionContext = new ActionContext(httpContext, routeData, actionDescriptor);
 
-            // Görünüm dosyasını kontrol et
-            var view = _viewEngine.GetView(null, $"~/Views/Partials/{viewName}.cshtml", false);
-            if (!view.Success)
-            {
-                throw new InvalidOperationException($"View {viewName} not found.");
-            }
+        //    // Görünüm dosyasını kontrol et
+        //    var view = _viewEngine.GetView(null, $"~/Views/Partials/{viewName}.cshtml", false);
+        //    if (!view.Success)
+        //    {
+        //        throw new InvalidOperationException($"View {viewName} not found.");
+        //    }
 
-            using (var sw = new StringWriter())
-            {
-                var viewContext = new ViewContext(actionContext, view.View, new ViewDataDictionary(_metadataProvider, new ModelStateDictionary()) { Model = model }, new TempDataDictionary(httpContext, _tempDataProvider), sw, new HtmlHelperOptions());
-                await view.View.RenderAsync(viewContext);
-                return sw.ToString();
-            }
-        }
+        //    using (var sw = new StringWriter())
+        //    {
+        //        var viewContext = new ViewContext(actionContext, view.View, new ViewDataDictionary(_metadataProvider, new ModelStateDictionary()) { Model = model }, new TempDataDictionary(httpContext, _tempDataProvider), sw, new HtmlHelperOptions());
+        //        await view.View.RenderAsync(viewContext);
+        //        return sw.ToString();
+        //    }
+        //} 
+        #endregion
 
 
 
