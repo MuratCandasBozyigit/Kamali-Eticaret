@@ -29,17 +29,17 @@ namespace E_COMM_KAMALİ.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddToCart(int productId, int quantity)
+        public async Task<IActionResult> AddToCart(int productId, string selectedSize, int quantity)
         {
             var product = await _productService.GetByIdAsync(productId); // Ürünü al
             if (product != null)
             {
                 var cart = _sessionService.GetCartItems(); // Kullanıcının mevcut sepetini al
-                var existingItem = cart.FirstOrDefault(c => c.ProductId == productId);
+                var existingItem = cart.FirstOrDefault(c => c.ProductId == productId && c.ProductSize == selectedSize);
 
                 if (existingItem != null)
                 {
-                    // Eğer ürün zaten sepetteyse, toplam miktarı kontrol et
+                    // Eğer ürün ve beden zaten sepetteyse, toplam miktarı kontrol et
                     int newQuantity = existingItem.Quantity + quantity;
                     if (newQuantity > 5)
                     {
@@ -52,14 +52,13 @@ namespace E_COMM_KAMALİ.Controllers
                 }
                 else
                 {
-                    // Yeni bir ürün ekleniyorsa
+                    // Yeni bir ürün ve beden ekleniyorsa
                     if (quantity > 5) quantity = 5;
                     var cartItem = new CartItemViewModel
                     {
                         ProductId = product.Id,
                         ProductName = product.ProductName,
-                        ProductSize = string.Join(", ", product.ProductSizes),
-
+                        ProductSize = selectedSize,  // Seçilen beden
                         ImagePath = product.ImagePath,
                         Price = product.ProductPrice,
                         Quantity = quantity

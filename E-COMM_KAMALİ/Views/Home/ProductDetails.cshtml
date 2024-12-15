@@ -13,14 +13,15 @@
         transition: background-color 0.3s;
     }
 
-        .size-option:hover {
-            background-color: #f0f0f0;
-        }
-
         .size-option.selected {
             background-color: #007bff;
             color: white;
         }
+
+        .size-option:hover {
+            background-color: #f0f0f0;
+        }
+
 
         .size-option:focus {
             outline: none;
@@ -125,6 +126,7 @@
                     <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
                         <input type="hidden" name="productId" value="@Model.Product.ProductId" />
                         <input type="hidden" id="selected-size" name="selectedSize" />
+
                         <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mt-4" style="width: 60px; display: inline-block;" />
                         <button type="submit" class="btn btn-primary btn-hover">
                             <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
@@ -228,8 +230,9 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
-              document.querySelectorAll('.size-option').forEach(function (button) {
+               document.querySelectorAll('.size-option').forEach(function (button) {
             button.addEventListener('click', function () {
                 // Tüm butonlardan 'selected' sınıfını kaldır
                 document.querySelectorAll('.size-option').forEach(function (btn) {
@@ -244,13 +247,16 @@
                 document.getElementById('selected-size').value = selectedSize;  // Bu inputu HTML'de eklemeyi unutma
             });
         });
-                $('form').submit(function(event) {
+
+        // Form gönderilmeden önce bedeni kontrol et
+        $('form').submit(function(event) {
             var selectedSize = $('#selected-size').val();
             if (!selectedSize) {
                 alert("Lütfen bir beden seçin.");
                 event.preventDefault(); // Formun gönderilmesini engelle
             }
         });
+
 
     </script>
 
@@ -313,6 +319,7 @@
             });
         }
     </script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const productDetails = document.querySelectorAll('.product-detail');
