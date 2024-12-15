@@ -18,30 +18,13 @@
             </div>
 
             <div class="product-content">
-                <!-- Ürün Başlığı -->  <h3 class="product-title">@Model.Product.ProductName</h3>
-                </br>             
-                <h2 class="product-title">@Model.Product.ProductTitle</h2>
+                <!-- Ürün Başlığı -->
+                <h3 class="product-title">@Model.Product.ProductName</h3>
+              @*   <h2 class="product-title">@Model.Product.ProductTitle</h2> *@
 
                 <!-- Mağazaya Git Linki -->
                 <a asp-controller="Home" asp-action="Index" class="product-link">Visit store</a>
 
-                <div class="product-price">
-                    @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
-                    {
-                        <span class="old-price" style="text-decoration: line-through;">
-                            @Model.Product.Price.ToString("C")
-                        </span> 
-                       <br />
-                        <span class="discounted-price" style="color: red;">
-                            @(@Model.Product.Price - (@Model.Product.Price * (decimal)Model.Product.DiscountRate.Value / 100))
-                        </span>
-                    }
-                    else
-                    {
-                        <span>@Model.Product.Price.ToString("C")</span>
-                    }
-                </div>
-                
                 <div class="product-router">
                     <ul>
                         <li>
@@ -53,18 +36,57 @@
                     </ul>
                 </div>
 
-           
+                <div class="product-price">
+                    @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
+                    {
+                        <span class="old-price" style="text-decoration: line-through;">
+                            @Model.Product.Price.ToString("C")
+                        </span>
+                        <br />
+                        <span class="discounted-price" style="color: red;">
+                            @(@Model.Product.Price - (@Model.Product.Price * (decimal)Model.Product.DiscountRate.Value / 100))
+                        </span>
+                    }
+                    else
+                    {
+                        <span>@Model.Product.Price.ToString("C")</span>
+                    }
+                </div>
+
                 <!-- Ürün Detayı -->
                 <div class="product-detail">
                     <h2>Özellikler:</h2>
-                    <p>@(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)</p>
-                    <p>@(string.IsNullOrWhiteSpace(Model.Product.ProductSize) ? "Beden mevcut değil." : Model.Product.ProductSize)</p>
+                    <p>
+                        @(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)
+                    </p>
+                </div><br />
+            
+                <div class="size-selection">
+                    <h3>Beden Seçin:</h3>
+                    @if (Model.Product.ProductSize.Any())
+                    {
+                        <div id="size-list" class=" ">
+                            @foreach (var size in Model.Product.ProductSize)
+                            {
+                                <button type="button" class="btn  size-option " data-size="@size">@size</button>
+
+
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Beden mevcut değil.</p>
+                    }
                 </div>
 
                 <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
                 <div class="purchase-info">
                     <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
                         <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                        <input type="hidden" name="selectedSize" id="selected-size" />
+
+
                         <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mt-4" style="width: 60px; display: inline-block;" />
                         <button type="submit" class="btn btn-primary btn-hover">
                             <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
@@ -81,8 +103,6 @@
         </div>
     </div>
 </div>
-
-
 
 <div style="padding: 20px; border: 1px solid #ddd; max-width: 800px; margin: 50px auto;">
     <div class="comment">
@@ -170,7 +190,46 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+                document.querySelectorAll('.size-option').forEach(button => {
+            button.addEventListener('click', function () {
+                // Seçilen beden hidden input'a atanıyor
+                document.getElementById('selected-size').value = this.dataset.size;
 
+                // Seçim vurgusunu güncelle
+                document.querySelectorAll('.size-option').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+    </script>
+    <script>
+              document.querySelectorAll('.size-option').forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Tüm butonlardan 'selected' sınıfını kaldır
+                document.querySelectorAll('.size-option').forEach(function (btn) {
+                    btn.classList.remove('selected');
+                });
+
+                // Seçilen butona 'selected' sınıfını ekle
+                button.classList.add('selected');
+
+                // Seçilen bedeni bir input alanına yaz
+                var selectedSize = button.getAttribute('data-size');
+                document.getElementById('selected-size').value = selectedSize;  // Bu inputu HTML'de eklemeyi unutma
+            });
+        });
+
+        // Form gönderilmeden önce bedeni kontrol et
+        $('form').submit(function(event) {
+            var selectedSize = $('#selected-size').val();
+            if (!selectedSize) {
+                alert("Lütfen bir beden seçin.");
+                event.preventDefault(); // Formun gönderilmesini engelle
+            }
+        });
+
+    </script>
     <script>
         $(document).ready(function () {
             // Product ID'yi belirleyelim (Bu ID'yi dinamik olarak sayfadan alabilirsiniz)
@@ -198,9 +257,6 @@
             });
         });
     </script>
-
-   
-
     <script>
         // Function to load products
         function loadProducts(page) {
@@ -266,6 +322,4 @@
             });
         });
     </script>
-
 }
-

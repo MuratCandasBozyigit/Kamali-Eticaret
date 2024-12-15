@@ -308,7 +308,6 @@ namespace E_COMM_KAMALİ.Controllers
             });
         }
 
-
         #endregion
 
         #region s
