@@ -56,9 +56,6 @@ namespace E_COMM_KAMALİ.Controllers
             return RedirectToAction("Index", "ShopCart");
         }
 
-
-
-
         [HttpPost]
         public IActionResult RemoveFromCart(int productId)
         {
@@ -84,7 +81,6 @@ namespace E_COMM_KAMALİ.Controllers
 
             return Json(new { success = false, message = "Miktar 1 ile 5 arasında olmalıdır." }); // Hata durumu
         }
-
 
     }
 }

@@ -60,15 +60,17 @@
                         @(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)
                     </p>
                 </div>
-
+                <br />
                 <div class="size-selection">
                     <h3>Beden Seçin:</h3>
                     @if (Model.Product.ProductSize.Any())
                     {
-                        <div id="size-list" class="d-flex flex-wrap">
+                        <div id="size-list" class="d-flex ">
                             @foreach (var size in Model.Product.ProductSize)
                             {
-                                <button type="button" class="btn btn-outline-primary size-option" data-size="@size">@size</button>
+                                <button type="button" class="btn btn-primary  btn-hover size-option" data-size="@size">@size</button>
+
+
                             }
                         </div>
                     }
@@ -188,7 +190,6 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script>
                 document.querySelectorAll('.size-option').forEach(button => {
             button.addEventListener('click', function () {
@@ -229,7 +230,6 @@
         });
 
     </script>
-
     <script>
         $(document).ready(function () {
             // Product ID'yi belirleyelim (Bu ID'yi dinamik olarak sayfadan alabilirsiniz)
@@ -257,7 +257,6 @@
             });
         });
     </script>
-
     <script>
         // Function to load products
         function loadProducts(page) {
@@ -289,7 +288,6 @@
             });
         }
     </script>
-
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const productDetails = document.querySelectorAll('.product-detail');

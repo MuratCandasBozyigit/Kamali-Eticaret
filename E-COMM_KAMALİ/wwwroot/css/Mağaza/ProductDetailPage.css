@@ -350,28 +350,7 @@ body {
 /*#endregion */
 
 /*#region ListProducts */
-.size-option {
-    margin: 5px;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
 
-    .size-option.selected {
-        background-color: #007bff;
-        color: white;
-    }
-
-    .size-option:hover {
-        background-color: #f0f0f0;
-    }
-
-
-    .size-option:focus {
-        outline: none;
-    }
 
 .custom-col {
     display: flex; /* Flexbox ile düzenleme */
@@ -461,7 +440,39 @@ body {
 /*#endregion */
 
 /*#endregion */
+/*#region SizeButtons */
+.size-option {
+    margin: 2px; /* Butonlar arasındaki boşluk */
+    padding: 10px 20px; /* Diğer butonlarla uyumlu iç dolgu */
+    font-size: 15px; /* Yazı boyutu */
+    font-weight: 500; /* Yazı kalınlığı */
+    border-radius: 0; /* Köşeleri köşeli yap */
+    border: 1px solid white; /* Varsayılan border rengi */
+    background-color: rgb(237, 233, 221); /* Varsayılan arka plan rengi */
+    color: black; /* Varsayılan yazı rengi */
+    cursor: pointer; /* İşaretçi imleci */
+    transition: all 0.3s ease-in-out; /* Geçiş efekti */
+}
 
+    .size-option:hover {
+        background-color: white; /* Hover durumunda arka plan rengi */
+        color: black; /* Hover durumunda yazı rengi */
+        border: 2px solid black; /* Hover durumunda siyah border */
+        transform: scale(1.05); /* Hover durumunda hafif büyüme efekti */
+    }
+
+    .size-option.selected {
+        background-color: #007bff; /* Seçili buton arka plan rengi */
+        color: white; /* Seçili buton yazı rengi */
+        border: 2px solid #0056b3; /* Seçili buton border rengi */
+    }
+
+    .size-option:focus {
+        outline: none; /* Odaklanma sırasında kenar çizgisi kaldırılır */
+    }
+
+
+/*#endregion */
 /*#region Comment Section */
 
 
