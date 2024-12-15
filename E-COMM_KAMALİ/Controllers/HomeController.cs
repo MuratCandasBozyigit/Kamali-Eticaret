@@ -105,6 +105,7 @@ namespace E_COMM_KAMALİ.Controllers
             return RedirectToAction("PendingComments");
         }
         #endregion
+        #region Sayfalar
         public async Task<IActionResult> Index(int page = 1)
         {
             try
@@ -117,7 +118,7 @@ namespace E_COMM_KAMALİ.Controllers
                 var commentsWithAuthors = approvedComments.Select(c => new CommentViewModel
                 {
                     Content = c.Content,
-                    AuthorName=c.AuthorName ??"Bilinmiyor",
+                    AuthorName = c.AuthorName ?? "Bilinmiyor",
                     Author = c.Author?.FullName ?? "Bilinmiyor",  // Eğer Author null ise "Bilinmiyor" yaz
                     DateCommented = c.DateCommented
                 }).ToList();
@@ -226,7 +227,7 @@ namespace E_COMM_KAMALİ.Controllers
                 DiscountRate = p.DiscountRate
             }).ToList();
 
-          
+
 
             // Seçilen ürünü al
             var product = await _productService.GetByIdAsync(productId);
@@ -236,7 +237,7 @@ namespace E_COMM_KAMALİ.Controllers
             }
 
             // İlgili ürünleri al
-            var relatedProducts = await _productService.GetProductsByCategoryIdAsync(categoryId); 
+            var relatedProducts = await _productService.GetProductsByCategoryIdAsync(categoryId);
             // İlgili ürünleri ProductViewModel'e dönüştür
             var relatedProductViewModels = relatedProducts.Select(p => new ProductViewModel
             {
@@ -284,8 +285,8 @@ namespace E_COMM_KAMALİ.Controllers
 
             // Normal sayfa döndürme (JSON yerine)
             return View(viewModel);
-        }
-
+        } 
+        #endregion
         #region YorumSatırı
 
         //public async Task<string> RenderViewToStringAsync(string viewName, object model)
@@ -320,11 +321,6 @@ namespace E_COMM_KAMALİ.Controllers
         //    }
         //} 
         #endregion
-
-
-
-
-
         #region s
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
