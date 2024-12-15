@@ -6,7 +6,7 @@ using ECOMM.Core.ViewModels;
 
 namespace ECOMM.Business.Concrete
 {
-    public class ProductService : Service<Product>,IProductService
+    public class ProductService : Service<Product>, IProductService
     {
         private readonly IRepository<Product> _productRepository;
         private readonly ISubCategoryService subCategoryService;
@@ -88,12 +88,12 @@ namespace ECOMM.Business.Concrete
             return filteredProducts; // Filtrelenmiş ürünleri döndürüyoruz
         }
 
-      
+
 
         public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId)
         {
-          var products = await _productRepository.GetAllAsync();
-            return products.Where(p=>p.Id == categoryId).ToList();
+            var products = await _productRepository.GetAllAsync();
+            return products.Where(p => p.Id == categoryId).ToList();
         }
 
         #endregion
@@ -101,7 +101,7 @@ namespace ECOMM.Business.Concrete
         public async Task<List<ProductViewModel>> GetAllProductsAsync()
         {
             var products = await _productRepository.GetAllAsyncQuery();
-            return await products.Include(p => p.Category)
+            return await products.Include(p => p.Category).Include(s => s.SubCategory)
                 .Select(static p => new ProductViewModel
                 {
                     ProductId = p.Id,
@@ -118,6 +118,10 @@ namespace ECOMM.Business.Concrete
                     Category = new CategoryViewModel
                     {
                         ParentCategoryName = p.Category.ParentCategoryName
+                    },
+                    SubCategory = new SubCategoryViewModel
+                    {
+                        SubCategoryName = p.SubCategory.SubCategoryName
                     }
                 }).ToListAsync();
         }

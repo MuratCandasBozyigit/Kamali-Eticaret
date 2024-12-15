@@ -90,7 +90,6 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-
         [HttpGet("GetAllProductsAsync")]
         public async Task<IActionResult> GetAllProductsAsync()
         {

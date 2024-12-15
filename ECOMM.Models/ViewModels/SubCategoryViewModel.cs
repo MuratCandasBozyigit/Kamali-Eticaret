@@ -8,16 +8,14 @@ namespace ECOMM.Core.ViewModels
         public int SubCategoryId { get; set; }
         public string SubCategoryName { get; set; }
 
-        // Category ile ilgili alanlar:
+      
         public int CategoryId { get; set; }
-        public string CategoryName { get; set; }          // Ana kategori adı
-        public string CategoryTag { get; set; }           // Ana kategori etiketi
-        public string CategoryDescription { get; set; }   // Ana kategori açıklaması
+        public string CategoryName { get; set; }         
+        public string CategoryTag { get; set; }        
+        public string CategoryDescription { get; set; }
 
-       
+
+        public string ProductSize { get; set; }
+        public List<ProductViewModel> Products { get; set; }
     }
-
-
-
-
 }

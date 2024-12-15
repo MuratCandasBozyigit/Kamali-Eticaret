@@ -237,8 +237,10 @@ namespace E_COMM_KAMALİ.Controllers
                 ImageUrl = product.ImagePath,
                 CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
                 ProductDescription = product.ProductDescription,
-                DiscountRate = product.DiscountRate // DiscountRate'ı atıyoruz
+                DiscountRate = product.DiscountRate,  // DiscountRate'ı atıyoruz
+                SubCategoryName = product.SubCategory != null ? product.SubCategory.SubCategoryName : "Alt Kategori Yok" // Handle subcategory similarly
             };
+
 
             var viewModel = new ProductDetailPageViewModel
             {
@@ -250,7 +252,27 @@ namespace E_COMM_KAMALİ.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> GetProductCategories(int productId)
+        {
+            // Ürünü veritabanından alıyoruz
+            var product = await _productService.GetByIdAsync(productId);
+            if (product == null)
+            {
+                return Json(new { success = false, message = "Ürün bulunamadı" });
+            }
 
+            // Kategori ve Alt Kategori bilgilerini alıyoruz
+            var categoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok";
+            var subCategoryName = product.SubCategory != null ? product.SubCategory.SubCategoryName : "Alt Kategori Yok";
+
+            // JSON olarak döndürüyoruz
+            return Json(new
+            {
+                success = true,
+                categoryName = categoryName,
+                subCategoryName = subCategoryName
+            });
+        }
 
         #region s
 
