@@ -88,8 +88,8 @@ namespace ECOMM.Business.Concrete
 
         public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId)
         {
-          var products = await _productRepository.GetAllAsync();
-            return products.Where(p=>p.Id == categoryId).ToList();
+            var products = await _productRepository.GetAllAsync();
+            return products.Where(p => p.CategoryId == categoryId).ToList();
         }
 
         public async Task<List<ProductViewModel>> GetAllProductsAsync()
