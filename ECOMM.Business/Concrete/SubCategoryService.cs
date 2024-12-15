@@ -83,5 +83,14 @@ namespace ECOMM.Business.Concrete
             // Implement the update logic
             return await _subCategoryRepository.UpdateAsync(entity);
         }
+
+        public async Task<IEnumerable<SubCategory>> GetByCategoryIdAsync(int categoryId)
+        {
+            // Await the GetAllAsync() task and then apply LINQ methods on the result.
+            var subCategories = await _subCategoryRepository.GetAllAsync();
+            return subCategories.Where(s => s.CategoryId == categoryId).ToList();
+        }
+
+
     }
 }

@@ -5,7 +5,11 @@ namespace ECOMM.Core.ViewModels
 {
     public class ProductDetailPageViewModel
     {
-        public ProductViewModel Product { get; set; }  // Ana ürün bilgisi
+        public ProductViewModel Product { get; set; } 
+        
+       
+
+
         public List<ProductViewModel> RelatedProducts { get; set; }  // İlgili ürünler listesi
         public List<CommentViewModel> Comments { get; set; }  // Yorumlar listesi
         public List<Product> Products { get; set; }

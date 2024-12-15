@@ -6,21 +6,22 @@ using ECOMM.Core.ViewModels;
 
 namespace ECOMM.Business.Concrete
 {
-    public class ProductService : Service<Product>,IProductService
+    public class ProductService : Service<Product>, IProductService
     {
         private readonly IRepository<Product> _productRepository;
-
+        private readonly ISubCategoryService subCategoryService;
         private readonly ICategoryService _categoryService;
 
         public ProductService(IRepository<Product> productRepository) : base(productRepository)
         {
             _productRepository = productRepository;
         }
-       
+
         public async Task<Product> GetByIdAsync(int id)
         {
             return await _productRepository.Query()
                                            .Include(p => p.Category)
+                                           .ThenInclude(c => c.SubCategories)
                                            .FirstOrDefaultAsync(p => p.Id == id);
         }
 
@@ -58,9 +59,10 @@ namespace ECOMM.Business.Concrete
             return await _categoryService.GetAllAsync();
         }
 
+        #region Filtreleme
         public async Task<IEnumerable<Product>> GetBySubCategoryIdAsync(int subCategoryId)
         {
-            
+
             var products = await _productRepository.GetAllAsync();
             return products.Where(p => p.Id == subCategoryId).ToList();
         }
@@ -76,7 +78,7 @@ namespace ECOMM.Business.Concrete
                 {
                     ProductId = p.Id,
                     ProductName = p.ProductName,
-                    ProductSize = string.Join("",p.ProductSizes),
+                    ProductSize = string.Join("", p.ProductSizes),
                     ProductDescription = p.ProductDescription,
                     Price = p.ProductPrice,
                     ImageUrl = p.ImagePath
@@ -86,16 +88,22 @@ namespace ECOMM.Business.Concrete
             return filteredProducts; // Filtrelenmiş ürünleri döndürüyoruz
         }
 
+
+
         public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId)
         {
             var products = await _productRepository.GetAllAsync();
+
             return products.Where(p => p.CategoryId == categoryId).ToList();
+
         }
+
+        #endregion
 
         public async Task<List<ProductViewModel>> GetAllProductsAsync()
         {
             var products = await _productRepository.GetAllAsyncQuery();
-            return await products.Include(p => p.Category)
+            return await products.Include(p => p.Category).Include(s => s.SubCategory)
                 .Select(static p => new ProductViewModel
                 {
                     ProductId = p.Id,
@@ -112,6 +120,10 @@ namespace ECOMM.Business.Concrete
                     Category = new CategoryViewModel
                     {
                         ParentCategoryName = p.Category.ParentCategoryName
+                    },
+                    SubCategory = new SubCategoryViewModel
+                    {
+                        SubCategoryName = p.SubCategory.SubCategoryName
                     }
                 }).ToListAsync();
         }

@@ -38,16 +38,29 @@
         <textarea rows="10" cols="20" class="form-control" id="ProductDescription" name="ProductDescription" required placeholder="Ürün açıklamanızı buraya yazın..."></textarea>
     </div>
 
+
     <div class="form-group">
         <label for="CategoryId" class="form-label">Kategori</label>
         <select class="form-control" id="CategoryId" name="CategoryId" required>
             <option value="">Kategori Seçin</option>
-            @foreach (var category in Model.Categories)
+            @foreach (var category in Model.Categories ?? new List<SelectListItem>())
             {
                 <option value="@category.Value">@category.Text</option>
             }
         </select>
     </div>
+
+    <div class="form-group">
+        <label for="SubCategoryId" class="form-label">Alt Kategori</label>
+        <select class="form-control" id="SubCategoryId" name="SubCategoryId" required>
+            <option value="">Alt Kategori Seçin</option>
+            @foreach (var subcategory in Model.SubCategories ?? new List<SelectListItem>())
+            {
+                <option value="@subcategory.Value">@subcategory.Text</option>
+            }
+        </select>
+    </div>
+
 
     @*/*Reism Ekleme*/*@
     <div class="form-group">

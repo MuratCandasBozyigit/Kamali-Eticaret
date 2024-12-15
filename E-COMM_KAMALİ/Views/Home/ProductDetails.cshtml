@@ -1,4 +1,4 @@
-﻿@model ECOMM.Core.ViewModels.ProductDetailPageViewModel
+@model ECOMM.Core.ViewModels.ProductDetailPageViewModel
 @{
     ViewData["Title"] = "Ürün Detayı";
 }
@@ -45,20 +45,15 @@
                 <div class="product-router">
                     <ul>
                         <li>
-                            Kategori:
-                            <span>
-                                @(string.IsNullOrWhiteSpace(Model.Product.Category?.ParentCategoryName) ? "Kategori Yok" : Model.Product.Category.ParentCategoryName)
-                            </span>
+                            Kategori: <span id="category-name">Yükleniyor...</span>
                         </li>
                         <li>
-                            Alt Kategori:
-                            <span>
-                                @(string.IsNullOrWhiteSpace(Model.Product.Category?.ParentCategoryTag) ? "Alt Kategori Yok" : Model.Product.Category.ParentCategoryTag)
-                            </span>
+                            Alt Kategori: <span id="sub-category-name">Yükleniyor...</span>
                         </li>
                     </ul>
                 </div>
 
+           
                 <!-- Ürün Detayı -->
                 <div class="product-detail">
                     <h2>Özellikler:</h2>
@@ -174,6 +169,38 @@
 </div>
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Product ID'yi belirleyelim (Bu ID'yi dinamik olarak sayfadan alabilirsiniz)
+            var productId = @Model.Product.ProductId;  // Örneğin modelden alınıyor
+
+            // AJAX ile kategori ve alt kategori bilgilerini alalım
+            $.ajax({
+                url: '/Home/GetProductCategories',  // HomeController'daki action methodunun URL'si
+                type: 'GET',
+                data: { productId: productId },  // Parametre olarak productId gönderiyoruz
+                success: function (response) {
+                    if (response.success) {
+                        // Başarıyla veri geldiyse, kategori ve alt kategoriyi sayfada göster
+                        $('#category-name').text(response.categoryName);
+                        $('#sub-category-name').text(response.subCategoryName);
+                    } else {
+                        // Hata durumunda mesajı göster
+                        console.log(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    // Hata durumunda
+                    console.error("AJAX Error: " + status + " - " + error);
+                }
+            });
+        });
+    </script>
+
+   
+
     <script>
         // Function to load products
         function loadProducts(page) {
@@ -239,4 +266,6 @@
             });
         });
     </script>
+
 }
+

@@ -22,6 +22,9 @@ namespace ECOMM.Core.ViewModels
         public int CategoryId { get; set; } 
         public string CategoryName { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
+        public int SubCategoryId { get; set; }
+        public string SunCategoryName { get; set; }
+        public IEnumerable<SelectListItem> SubCategories { get; set; }
 
         public void UpdateProductInfo(Product product)
         {
@@ -31,7 +34,8 @@ namespace ECOMM.Core.ViewModels
             product.ProductTitle = this.ProductTitle;
             product.ProductDescription = this.ProductDescription;
             product.ProductPrice =(decimal)this.ProductPrice;
-            product.CategoryId = this.CategoryId; // Kategori ID'sini güncelle
+            product.CategoryId = this.CategoryId;
+            product.SubCategoryId = this.SubCategoryId; 
         }
 
     }

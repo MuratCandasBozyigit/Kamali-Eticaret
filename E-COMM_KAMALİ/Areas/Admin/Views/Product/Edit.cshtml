@@ -55,6 +55,8 @@
         <span asp-validation-for="ProductDescription" class="text-danger"></span>
     </div> <br />
 
+
+    @*Kategori *@
     <div class="form-group">
         <label asp-for="CategoryId">Kategori:</label>
         <select asp-for="CategoryId" class="form-control" asp-items="@(new SelectList(Model.Categories, "Value", "Text"))" required>
@@ -62,6 +64,16 @@
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div> <br />
+    @*Alt Kategori *@
+    <div class="form-group">
+        <label asp-for="SubCategoryId">Alt Kategori:</label>
+        <select asp-for="SubCategoryId" class="form-control" asp-items="@(new SelectList(Model.SubCategories, "Value", "Text"))" required>
+            <option value="">--Alt Kategori Seçin --</option>
+        </select>
+        <span asp-validation-for="SubCategoryId" class="text-danger"></span>
+    </div> <br />
+
+
 
     <div class="form-group mr-2" >
         <label>Ürün Resmi:</label>
@@ -190,3 +202,4 @@
         });
     </script>
 }
+  
