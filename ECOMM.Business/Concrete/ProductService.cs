@@ -25,7 +25,6 @@ namespace ECOMM.Business.Concrete
                                            .FirstOrDefaultAsync(p => p.Id == id);
         }
 
-
         public async Task<IEnumerable<Product>> GetPaginatedProductsAsync(int page, int pageSize)
         {
             return await _productRepository.Query()

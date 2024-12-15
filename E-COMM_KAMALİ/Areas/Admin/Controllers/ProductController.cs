@@ -143,13 +143,21 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Create()
         {
             var categories = await _categoryService.GetAllAsync();
+            var subCategories = await _subCategoryService.GetAllAsync();
             var viewModel = new ProductCreateViewModel
             {
                 Categories = categories.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
                     Text = c.ParentCategoryName
+                }).ToList(),
+
+                SubCategories = subCategories.Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.SubCategoryName // Adjust this based on your model properties
                 }).ToList()
+
             };
 
             return View(viewModel);

@@ -29,5 +29,12 @@ namespace ECOMM.Core.ViewModels
         public string ProductCategory { get; set; }
         public string CategoryName { get; set; }
         public IEnumerable<SelectListItem> Categories { get; set; }
+
+        [ForeignKey("SubCategoryId")]
+        public Category SubCategory { get; set; }
+        public int SubCategoryId { get; set; }
+        public string ProductSubCategory { get; set; }
+        public string SubCategoryName { get; set; }
+        public IEnumerable<SelectListItem> SubCategories { get; set; }
     }
 }
