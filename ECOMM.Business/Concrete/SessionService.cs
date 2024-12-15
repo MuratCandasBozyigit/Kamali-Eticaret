@@ -28,7 +28,7 @@ public class SessionService : ISessionService
     public void AddToCart(CartItemViewModel item)
     {
         var cartItems = GetCartItems();
-        var existingItem = cartItems.FirstOrDefault(i => i.ProductId == item.ProductId);
+        var existingItem = cartItems.FirstOrDefault(i => i.ProductId == item.ProductId && i.ProductSize == item.ProductSize);
 
         if (existingItem != null)
         {

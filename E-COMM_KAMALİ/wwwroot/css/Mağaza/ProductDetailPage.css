@@ -350,6 +350,8 @@ body {
 /*#endregion */
 
 /*#region ListProducts */
+
+
 .custom-col {
     display: flex; /* Flexbox ile düzenleme */
     justify-content: center; /* Kartları ortalar */
@@ -438,7 +440,44 @@ body {
 /*#endregion */
 
 /*#endregion */
+/*#region SizeButtons */
+.size-option {
+    margin: 2px; /* Butonlar arasındaki boşluk */
+    padding: 10px 20px; /* Diğer butonlarla uyumlu iç dolgu */
+    font-size: 15px; /* Yazı boyutu */
+    font-weight: 500; /* Yazı kalınlığı */
+    border-radius: 0; /* Köşeleri köşeli yap */
+    border: none; /* Varsayılan border rengi */
+    background-color: rgb(51, 51, 51); /* Varsayılan arka plan rengi */
+    color: white; /* Varsayılan yazı rengi */
+    cursor: pointer; /* İşaretçi imleci */
+    transition: all 0.3s ease-in-out; /* Geçiş efekti */
+    display:initial;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    width: 95px; /* Sabit genişlik ayarı isteğe bağlı */
+    height: 50px; /* Sabit yükseklik */
+}
 
+    .size-option:hover {
+        background-color: white; /* Hover durumunda arka plan rengi */
+        color: black; /* Hover durumunda yazı rengi */
+        border: 2px solid black; /* Hover durumunda siyah border */
+        transform: scale(1.05); /* Hover durumunda hafif büyüme efekti */
+    }
+
+    .size-option.selected {
+        background-color: rgb(176, 108, 26); /* Seçili buton arka plan rengi */
+        color: white; /* Seçili buton yazı rengi */
+        border: 2px solid #0056b3; /* Seçili buton border rengi */
+    }
+
+    .size-option:focus {
+        outline: none; /* Odaklanma sırasında kenar çizgisi kaldırılır */
+    }
+
+/*#endregion */
 /*#region Comment Section */
 
 
@@ -494,7 +533,6 @@ textarea::placeholder {
 
 
 /*#endregion */
-
 /*#region ÜrünlerListesi */
 
 /*#region Normal */

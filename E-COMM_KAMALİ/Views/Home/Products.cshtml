@@ -33,16 +33,16 @@
                             <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-details ">Detaylar</a>
                         </div>
                         <div class="card-footer">
-                            <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
+                          @*   <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
                                 <input type="hidden" name="quantity" value="1" /> <!-- Miktar her zaman 1 olarak gönderilecek -->
                                 <button type="submit" class="btn btn-light btn-add-to-cart">
                                     <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                                 </button>
-                            </form>
+                            </form> *@
 
 
-                          <br />
+                          
                             <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
                                 <button type="submit" class="btn btn-favourite btn-light">
