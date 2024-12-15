@@ -59,16 +59,16 @@
                     <p>
                         @(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)
                     </p>
-                </div>
-                <br />
+                </div><br />
+            
                 <div class="size-selection">
                     <h3>Beden Seçin:</h3>
                     @if (Model.Product.ProductSize.Any())
                     {
-                        <div id="size-list" class="d-flex ">
+                        <div id="size-list" class=" ">
                             @foreach (var size in Model.Product.ProductSize)
                             {
-                                <button type="button" class="btn btn-primary  btn-hover size-option" data-size="@size">@size</button>
+                                <button type="button" class="btn  size-option " data-size="@size">@size</button>
 
 
                             }
