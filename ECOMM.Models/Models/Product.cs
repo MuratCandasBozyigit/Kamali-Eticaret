@@ -38,6 +38,12 @@ namespace ECOMM.Core.Models
         [ForeignKey("CategoryId")]
         public Category Category { get; set; } // Kategori ilişkisi
 
+
+        // Foreign Key to SubCategory
+        public int SubCategoryId { get; set; }
+        [ForeignKey("SubCategoryId")]
+        public SubCategory SubCategory { get; set; }
+
         [Required]
         public List<string> ProductSizes { get; set; } = new List<string>(); // Ürün beden bilgisi
 

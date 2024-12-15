@@ -13,7 +13,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         #region Servisler 
         private readonly IProductService _productService;
         private readonly ICategoryService _categoryService;
-       
+       private readonly ISubCategoryService _subCategoryService;
 
         public ProductController(IProductService productService, ICategoryService categoryService)
         {
@@ -71,19 +71,25 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             {
                 var products = await _productService.GetAllAsync();
                 var categories = await _categoryService.GetAllAsync();
+                var subCategories = await _subCategoryService.GetAllAsync();
 
                 foreach (var product in products)
                 {
+                    // Set the category of the product
                     product.Category = categories.FirstOrDefault(c => c.Id == product.CategoryId);
+
+                    // Set the subcategory of the product
+                    product.SubCategory = subCategories.FirstOrDefault(s => s.Id == product.SubCategory.Id);
                 }
 
-                return Json(products); // JSON formatında döndür
+                return Json(products); // Return the products in JSON format
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Sunucu hatası: {ex.Message}");
+                return StatusCode(500, $"Server error: {ex.Message}");
             }
         }
+
 
         [HttpGet("GetAllProductsAsync")]
         public async Task<IActionResult> GetAllProductsAsync()

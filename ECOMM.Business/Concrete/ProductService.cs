@@ -60,9 +60,10 @@ namespace ECOMM.Business.Concrete
             return await _categoryService.GetAllAsync();
         }
 
+        #region Filtreleme
         public async Task<IEnumerable<Product>> GetBySubCategoryIdAsync(int subCategoryId)
         {
-            
+
             var products = await _productRepository.GetAllAsync();
             return products.Where(p => p.Id == subCategoryId).ToList();
         }
@@ -78,7 +79,7 @@ namespace ECOMM.Business.Concrete
                 {
                     ProductId = p.Id,
                     ProductName = p.ProductName,
-                    ProductSize = string.Join("",p.ProductSizes),
+                    ProductSize = string.Join("", p.ProductSizes),
                     ProductDescription = p.ProductDescription,
                     Price = p.ProductPrice,
                     ImageUrl = p.ImagePath
@@ -88,11 +89,15 @@ namespace ECOMM.Business.Concrete
             return filteredProducts; // Filtrelenmiş ürünleri döndürüyoruz
         }
 
+      
+
         public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId)
         {
           var products = await _productRepository.GetAllAsync();
             return products.Where(p=>p.Id == categoryId).ToList();
         }
+
+        #endregion
 
         public async Task<List<ProductViewModel>> GetAllProductsAsync()
         {

@@ -55,6 +55,13 @@ namespace ECOMM.Data
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDBContext).Assembly);
+
+            modelBuilder.Entity<Product>()
+      .HasOne(p => p.SubCategory)
+      .WithMany()
+      .HasForeignKey(p => p.SubCategoryId) // Reference the foreign key directly
+      .OnDelete(DeleteBehavior.Restrict);
+
         }
 
     }
