@@ -58,6 +58,8 @@ namespace E_COMM_KAMALİ.Controllers
                     {
                         ProductId = product.Id,
                         ProductName = product.ProductName,
+                        ProductSize = string.Join(", ", product.ProductSizes),
+
                         ImagePath = product.ImagePath,
                         Price = product.ProductPrice,
                         Quantity = quantity
