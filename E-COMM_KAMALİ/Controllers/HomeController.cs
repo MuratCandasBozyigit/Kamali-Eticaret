@@ -2,20 +2,15 @@ using E_COMM_KAMALİ.Models;
 using ECOMM.Business.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using Microsoft.AspNetCore.Http; // Eklenmeli
-using Microsoft.EntityFrameworkCore;
 using ECOMM.Core.ViewModels;
 using ECOMM.Core.Models;
-using ECOMM.Business.Concrete;
-using Microsoft.AspNetCore.Identity; 
-//using Microsoft.AspNet.Identity;
-//public static class HttpRequestExtensions
-//{
-//    public static bool IsAjaxRequest(this HttpRequest request)
-//    {
-//        return request.Headers["X-Requested-With"] == "XMLHttpRequest";
-//    }
-//}
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+
 
 namespace E_COMM_KAMALİ.Controllers
 {
@@ -24,15 +19,18 @@ namespace E_COMM_KAMALİ.Controllers
         #region Servisler 
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<User> _userManager;
-
+        private readonly IRazorViewEngine _viewEngine;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ITempDataProvider _tempDataProvider;
         private readonly IProductService _productService;
         private readonly IOrderService _orderService;
         // private readonly IFavouritesService _favouritesService;
         private readonly ICategoryService categoryService;
         private readonly ICommentService _commentService;
         private readonly IUserService _userService;
-
-        public HomeController(ILogger<HomeController> logger, IProductService productService, IOrderService orderService, /*IFavouritesService favouritesService,*/ ICommentService commentService, IUserService userService, ICategoryService categoryService)
+        private readonly IActionDescriptorCollectionProvider _actionDescriptorCollectionProvider;
+        private readonly IModelMetadataProvider _metadataProvider;
+        public HomeController(ILogger<HomeController> logger, IProductService productService, IOrderService orderService, /*IFavouritesService favouritesService,*/ ICommentService commentService, IUserService userService, ICategoryService categoryService, IRazorViewEngine viewEngine, IHttpContextAccessor httpContextAccessor, ITempDataProvider tempDataProvider, IActionDescriptorCollectionProvider actionDescriptorCollectionProvider, IModelMetadataProvider metadataProvider)
         {
             _logger = logger;
             _productService = productService;
@@ -41,7 +39,11 @@ namespace E_COMM_KAMALİ.Controllers
             _commentService = commentService;
             _userService = userService;
             this.categoryService = categoryService;
-        
+            _viewEngine = viewEngine;
+            _httpContextAccessor = httpContextAccessor;
+            _tempDataProvider = tempDataProvider;
+            _actionDescriptorCollectionProvider = actionDescriptorCollectionProvider;
+            _metadataProvider = metadataProvider;
         }
         #endregion
         #region Comment
@@ -103,6 +105,7 @@ namespace E_COMM_KAMALİ.Controllers
             return RedirectToAction("PendingComments");
         }
         #endregion
+        #region Sayfalar
         public async Task<IActionResult> Index(int page = 1)
         {
             try
@@ -115,7 +118,7 @@ namespace E_COMM_KAMALİ.Controllers
                 var commentsWithAuthors = approvedComments.Select(c => new CommentViewModel
                 {
                     Content = c.Content,
-                    AuthorName=c.AuthorName ??"Bilinmiyor",
+                    AuthorName = c.AuthorName ?? "Bilinmiyor",
                     Author = c.Author?.FullName ?? "Bilinmiyor",  // Eğer Author null ise "Bilinmiyor" yaz
                     DateCommented = c.DateCommented
                 }).ToList();
@@ -198,21 +201,54 @@ namespace E_COMM_KAMALİ.Controllers
             return View(categories);
         }
 
-        public async Task<IActionResult> ProductDetails(int productId, int categoryId)
+        public async Task<IActionResult> ProductDetails(int productId, int categoryId, int page = 1)
         {
-            var category = await _productService.GetByCategoryIdAsync(categoryId);
+            int pageSize = 4;
 
-            var categoryRelatedProducts = category.Select(product => new ProductViewModel
+            // Tüm ürünleri al ve toplam ürün sayısını hesapla
+            var products = await _productService.GetAllAsync();
+            int totalProducts = products.Count(); // Toplam ürün sayısını al
+            int totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize); // Toplam sayfa sayısını hesapla
+
+            // Sayfalı ürünleri al
+            var paginatedProducts = await _productService.GetPaginatedProductsAsync(page, pageSize);
+
+            // `Product` modelinden `ProductViewModel` modeline dönüşüm yap
+            var paginatedProductViewModels = paginatedProducts.Select(p => new ProductViewModel
             {
-                ProductId = product.Id,
-                ProductName = product.ProductName,
-                ProductSize = string.Join("", product.ProductSizes),
-                Price = product.ProductPrice,
-                ImageUrl = product.ImagePath,
-                CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
-                DiscountRate = product.DiscountRate // DiscountRate'ı atıyoruz
+                ProductId = p.Id,
+                ProductName = p.ProductName,
+                ProductSize = string.Join("", p.ProductSizes),
+                ProductTitle = p.ProductTitle,
+                Price = p.ProductPrice,
+                ImageUrl = p.ImagePath,
+                CategoryName = p.Category != null ? p.Category.ParentCategoryName : "Kategori Yok",
+                ProductDescription = p.ProductDescription,
+                DiscountRate = p.DiscountRate
             }).ToList();
 
+
+
+            // Seçilen ürünü al
+            var product = await _productService.GetByIdAsync(productId);
+            if (product == null)
+            {
+                return NotFound("İlgili ürün bulunamadı");
+            }
+
+            // İlgili ürünleri al
+            var relatedProducts = await _productService.GetProductsByCategoryIdAsync(categoryId);
+            // İlgili ürünleri ProductViewModel'e dönüştür
+            var relatedProductViewModels = relatedProducts.Select(p => new ProductViewModel
+            {
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                ProductTitle = p.ProductTitle,
+                Price = p.Price,
+                ImageUrl = p.ImageUrl,
+                DiscountRate = p.DiscountRate
+            }).ToList();
+            // Yorumları al
             var comments = await _commentService.GetAllAsync();
             var commentsWithAuthors = comments.Select(c => new CommentViewModel
             {
@@ -221,12 +257,7 @@ namespace E_COMM_KAMALİ.Controllers
                 DateCommented = c.DateCommented
             }).ToList();
 
-            var product = await _productService.GetByIdAsync(productId);
-            if (product == null)
-            {
-                return NotFound("İlgili ürün bulunamadı");
-            }
-
+            // Ürün modelini oluştur
             var productViewModel = new ProductViewModel
             {
                 ProductId = product.Id,
@@ -237,6 +268,7 @@ namespace E_COMM_KAMALİ.Controllers
                 ImageUrl = product.ImagePath,
                 CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
                 ProductDescription = product.ProductDescription,
+
                 DiscountRate = product.DiscountRate,  // DiscountRate'ı atıyoruz
                 SubCategoryName = product.SubCategory != null ? product.SubCategory.SubCategoryName : "Alt Kategori Yok" // Handle subcategory similarly
             };
@@ -245,11 +277,13 @@ namespace E_COMM_KAMALİ.Controllers
             var viewModel = new ProductDetailPageViewModel
             {
                 Product = productViewModel,
-                RelatedProducts = categoryRelatedProducts,
+                RelatedProducts = relatedProducts,
                 Comments = commentsWithAuthors
             };
 
+            // Normal sayfa döndürme (JSON yerine)
             return View(viewModel);
+
         }
 
         public async Task<IActionResult> GetProductCategories(int productId)
@@ -273,6 +307,9 @@ namespace E_COMM_KAMALİ.Controllers
                 subCategoryName = subCategoryName
             });
         }
+
+
+        #endregion
 
         #region s
 

@@ -93,7 +93,9 @@ namespace ECOMM.Business.Concrete
         public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId)
         {
             var products = await _productRepository.GetAllAsync();
-            return products.Where(p => p.Id == categoryId).ToList();
+
+            return products.Where(p => p.CategoryId == categoryId).ToList();
+
         }
 
         #endregion
