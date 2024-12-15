@@ -31,7 +31,8 @@ namespace E_COMM_KAMALİ.Controllers
         [HttpPost]
         public async Task<IActionResult> AddToCart(int productId, string selectedSize, int quantity)
         {
-            var product = await _productService.GetByIdAsync(productId); // Ürünü al
+            // Ürünü al
+            var product = await _productService.GetByIdAsync(productId);
             if (product != null)
             {
                 var cart = _sessionService.GetCartItems(); // Kullanıcının mevcut sepetini al
@@ -70,6 +71,7 @@ namespace E_COMM_KAMALİ.Controllers
 
             return RedirectToAction("Index", "ShopCart");
         }
+
 
 
         [HttpPost]

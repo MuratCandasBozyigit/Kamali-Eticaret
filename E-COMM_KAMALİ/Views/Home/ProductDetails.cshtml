@@ -125,7 +125,8 @@
                 <div class="purchase-info">
                     <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
                         <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                        <input type="hidden" id="selected-size" name="selectedSize" />
+                        <input type="hidden" name="selectedSize" id="selected-size" />
+
 
                         <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mt-4" style="width: 60px; display: inline-block;" />
                         <button type="submit" class="btn btn-primary btn-hover">
@@ -232,7 +233,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script>
-               document.querySelectorAll('.size-option').forEach(function (button) {
+              document.querySelectorAll('.size-option').forEach(function (button) {
             button.addEventListener('click', function () {
                 // Tüm butonlardan 'selected' sınıfını kaldır
                 document.querySelectorAll('.size-option').forEach(function (btn) {
@@ -256,7 +257,6 @@
                 event.preventDefault(); // Formun gönderilmesini engelle
             }
         });
-
 
     </script>
 
