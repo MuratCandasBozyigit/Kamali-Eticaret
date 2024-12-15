@@ -9,7 +9,7 @@ namespace ECOMM.Business.Concrete
     public class ProductService : Service<Product>,IProductService
     {
         private readonly IRepository<Product> _productRepository;
-
+        private readonly ISubCategoryService subCategoryService;
         private readonly ICategoryService _categoryService;
 
         public ProductService(IRepository<Product> productRepository) : base(productRepository)

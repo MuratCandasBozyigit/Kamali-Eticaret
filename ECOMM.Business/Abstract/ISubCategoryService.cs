@@ -11,6 +11,6 @@ namespace ECOMM.Business.Abstract
     {
 
         Task<IEnumerable<SubCategory>> GetAllIncludingCategoryAsync();
-
+        Task<IEnumerable<SubCategory>> GetByCategoryIdAsync(int categoryId);
     }
 }

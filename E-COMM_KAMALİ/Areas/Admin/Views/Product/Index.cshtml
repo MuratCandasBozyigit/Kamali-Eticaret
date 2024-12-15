@@ -24,6 +24,7 @@
                 <th>Fiyat</th>
                 <th>İndirim Yüzdesi</th>
                 <th>Kategori</th>
+                <th>Alt Kategori</th>
                 <th>İşlemler</th>
             </tr>
         </thead>
@@ -78,6 +79,7 @@
 
 
                     { data: 'category.parentCategoryName', title: 'Kategori' },
+                     { data: 'subCategory.subCategoryName', title: 'Alt Kategori' },
                     {
                         data: null, title: 'İşlemler', render: function (data) {
                             return '<a href="/Admin/Product/Edit/' + data.productId + '" class="btn btn-sm btn-warning">Düzenle</a>' +

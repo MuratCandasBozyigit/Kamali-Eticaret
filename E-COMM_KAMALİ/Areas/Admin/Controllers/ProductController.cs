@@ -15,11 +15,11 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         private readonly ICategoryService _categoryService;
        private readonly ISubCategoryService _subCategoryService;
 
-        public ProductController(IProductService productService, ICategoryService categoryService)
+        public ProductController(IProductService productService, ICategoryService categoryService, ISubCategoryService subCategoryService)
         {
             _productService = productService;
             _categoryService = categoryService;
-       
+            _subCategoryService = subCategoryService;
         }
 
         #endregion
@@ -49,7 +49,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 Categories = categories.ToList() // Kategorileri listeye çevir
             };
 
-            return View(model);
+            return View("Index");
         }
 
         public class HomeViewModel
@@ -139,11 +139,24 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             }
         }
 
-        [HttpGet("Create")] 
+        [HttpGet("Create")]
         public async Task<IActionResult> Create()
         {
             var categories = await _categoryService.GetAllAsync();
             var subCategories = await _subCategoryService.GetAllAsync();
+
+            // Check for null or empty categories or subCategories
+            if (categories == null || !categories.Any())
+            {
+                ModelState.AddModelError("", "No categories found.");
+                return View(new ProductCreateViewModel());
+            }
+
+            if (subCategories == null || !subCategories.Any())
+            {
+                ModelState.AddModelError("", "No subcategories found.");
+            }
+
             var viewModel = new ProductCreateViewModel
             {
                 Categories = categories.Select(c => new SelectListItem
@@ -151,17 +164,16 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                     Value = c.Id.ToString(),
                     Text = c.ParentCategoryName
                 }).ToList(),
-
                 SubCategories = subCategories.Select(s => new SelectListItem
                 {
                     Value = s.Id.ToString(),
-                    Text = s.SubCategoryName // Adjust this based on your model properties
-                }).ToList()
-
+                    Text = s.SubCategoryName
+                }).ToList() // Initialize as an empty list if null
             };
 
             return View(viewModel);
         }
+
 
         [HttpPost("Create")]
         public async Task<IActionResult> Create(Product product, IFormFile image, IFormFile image1, IFormFile image2, IFormFile image3, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock, double? DiscountRate)
@@ -249,23 +261,36 @@ namespace ECOMM.Web.Areas.Admin.Controllers
         [HttpGet("Edit/{id}")]
         public async Task<IActionResult> Edit(int id)
         {
+            // Fetch the product by its id
             var product = await _productService.GetByIdAsync(id);
             if (product == null)
             {
                 return NotFound();
             }
+
+            // Fetch all subcategories based on the selected category of the product
+            var subCategories = await _subCategoryService.GetByCategoryIdAsync(product.CategoryId);
+            if (subCategories == null || !subCategories.Any())
+            {
+                ModelState.AddModelError("", "No subcategories found for this category.");
+                return View("Error");
+            }
+
+            // Fetch all categories
             var categories = await _categoryService.GetAllAsync();
             if (categories == null || !categories.Any())
             {
-                ModelState.AddModelError("", "Kategori bilgisi bulunamadı.");
+                ModelState.AddModelError("", "No categories found.");
                 return View("Error");
             }
+
+            // Prepare the view model with product details
             var viewModel = new ProductEditViewModel
             {
                 ProductId = product.Id,
                 ProductTitle = product.ProductTitle,
                 ProductName = product.ProductName,
-                ProductSizes = product.ProductSizes ?? new List<string>(), // Null kontrolü
+                ProductSizes = product.ProductSizes ?? new List<string>(), // Null check for sizes
                 DiscountRate = product.DiscountRate,
                 ProductDescription = product.ProductDescription,
                 ProductPrice = product.ProductPrice,
@@ -273,16 +298,23 @@ namespace ECOMM.Web.Areas.Admin.Controllers
                 ImagePath1 = product.ImagePath1,
                 ImagePath2 = product.ImagePath2,
                 ImagePath3 = product.ImagePath3,
-                CategoryId = product.CategoryId,
+                CategoryId = product.CategoryId, // Set the current category
                 Categories = categories.Select(c => new SelectListItem
                 {
                     Value = c.Id.ToString(),
-                    Text = c.ParentCategoryName
-                }).ToList()
+                    Text = c.ParentCategoryName // Assuming 'ParentCategoryName' is the property to display
+                }).ToList(),
+                SubCategoryId = product.SubCategoryId, // Set the current subcategory
+                SubCategories = subCategories.Select(s => new SelectListItem
+                {
+                    Value = s.Id.ToString(),
+                    Text = s.SubCategoryName // Assuming 'SubCategoryName' is the property to display
+                }).ToList(),
             };
 
             return View(viewModel);
         }
+
 
         [HttpPost("Edit/{id}")]
         public async Task<IActionResult> Edit(ProductEditViewModel viewModel, IFormFile image, IFormFile image1, IFormFile image2, IFormFile image3, [FromForm] List<string> ProductSizes, [FromForm] Dictionary<string, int> SizeStock)
@@ -298,6 +330,7 @@ namespace ECOMM.Web.Areas.Admin.Controllers
             productToUpdate.ProductDescription = viewModel.ProductDescription;
             productToUpdate.ProductPrice = viewModel.ProductPrice;
             productToUpdate.CategoryId = viewModel.CategoryId;
+            productToUpdate.SubCategoryId = viewModel.SubCategoryId;
             productToUpdate.ProductSizes = ProductSizes ?? productToUpdate.ProductSizes;
             productToUpdate.DiscountRate = viewModel.DiscountRate;
             productToUpdate.SizeStock = SizeStock ?? productToUpdate.SizeStock;
