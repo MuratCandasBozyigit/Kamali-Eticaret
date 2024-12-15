@@ -3,33 +3,6 @@
     ViewData["Title"] = "Ürün Detayı";
 }
 
-<style>
-    .size-option {
-        margin: 5px;
-        padding: 10px 15px;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-        .size-option.selected {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .size-option:hover {
-            background-color: #f0f0f0;
-        }
-
-
-        .size-option:focus {
-            outline: none;
-        }
-
-</style>
-
-
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
 <link rel="stylesheet" href="/css/Mağaza/ProductDetailPage.css">
 
@@ -80,11 +53,6 @@
                     }
                 </div>
 
-
-
-
-
-
                 <!-- Ürün Detayı -->
                 <div class="product-detail">
                     <h2>Özellikler:</h2>
@@ -92,13 +60,6 @@
                         @(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)
                     </p>
                 </div>
-
-
-
-
-
-
-               
 
                 <div class="size-selection">
                     <h3>Beden Seçin:</h3>
@@ -116,10 +77,6 @@
                         <p>Beden mevcut değil.</p>
                     }
                 </div>
-
-
-
-
 
                 <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
                 <div class="purchase-info">
@@ -232,6 +189,19 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <script>
+                document.querySelectorAll('.size-option').forEach(button => {
+            button.addEventListener('click', function () {
+                // Seçilen beden hidden input'a atanıyor
+                document.getElementById('selected-size').value = this.dataset.size;
+
+                // Seçim vurgusunu güncelle
+                document.querySelectorAll('.size-option').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+    </script>
     <script>
               document.querySelectorAll('.size-option').forEach(function (button) {
             button.addEventListener('click', function () {

@@ -7,6 +7,7 @@ namespace E_COMM_KAMALİ.Controllers
 {
     public class ShopCartController : Controller
     {
+        #region Region
         private readonly IOrderService _orderService;
         private readonly ICategoryService _categoryService;
         private readonly IProductService _productService;
@@ -22,6 +23,8 @@ namespace E_COMM_KAMALİ.Controllers
             _sessionService = sessionService;
         }
 
+        #endregion
+
         public IActionResult Index()
         {
             var cartItems = _sessionService.GetCartItems(); // Oturumdan sepet öğelerini al
@@ -35,42 +38,24 @@ namespace E_COMM_KAMALİ.Controllers
             var product = await _productService.GetByIdAsync(productId);
             if (product != null)
             {
-                var cart = _sessionService.GetCartItems(); // Kullanıcının mevcut sepetini al
-                var existingItem = cart.FirstOrDefault(c => c.ProductId == productId && c.ProductSize == selectedSize);
-
-                if (existingItem != null)
+                // Yeni bir sepet öğesi oluştur
+                var cartItem = new CartItemViewModel
                 {
-                    // Eğer ürün ve beden zaten sepetteyse, toplam miktarı kontrol et
-                    int newQuantity = existingItem.Quantity + quantity;
-                    if (newQuantity > 5)
-                    {
-                        existingItem.Quantity = 5; // Maksimum 5 ile sınırla
-                    }
-                    else
-                    {
-                        existingItem.Quantity = newQuantity;
-                    }
-                }
-                else
-                {
-                    // Yeni bir ürün ve beden ekleniyorsa
-                    if (quantity > 5) quantity = 5;
-                    var cartItem = new CartItemViewModel
-                    {
-                        ProductId = product.Id,
-                        ProductName = product.ProductName,
-                        ProductSize = selectedSize,  // Seçilen beden
-                        ImagePath = product.ImagePath,
-                        Price = product.ProductPrice,
-                        Quantity = quantity
-                    };
+                    ProductId = product.Id,
+                    ProductName = product.ProductName,
+                    ProductSize = selectedSize, // Beden bilgisi
+                    ImagePath = product.ImagePath,
+                    Price = product.ProductPrice,
+                    Quantity = Math.Min(quantity, 5) // Maksimum 5'e sınırla
+                };
 
-                    _sessionService.AddToCart(cartItem);
-                }
+                // Sepet öğesini ekle
+                _sessionService.AddToCart(cartItem);
             }
 
             return RedirectToAction("Index", "ShopCart");
         }
+
 
 
 
