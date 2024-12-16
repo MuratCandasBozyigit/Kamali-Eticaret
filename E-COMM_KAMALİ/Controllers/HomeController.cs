@@ -316,7 +316,6 @@ namespace E_COMM_KAMALİ.Controllers
         }
 
         #endregion
-
         #region s
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

@@ -43,33 +43,41 @@ body {
     box-shadow: none; /* Gölge kaldırıldı */
 }
 
-/* Resim Stili */
-.product-imgs {
+/* Resim Kapsayıcı Stili */
+/*.product-imgs {
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: rgb(250, 248, 245);
-    border-radius: 0; /* Köşeler düz */
-    margin-left: 35px;
-    margin-right: 50px;
-    overflow: hidden; /* Taşmayı önlemek için */
-}
+    border-radius: 8px;*/ /* Hafif yuvarlak köşeler için */
+    /*margin: 0 50px;*/ /* Soldan ve sağdan boşluk */
+    /*overflow: hidden;*/ /* Taşmayı gizler */
+/*}*/
 
-.img-showcase {
-    width: 100%; /* Kapsayıcı genişliği */
-    display: flex;
+/* Resim Vitrini Stili */
+/*.img-showcase {
+    width: 100%;*/ /* Kapsayıcı genişliği */
+    /*display: flex;
     justify-content: center;
     align-items: center;
+    margin-right: 10px;
     background-color: rgb(250, 248, 245);
-}
+    border: 2px solid #ddd;*/ /* Çerçeve ekledim (isteğe bağlı) */
+    /*border-radius: 8px;*/ /* Aynı şekilde yuvarlatma */
+/*}*/
 
-    .img-showcase img {
-        width: 650px; /* Sabit genişlik */
-        height: 650px; /* Sabit yükseklik */
-        object-fit: cover; /* Resmi kapsayıcı boyuta göre kırpmak için */
-        border-radius: 0; /* Köşeler düz */
-    }
+    /* Resim Stili */
+    /*.img-showcase img {
+        width: 100%;*/ /* Resmi kapsayıcı genişliğe uydur */
+        /*max-width: 200px;*/ /* Maksimum genişliği belirle */
+        /*height: auto;*/ /* Oranı koru */
+        /*aspect-ratio: 9 / 16;*/ /* Oranı zorunlu kıl */
+        /*object-fit: cover;*/ /* Resmi çerçeveye sığdır */
+        /*border-radius: 8px;*/ /* Resim köşeleri hafif yuvarlak */
+    /*}*/
+
+
 
 /* Ürün İçeriği */
 .product-content {
@@ -898,4 +906,39 @@ textarea::placeholder {
     }
 }
 /*#endregion */
+/*#endregion */
+
+
+/*#region ResimDneme */
+
+.main-image {
+    object-fit: cover;
+    aspect-ratio: 9 / 16;
+    max-width: 100%;
+    border-radius: 8px;
+}
+
+/* Küçük resimler için düzenleme */
+.thumbnail {
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+    border: 2px solid #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+    /* Hover ile efekt */
+    .thumbnail:hover {
+        border-color: #007bff;
+    }
+
+.img-thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
 /*#endregion */
