@@ -6,115 +6,114 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
 <link rel="stylesheet" href="/css/Mağaza/ProductDetailPage.css">
 
-<div class="container">
+<div class="container py-5">
     <div class="card-wrapper">
         <div class="card">
-            <div class="container py-5">
-                <div class="row d-flex justify-content-center align-items-start">
+            <div class="row d-flex justify-content-center align-items-start">
 
-                    <!-- Ana Resim -->
-                    <div class="col-lg-8 col-md-9 col-sm-12 mb-4">
-                        <div class="ratio ratio-16x9">
-                            <img id="mainImage" src="@Model.Product.ImageUrl" alt="Ana Resim" class="main-image">
+                <!-- Ana Resim ve Küçük Resimler -->
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="row">
+                        <!-- Ana Resim -->
+                        <div class="col-lg-8 col-md-9 col-sm-12 mb-4">
+                            <div class="ratio ratio-16x9">
+                                <img id="mainImage" src="@Model.Product.ImageUrl" alt="Ana Resim" class="main-image">
+                            </div>
+                        </div>
+
+                        <!-- Küçük Resimler -->
+                        <div class="col-lg-2 col-md-3 col-sm-12">
+                            <div class="img-thumbnails d-flex flex-column gap-3">
+                                <img class="thumbnail" src="@Model.Product.ImageUrl1" alt="Resim 1">
+                                <img class="thumbnail" src="@Model.Product.ImageUrl2" alt="Resim 2">
+                                <img class="thumbnail" src="@Model.Product.ImageUrl3" alt="Resim 3">
+                            </div>
                         </div>
                     </div>
+                </div>
 
-                    <!-- Küçük Resimler -->
-                    <div class="col-lg-2 col-md-3 col-sm-12">
-                        <div class="img-thumbnails d-flex flex-column gap-3">
-                            <img class="thumbnail" src="@Model.Product.ImageUrl1" alt="Resim 1">
-                            <img class="thumbnail" src="@Model.Product.ImageUrl2" alt="Resim 2">
-                            <img class="thumbnail" src="@Model.Product.ImageUrl3" alt="Resim 3">
+                <!-- Ürün Bilgileri ve Butonlar -->
+                <div class="col-lg-12 col-md-12 col-sm-12 mt-4">
+                    <div class="product-content">
+                        <!-- Ürün Başlığı -->
+                        <h3 class="product-title">@Model.Product.ProductName</h3>
+
+                        <!-- Mağazaya Git Linki -->
+                        <a asp-controller="Home" asp-action="Index" class="product-link">Visit store</a>
+
+                        <div class="product-router">
+                            <ul>
+                                <li>
+                                    Kategori: <span id="category-name">Yükleniyor...</span>
+                                </li>
+                                <li>
+                                    Alt Kategori: <span id="sub-category-name">Yükleniyor...</span>
+                                </li>
+                            </ul>
                         </div>
-                    </div>
 
-                </div>
-            </div>
-
-
-
-            <div class="product-content">
-                <!-- Ürün Başlığı -->
-                <h3 class="product-title">@Model.Product.ProductName</h3>
-                @*   <h2 class="product-title">@Model.Product.ProductTitle</h2> *@
-
-                <!-- Mağazaya Git Linki -->
-                <a asp-controller="Home" asp-action="Index" class="product-link">Visit store</a>
-
-                <div class="product-router">
-                    <ul>
-                        <li>
-                            Kategori: <span id="category-name">Yükleniyor...</span>
-                        </li>
-                        <li>
-                            Alt Kategori: <span id="sub-category-name">Yükleniyor...</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="product-price">
-                    @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
-                    {
-                        <span class="old-price" style="text-decoration: line-through;">
-                            @Model.Product.Price.ToString("C")
-                        </span>
-                        <br />
-                        <span class="discounted-price" style="color: red;">
-                            @(@Model.Product.Price - (@Model.Product.Price * (decimal)Model.Product.DiscountRate.Value / 100))
-                        </span>
-                    }
-                    else
-                    {
-                        <span>@Model.Product.Price.ToString("C")</span>
-                    }
-                </div>
-
-                <!-- Ürün Detayı -->
-                <div class="product-detail">
-                    <h2>Özellikler:</h2>
-                    <p>
-                        @(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)
-                    </p>
-                </div><br />
-
-                <div class="size-selection">
-                    <h3>Beden Seçin:</h3>
-                    @if (Model.Product.ProductSize.Any())
-                    {
-                        <div id="size-list" class=" ">
-                            @foreach (var size in Model.Product.ProductSize)
+                        <div class="product-price">
+                            @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
                             {
-                                <button type="button" class="btn  size-option " data-size="@size">@size</button>
-
-
+                                <span class="old-price" style="text-decoration: line-through;">
+                                    @Model.Product.Price.ToString("C")
+                                </span>
+                                <br />
+                                <span class="discounted-price" style="color: red;">
+                                    @(@Model.Product.Price - (@Model.Product.Price * (decimal)Model.Product.DiscountRate.Value / 100))
+                                </span>
+                            }
+                            else
+                            {
+                                <span>@Model.Product.Price.ToString("C")</span>
                             }
                         </div>
-                    }
-                    else
-                    {
-                        <p>Beden mevcut değil.</p>
-                    }
+
+                        <!-- Ürün Detayı -->
+                        <div class="product-detail">
+                            <h2>Özellikler:</h2>
+                            <p>
+                                @(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)
+                            </p>
+                        </div><br />
+
+                        <div class="size-selection">
+                            <h3>Beden Seçin:</h3>
+                            @if (Model.Product.ProductSize.Any())
+                            {
+                                <div id="size-list" class=" ">
+                                    @foreach (var size in Model.Product.ProductSize)
+                                    {
+                                        <button type="button" class="btn  size-option " data-size="@size">@size</button>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <p>Beden mevcut değil.</p>
+                            }
+                        </div>
+
+                        <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
+                        <div class="purchase-info">
+                            <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
+                                <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                                <input type="hidden" name="selectedSize" id="selected-size" />
+                                <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mt-4" style="width: 60px; display: inline-block;" />
+                                <button type="submit" class="btn  btn-hover">
+                                    <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                                </button>
+                            </form>
+                            <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
+                                <input type="hidden" name="productId" value="@Model.Product.ProductId" />
+                                <button type="submit" class="btn  btn-hover">
+                                    <i class="fa-regular fa-heart"></i> Favoriler
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
-                <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
-                <div class="purchase-info">
-                    <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                        <input type="hidden" name="selectedSize" id="selected-size" />
-
-
-                        <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mt-4" style="width: 60px; display: inline-block;" />
-                        <button type="submit" class="btn btn-primary btn-hover">
-                            <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
-                        </button>
-                    </form>
-                    <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
-                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                        <button type="submit" class="btn btn-primary btn-hover">
-                            <i class="fa-regular fa-heart"></i> Favoriler
-                        </button>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
