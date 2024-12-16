@@ -6,103 +6,29 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700;800&display=swap">
 <link rel="stylesheet" href="/css/Mağaza/ProductDetailPage.css">
 
-<div class="container">
-    <div class="card-wrapper">
-        <div class="card">
-            <div class="product-imgs">
-                <div class="img-display">
-                    <div class="img-showcase">
-                        <img src="@Model.Product.ImageUrl" alt="Product image" />
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-content">
-                <!-- Ürün Başlığı -->
-                <h3 class="product-title">@Model.Product.ProductName</h3>
-              @*   <h2 class="product-title">@Model.Product.ProductTitle</h2> *@
-
-                <!-- Mağazaya Git Linki -->
-                <a asp-controller="Home" asp-action="Index" class="product-link">Visit store</a>
-
-                <div class="product-router">
-                    <ul>
-                        <li>
-                            Kategori: <span id="category-name">Yükleniyor...</span>
-                        </li>
-                        <li>
-                            Alt Kategori: <span id="sub-category-name">Yükleniyor...</span>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="product-price">
-                    @if (Model.Product.DiscountRate.HasValue && Model.Product.DiscountRate > 0)
-                    {
-                        <span class="old-price" style="text-decoration: line-through;">
-                            @Model.Product.Price.ToString("C")
-                        </span>
-                        <br />
-                        <span class="discounted-price" style="color: red;">
-                            @(@Model.Product.Price - (@Model.Product.Price * (decimal)Model.Product.DiscountRate.Value / 100))
-                        </span>
-                    }
-                    else
-                    {
-                        <span>@Model.Product.Price.ToString("C")</span>
-                    }
-                </div>
-
-                <!-- Ürün Detayı -->
-                <div class="product-detail">
-                    <h2>Özellikler:</h2>
-                    <p>
-                        @(string.IsNullOrWhiteSpace(Model.Product.ProductDescription) ? "Açıklama mevcut değil." : Model.Product.ProductDescription)
-                    </p>
-                </div><br />
-            
-                <div class="size-selection">
-                    <h3>Beden Seçin:</h3>
-                    @if (Model.Product.ProductSize.Any())
-                    {
-                        <div id="size-list" class=" ">
-                            @foreach (var size in Model.Product.ProductSize)
-                            {
-                                <button type="button" class="btn  size-option " data-size="@size">@size</button>
-
-
-                            }
-                        </div>
-                    }
-                    else
-                    {
-                        <p>Beden mevcut değil.</p>
-                    }
-                </div>
-
-                <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
-                <div class="purchase-info">
-                    <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
-                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                        <input type="hidden" name="selectedSize" id="selected-size" />
-
-
-                        <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mt-4" style="width: 60px; display: inline-block;" />
-                        <button type="submit" class="btn btn-primary btn-hover">
-                            <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
-                        </button>
-                    </form>
-                    <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
-                        <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                        <button type="submit" class="btn btn-primary btn-hover">
-                            <i class="fa-regular fa-heart"></i> Favoriler
-                        </button>
-                    </form>
-                </div>
-            </div>
+<div class="product-imgs">
+    <div class="img-display">
+        <div class="img-showcase">
+            <img src="@Model.Product.ImageUrl" alt="Product image 1" />
+        </div>
+    </div>
+    <div class="img-display">
+        <div class="img-showcase">
+            <img src="@Model.Product.ImageUrl1" alt="Product image 2" />
+        </div>
+    </div>
+    <div class="img-display">
+        <div class="img-showcase">
+            <img src="@Model.Product.ImageUrl2" alt="Product image 3" />
+        </div>
+    </div>
+    <div class="img-display">
+        <div class="img-showcase">
+            <img src="@Model.Product.ImageUrl3" alt="Product image 4" />
         </div>
     </div>
 </div>
+
 
 <div style="padding: 20px; border: 1px solid #ddd; max-width: 800px; margin: 50px auto;">
     <div class="comment">

@@ -223,6 +223,9 @@ namespace E_COMM_KAMALİ.Controllers
                 ProductTitle = p.ProductTitle,
                 Price = p.ProductPrice,
                 ImageUrl = p.ImagePath,
+                ImageUrl1 = p.ImagePath1,
+                ImageUrl2 = p.ImagePath2,
+                ImageUrl3 = p.ImagePath3,
                 CategoryName = p.Category != null ? p.Category.ParentCategoryName : "Kategori Yok",
                 ProductDescription = p.ProductDescription,
                 DiscountRate = p.DiscountRate
@@ -267,6 +270,9 @@ namespace E_COMM_KAMALİ.Controllers
                 ProductTitle = product.ProductTitle,
                 Price = product.ProductPrice,
                 ImageUrl = product.ImagePath,
+                ImageUrl1 = product.ImagePath1,
+                ImageUrl2 = product.ImagePath2,
+                ImageUrl3 = product.ImagePath3,
                 CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
                 ProductDescription = product.ProductDescription,
 
