@@ -8,14 +8,29 @@
 <div class="container">
     <div class="card-wrapper">
         <div class="card">
-            <div class="product-imgs">
-                <div class="img-display">
-                    <div class="img-showcase">
-                        <img src="@Model.Product.ImageUrl" alt="Product image" />
+            <div class="container py-5">
+                <div class="row d-flex justify-content-center align-items-center">
+                    <!-- Ana Resim -->
+                    <div class="col-lg-8 col-md-9 col-sm-12">
+                        <div class="ratio ratio-3x2">
+                            <img id="mainImage" src="@Model.Product.ImageUrl" alt="Ana Resim" class="main-image">
+                        </div>
+                    </div><div class="col-lg-8 col-md-9 col-sm-12">
+                        <div>
+                            <img id="mainImage" src="@Model.Product.ImageUrl" alt="Ana Resim" class="main-image">
+                        </div>
+                    </div>
+
+                    <!-- Küçük Resimler -->
+                    <div class="col-lg-2 col-md-3 col-sm-12">
+                        <div class="img-thumbnails">
+                            <img class="thumbnail" src="@Model.Product.ImageUrl1" alt="Resim 1">
+                            <img class="thumbnail" src="@Model.Product.ImageUrl2" alt="Resim 2">
+                            <img class="thumbnail" src="@Model.Product.ImageUrl3" alt="Resim 3">
+                        </div>
                     </div>
                 </div>
             </div>
-
             <div class="product-content">
                 <!-- Ürün Başlığı -->
                 <h3 class="product-title">@Model.Product.ProductName</h3>
@@ -345,3 +360,11 @@
         });
     </script>
 }
+@* 
+            <div class="product-imgs">
+                <div class="img-display">
+                    <div class="img-showcase">
+                        <img src="@Model.Product.ImageUrl" alt="Product image" />
+                    </div>
+                </div>
+            </div> *@
