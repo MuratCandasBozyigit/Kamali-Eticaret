@@ -36,7 +36,7 @@ namespace E_COMM_KAMALİ.Controllers
 
         // Favorilere ürün ekle
         [HttpPost]
-        public async Task<IActionResult> AddToFavourites(int productId, int quantity)
+        public async Task<IActionResult> AddToFavourites(int productId,string selectedSize)
         {
             var product = await productService.GetByIdAsync(productId); // Ürünü al
             if (product != null)
@@ -45,9 +45,9 @@ namespace E_COMM_KAMALİ.Controllers
                 {
                     ProductId = product.Id,
                     ProductName = product.ProductName,
+                    ProductSize = selectedSize, // Sadece seçilen bedeni kullan
                     ImagePath = product.ImagePath,
                     Price = product.ProductPrice,
-                    Quantity = quantity // Eğer Quantity gerekli değilse bu satırı kaldırabilirsin
                 };
 
                 _sessionService.AddToFavourites(cartItem); // Favorilere ekle
@@ -55,6 +55,8 @@ namespace E_COMM_KAMALİ.Controllers
 
             return RedirectToAction("Index", "Favourites"); // Favori sayfasına yönlendir
         }
+
+
 
         // Favoriden ürün sil
         [HttpPost]

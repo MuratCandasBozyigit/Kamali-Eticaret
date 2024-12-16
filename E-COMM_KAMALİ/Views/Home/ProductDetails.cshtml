@@ -104,12 +104,17 @@
                                     <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                                 </button>
                             </form>
-                            <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
+                          
+                            <form asp-controller="Favourites" asp-action="AddToFavourites" method="post" class="fav-btn">
                                 <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                                <button type="submit" class="btn  btn-hover">
+                              @*   <input type="hidden" id="selected-size-@Model.Product.ProductId" name="productSize" />  *@
+                                <input type="hidden" name="selectedSize" id="selected-size" />
+                                <button type="submit" class="btn btn-warning btn-hover">
                                     <i class="fa-regular fa-heart"></i> Favoriler
                                 </button>
                             </form>
+
+
                         </div>
                     </div>
                 </div>
@@ -234,7 +239,6 @@
             });
         });
     </script>
-
     <script>
         $(document).ready(function () {
             // Küçük resimlere tıklama olayı
@@ -254,6 +258,28 @@
         });
     </script>
 
+
+    <script>
+        // Beden seçenekleri tıklandığında
+        document.querySelectorAll('.size-option').forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Seçilen bedeni hidden input'a ata
+                var productId = button.getAttribute('data-product-id'); // Ürün ID'sini al
+                var selectedSize = button.getAttribute('data-size'); // Seçilen bedeni al
+
+                // İlgili hidden input'u bul ve value'sunu değiştir
+                document.getElementById('selected-size-' + productId).value = selectedSize;
+
+                // Tüm butonlardan 'selected' sınıfını kaldır
+                document.querySelectorAll('.size-option').forEach(function (btn) {
+                    btn.classList.remove('selected');
+                });
+
+                // Seçilen butona 'selected' sınıfını ekle
+                button.classList.add('selected');
+            });
+        });
+    </script>
 
 
     <script>
@@ -296,6 +322,8 @@
         });
 
     </script>
+
+
     <script>
         $(document).ready(function () {
             // Product ID'yi belirleyelim (Bu ID'yi dinamik olarak sayfadan alabilirsiniz)
