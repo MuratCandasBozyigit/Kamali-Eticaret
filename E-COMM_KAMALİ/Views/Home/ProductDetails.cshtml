@@ -114,6 +114,28 @@
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Küçük resimlere tıklama olayı
+            $('.thumbnail').click(function () {
+                // Tıklanan küçük resmin kaynak (src) bilgisini al
+                var newSrc = $(this).attr('src');
+
+                // Ana resmin mevcut kaynak bilgisini al
+                var oldSrc = $('#mainImage').attr('src');
+
+                // Ana resmin kaynağını yeni resimle değiştir
+                $('#mainImage').attr('src', newSrc);
+
+                // Tıklanan küçük resmin kaynağını eski ana resim kaynağıyla değiştir
+                $(this).attr('src', oldSrc);
+            });
+        });
+    </script>
+
+
+
     <script>
                 document.querySelectorAll('.size-option').forEach(button => {
             button.addEventListener('click', function () {
