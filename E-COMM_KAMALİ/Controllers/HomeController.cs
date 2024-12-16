@@ -125,17 +125,17 @@ namespace E_COMM_KAMALİ.Controllers
 
                 int pageSize = 4;  // Sayfa başına gösterilecek ürün sayısı
 
-                // Ürünleri al ve sayfalama işlemi yap
+                // Ürünleri al ve rastgele sıralama uygula
                 var products = await _productService.GetAllAsync();
-                var paginatedProducts = products.Skip((page - 1) * pageSize)
-                                                .Take(pageSize)
-                                                .ToList();
+                var randomProducts = products.OrderBy(p => Guid.NewGuid())  // Rastgele sıralama
+                                              .Take(pageSize)             // Belirtilen sayıda ürün seç
+                                              .ToList();
 
                 // ViewModel oluştur
                 var viewModel = new IndexViewModel
                 {
                     Comments = commentsWithAuthors,  // Yorumları ViewModel'e atıyoruz
-                    Products = paginatedProducts     // Ürünleri ViewModel'e atıyoruz
+                    Products = randomProducts        // Rastgele ürünleri ViewModel'e atıyoruz
                 };
 
                 // Sayfa bilgilerini View'a gönder
@@ -151,6 +151,7 @@ namespace E_COMM_KAMALİ.Controllers
                 return StatusCode(500, "Ürünler yüklenirken bir hata oluştu.");
             }
         }
+
 
         public async Task<IActionResult> Products(int productId, int categoryId)
         {
