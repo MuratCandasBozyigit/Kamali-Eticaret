@@ -913,7 +913,7 @@ textarea::placeholder {
 
 .main-image {
     object-fit: cover;
-    aspect-ratio: 9 / 16;
+    aspect-ratio: 3 / 2; /* Büyük resmin oranı 3x2 olmalı */
     max-width: 100%;
     border-radius: 8px;
 }
@@ -921,9 +921,10 @@ textarea::placeholder {
 /* Küçük resimler için düzenleme */
 .thumbnail {
     object-fit: cover;
-    aspect-ratio: 1 / 1;
-    max-width: 100%;
-    height: auto;
+    aspect-ratio: 1 / 1; /* Küçük resimler kare şeklinde olacak */
+   
+    width: 300px;
+     height: 300px;
     cursor: pointer;
     border: 2px solid #f8f9fa;
     transition: border-color 0.3s ease;
@@ -934,10 +935,22 @@ textarea::placeholder {
         border-color: #007bff;
     }
 
+/* Küçük resimleri dikey olarak hizalamak için düzenleme */
 .img-thumbnails {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+    display: inline-flex;
+    flex-direction: row;
+    gap: 10px; /* Resimler arasında boşluk bırakır */
+}
+
+/* Bootstrap grid düzenlemelerini iyileştirmek için */
+@media (max-width: 767px) {
+    .col-lg-8, .col-md-9, .col-sm-12 {
+        flex: 1 1 100%; /* Küçük ekranlarda elemanlar tam genişlik alır */
+    }
+
+    .col-lg-2, .col-md-3 {
+        flex: 1 1 100%; /* Küçük resimler de tam genişlikte olacak */
+    }
 }
 
 

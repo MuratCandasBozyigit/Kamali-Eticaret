@@ -9,14 +9,11 @@
     <div class="card-wrapper">
         <div class="card">
             <div class="container py-5">
-                <div class="row d-flex justify-content-center align-items-center">
+                <div class="row d-flex justify-content-center align-items-start">
+
                     <!-- Ana Resim -->
                     <div class="col-lg-8 col-md-9 col-sm-12">
-                        <div class="ratio ratio-3x2">
-                            <img id="mainImage" src="@Model.Product.ImageUrl" alt="Ana Resim" class="main-image">
-                        </div>
-                    </div><div class="col-lg-8 col-md-9 col-sm-12">
-                        <div>
+                        <div class="ratio ratio-16x9">
                             <img id="mainImage" src="@Model.Product.ImageUrl" alt="Ana Resim" class="main-image">
                         </div>
                     </div>
@@ -29,8 +26,12 @@
                             <img class="thumbnail" src="@Model.Product.ImageUrl3" alt="Resim 3">
                         </div>
                     </div>
+
                 </div>
             </div>
+
+
+
             <div class="product-content">
                 <!-- Ürün Başlığı -->
                 <h3 class="product-title">@Model.Product.ProductName</h3>
