@@ -10,7 +10,7 @@ body {
 /* Container */
 .container {
     margin-top: 30px;
-    max-width: 1600px;
+    max-width: 1400px;
     width: 100%;
     padding: 20px;
     border-radius: 0px; /* Köşeler düz */
@@ -44,47 +44,11 @@ body {
     box-shadow: none; /* Gölge kaldırıldı */
 }
 
-
-/* Resim Kapsayıcı Stili */
-/*.product-imgs {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(250, 248, 245);
-    border-radius: 8px;*/ /* Hafif yuvarlak köşeler için */
-    /*margin: 0 50px;*/ /* Soldan ve sağdan boşluk */
-    /*overflow: hidden;*/ /* Taşmayı gizler */
-/*}*/
-
-/* Resim Vitrini Stili */
-/*.img-showcase {
-    width: 100%;*/ /* Kapsayıcı genişliği */
-    /*display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 10px;
-    background-color: rgb(250, 248, 245);
-    border: 2px solid #ddd;*/ /* Çerçeve ekledim (isteğe bağlı) */
-    /*border-radius: 8px;*/ /* Aynı şekilde yuvarlatma */
-/*}*/
-
-    /* Resim Stili */
-    /*.img-showcase img {
-        width: 100%;*/ /* Resmi kapsayıcı genişliğe uydur */
-        /*max-width: 200px;*/ /* Maksimum genişliği belirle */
-        /*height: auto;*/ /* Oranı koru */
-        /*aspect-ratio: 9 / 16;*/ /* Oranı zorunlu kıl */
-        /*object-fit: cover;*/ /* Resmi çerçeveye sığdır */
-        /*border-radius: 8px;*/ /* Resim köşeleri hafif yuvarlak */
-    /*}*/
-
-
-
 /* Ürün İçeriği */
 .product-content {
     margin-left: 50px;
     flex: 2;
+    font-size: 2.5rem;
     padding: 20px;
     background-color: rgb(240, 247, 247);
     border-radius: 0px; /* Köşeler düz */
@@ -92,8 +56,8 @@ body {
 }
 
 .product-title {
-    font-size: 4rem;
-    font-weight: 700;
+    font-size: 5rem;
+    font-weight: 800;
     margin-bottom: 4px; /* Başlık ile diğer içerikler arasında 3-4px boşluk */
     color: rgb(10, 10, 10);
 }
@@ -101,7 +65,7 @@ body {
 .product-link {
     margin-top: 4px; /* Başlık ile diğer içerikler arasında 3-4px boşluk */
     font-weight: 500;
-    font-size: 1.5rem;
+    font-size:2rem;
     color: #007bff;
     text-decoration: none;
     margin-bottom: 10px;
@@ -124,7 +88,7 @@ body {
 
 .product-price {
     margin-top: 12px;
-    font-size: 1.75rem;
+    font-size: 3rem;
     font-weight: 700;
     margin: 20px 0;
     color: black;
@@ -132,7 +96,7 @@ body {
 
 .product-detail h2 {
     margin-top: 15px;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: 800;
     margin-bottom: 15px;
     color: rgb(28, 28, 27);
@@ -161,7 +125,7 @@ body {
 
 .product-router ul {
     padding: 0;
-    font-weight: 700;
+    font-weight: 900;
     margin-bottom: 20px;
     list-style: none;
     color: rgb(28, 28, 27);
@@ -170,7 +134,7 @@ body {
 .product-router li {
     margin-bottom: 20px;
     font-size: 1rem;
-    font-weight: 700;
+    font-weight: 900;
     line-height: 1.5;
     margin-top: 15px;
     color: rgb(28, 28, 27);
@@ -187,6 +151,7 @@ body {
 .purchase-info .btn {
     margin-top: 50px;
     background-color: #333;
+    flex-direction: row;
     color: #fff;
     text-align: right;
     border: 1px solid #333;
@@ -900,14 +865,15 @@ body {
 
 
 .comment {
-    position: relative; /* Yalnızca kendi kapsayıcısında konumlandır */
-    margin: 0 auto; /* Yatayda ortala */
-    width: 400px; /* Kutunun genişliği */
+    position: relative;
+    margin: 0 auto;
+    width: 80%; /* Genişliği yüzdeyle ayarla */
+    max-width: 1400px; /* Maksimum genişlik */
     padding: 20px;
-    background-color: white; /* Beyaz arka plan */
-    border: 2px solid black; /* Keskin siyah kenar */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Hafif gölge */
-    font-family: 'Open Sans', sans-serif; /* Modern yazı tipi */
+    background-color: white;
+    border: 2px solid black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Open Sans', sans-serif;
     box-sizing: border-box;
 }
 

@@ -105,7 +105,6 @@
                                 </button>
                             </form>
 
-
                             <form asp-controller="Favourites" asp-action="AddToFavourites" method="post" class="fav-btn" id="fav-form-@Model.Product.ProductId">
                                 <input type="hidden" name="productId" value="@Model.Product.ProductId" />
                                 <input type="hidden" name="selectedSize" id="selected-size-@Model.Product.ProductId" />
@@ -113,10 +112,6 @@
                                     <i class="fa-regular fa-heart"></i> Favoriler
                                 </button>
                             </form>
-
-
-
-
                         </div>
                     </div>
                 </div>
