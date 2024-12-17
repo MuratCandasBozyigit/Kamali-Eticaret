@@ -104,15 +104,17 @@
                                     <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
                                 </button>
                             </form>
-                          
-                            <form asp-controller="Favourites" asp-action="AddToFavourites" method="post" class="fav-btn">
+
+
+                            <form asp-controller="Favourites" asp-action="AddToFavourites" method="post" class="fav-btn" id="fav-form-@Model.Product.ProductId">
                                 <input type="hidden" name="productId" value="@Model.Product.ProductId" />
-                              @*   <input type="hidden" id="selected-size-@Model.Product.ProductId" name="productSize" />  *@
-                                <input type="hidden" name="selectedSize" id="selected-size" />
+                                <input type="hidden" name="selectedSize" id="selected-size-@Model.Product.ProductId" />
                                 <button type="submit" class="btn btn-warning btn-hover">
                                     <i class="fa-regular fa-heart"></i> Favoriler
                                 </button>
                             </form>
+
+
 
 
                         </div>
@@ -211,6 +213,44 @@
 </div>
 
 @section Scripts {
+    <script>
+              (function () {
+            var formId = "fav-form-@Model.Product.ProductId"; // Form ID
+            var form = document.getElementById(formId); // Formu al
+
+            if (form) {
+                // Bu formdaki beden seçeneklerini seç
+                form.querySelectorAll('.size-option').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        // Tüm butonlardan 'selected' sınıfını kaldır
+                        form.querySelectorAll('.size-option').forEach(function (btn) {
+                            btn.classList.remove('selected');
+                        });
+
+                        // Seçilen butona 'selected' sınıfını ekle
+                        button.classList.add('selected');
+
+                        // Seçilen bedeni ilgili hidden input'a yaz
+                        var selectedSizeInput = form.querySelector('#selected-size-@Model.Product.ProductId');
+                        var selectedSize = button.getAttribute('data-size');
+                        if (selectedSizeInput) {
+                            selectedSizeInput.value = selectedSize; // Hidden input'a değeri ata
+                        }
+                    });
+                });
+            }
+        })();
+
+    </script>
+
+
+
+
+
+
+
+
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -257,8 +297,6 @@
             });
         });
     </script>
-
-
     <script>
         // Beden seçenekleri tıklandığında
         document.querySelectorAll('.size-option').forEach(function (button) {
@@ -280,8 +318,6 @@
             });
         });
     </script>
-
-
     <script>
                 document.querySelectorAll('.size-option').forEach(button => {
             button.addEventListener('click', function () {
@@ -322,8 +358,6 @@
         });
 
     </script>
-
-
     <script>
         $(document).ready(function () {
             // Product ID'yi belirleyelim (Bu ID'yi dinamik olarak sayfadan alabilirsiniz)
