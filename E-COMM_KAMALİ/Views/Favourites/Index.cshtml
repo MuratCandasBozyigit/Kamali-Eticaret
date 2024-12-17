@@ -22,7 +22,14 @@
                                     </div>
                                     <div class="col-md-3 col-lg-3 col-xl-3">
 
-                                        <p class="lead fw-normal mb-2 " style="font-weight:bolder !important;">@item.ProductName</p>
+
+                                        <form action="@Url.Action("ProductDetails", "Home")" method="get">
+                                            <input type="hidden" name="productId" value="@item.ProductId" />
+                                            <button type="submit" style="background: none; border: none; color: black; font-weight: bolder;">
+                                                @item.ProductName
+                                            </button>
+                                        </form>
+
 
                                         <p>Seçilen Beden: @(string.IsNullOrWhiteSpace(item.ProductSize) ? "Henüz seçilmedi" : item.ProductSize)</p>
 
