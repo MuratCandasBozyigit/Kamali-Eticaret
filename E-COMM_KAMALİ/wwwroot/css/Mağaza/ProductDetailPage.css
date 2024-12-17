@@ -33,6 +33,7 @@ body {
     flex-direction: row;
     width: 100%;
     justify-content: space-between;
+    justify-content: center;
     padding: 15px;
     background-color: rgb(240, 247, 247);
     border-radius: 0px; /* Köşeler düz */
@@ -42,6 +43,7 @@ body {
     padding-left: 20px;
     box-shadow: none; /* Gölge kaldırıldı */
 }
+
 
 /* Resim Kapsayıcı Stili */
 /*.product-imgs {
@@ -354,6 +356,48 @@ body {
         }
 }
 
+
+/*#endregion */
+/*#region ResimDneme */
+
+.main-image {
+    object-fit: contain;
+    aspect-ratio: 16 /9;
+    max-width: 100%;
+    border-radius: 8px;
+    height: auto;
+}
+
+.thumbnail {
+    object-fit: cover;
+    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: 120px;
+    height: 100px;
+    cursor: pointer;
+    border: 2px solid #f8f9fa;
+    transition: border-color 0.3s ease;
+}
+
+    .thumbnail:hover {
+        border-color: rgb(225, 135, 20);
+    }
+
+.img-thumbnails {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+@media (max-width: 767px) {
+    .col-lg-8, .col-md-9, .col-sm-12 {
+        flex: 1 1 100%; /* Küçük ekranlarda elemanlar tam genişlik alır */
+    }
+
+    .col-lg-2, .col-md-3 {
+        flex: 1 1 100%; /* Küçük resimler de tam genişlikte olacak */
+    }
+}
 
 /*#endregion */
 
@@ -812,48 +856,6 @@ body {
 /*#endregion */
 
 
-/*#region ResimDneme */
-
-.main-image {
-    object-fit: contain;
-    aspect-ratio: 16 /9;
-    max-width: 100%;
-    border-radius: 8px;
-    height: auto;
-}
-
-.thumbnail {
-    object-fit: cover;
-    aspect-ratio: 1 / 1;
-    width: 100%;
-    max-width: 120px;
-    height: 100px;
-    cursor: pointer;
-    border: 2px solid #f8f9fa;
-    transition: border-color 0.3s ease;
-}
-
-    .thumbnail:hover {
-        border-color: rgb(225, 135, 20);
-    }
-
-.img-thumbnails {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-@media (max-width: 767px) {
-    .col-lg-8, .col-md-9, .col-sm-12 {
-        flex: 1 1 100%; /* Küçük ekranlarda elemanlar tam genişlik alır */
-    }
-
-    .col-lg-2, .col-md-3 {
-        flex: 1 1 100%; /* Küçük resimler de tam genişlikte olacak */
-    }
-}
-
-/*#endregion */
 
 /*#region İşimKALMADIBİLE */
 /*#region SizeButtons */
@@ -949,6 +951,4 @@ textarea::placeholder {
 
 
 /*#endregion */
-
-
 /*#endregion */
