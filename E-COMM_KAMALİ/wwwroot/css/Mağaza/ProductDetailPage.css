@@ -210,8 +210,34 @@ body {
 
 /* Tablet ve küçük ekranlar */
 @media (max-width: 768px) {
-    .card-wrapper {
-        flex-direction: column;
+
+
+    .thumbnail {
+        object-fit: cover;
+        aspect-ratio: 1 / 1;
+        width: 100%;
+        max-width: 120px;
+        height: 100px;
+        cursor: pointer;
+        margin-left:50px;
+        flex-direction: row !important;
+        border: 2px solid #f8f9fa;
+        transition: border-color 0.3s ease;
+    }
+
+        .thumbnail:hover {
+            border-color: rgb(225, 135, 20);
+        }
+
+    .img-thumbnails {
+        display: flex;
+        flex-direction: row !important;
+        gap: 10px;
+    }
+
+
+        .card-wrapper {
+        flex-direction: row;
         align-items: center;
     }
 
@@ -229,12 +255,12 @@ body {
 
     .product-title {
         font-size: 2.5rem;
-        margin-bottom: 3px; /* Başlık ve içerikler arasındaki boşluk */
+        margin-bottom: 3px;
     }
 
     .product-link {
         font-size: 1.2rem;
-        margin-top: 3px; /* Başlık ve içerikler arasındaki boşluk */
+        margin-top: 3px;
     }
 
     .product-price {
@@ -252,7 +278,7 @@ body {
     .purchase-info .btn {
         padding: 10px 20px;
         font-size: 1rem;
-        justify-content: center; /* Butonu ortala */
+        justify-content: center;
     }
 
     .purchase-info .form-control {
