@@ -509,6 +509,21 @@ body {
     }
 }
 
+@media (max-width:368px){
+    .size-selection .size-option {
+        padding: 2px 4px; /* Buton içindeki boşlukları küçült */
+        font-size: 10px; /* Yazı boyutunu küçült */
+        width: 24px; /* Butonun genişliğini sabitle */
+        height: 24px; /* Butonun yüksekliğini küçült */
+        min-width: 20px; /* Genişlik için minimum değer */
+        text-align: center; /* Yazıyı ortala */
+    }
+    
+    .fav-btn{
+        margin-left:13px;
+    }
+}
+
 @media (max-width: 322px) {
 
     .product-card {
