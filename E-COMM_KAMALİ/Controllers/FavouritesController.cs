@@ -34,27 +34,33 @@ namespace E_COMM_KAMALİ.Controllers
             return View(favouritesItems); // Favori sayfasına gönder
         }
 
+
+
         // Favorilere ürün ekle
         [HttpPost]
-        public async Task<IActionResult> AddToFavourites(int productId, int quantity)
+        public async Task<IActionResult> AddToFavourites(int productId, string selectedSize)
         {
-            var product = await productService.GetByIdAsync(productId); // Ürünü al
+           
+
+            var product = await productService.GetByIdAsync(productId);
             if (product != null)
             {
                 var cartItem = new CartItemViewModel
                 {
                     ProductId = product.Id,
                     ProductName = product.ProductName,
+                    ProductSize = selectedSize,
                     ImagePath = product.ImagePath,
                     Price = product.ProductPrice,
-                    Quantity = quantity // Eğer Quantity gerekli değilse bu satırı kaldırabilirsin
                 };
 
-                _sessionService.AddToFavourites(cartItem); // Favorilere ekle
+                _sessionService.AddToFavourites(cartItem);
             }
 
-            return RedirectToAction("Index", "Favourites"); // Favori sayfasına yönlendir
+            return RedirectToAction("Index", "Favourites");
         }
+
+
 
         // Favoriden ürün sil
         [HttpPost]
