@@ -93,17 +93,30 @@
                                 <p>Beden mevcut değil.</p>
                             }
                         </div>
-
+                       
                         <!-- Satın Alma Bilgisi ve Sepet Ekleme -->
                         <div class="purchase-info">
-                            <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
+
+                            <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex align-items-center gap-2">
                                 <input type="hidden" name="productId" value="@Model.Product.ProductId" />
                                 <input type="hidden" name="selectedSize" id="selected-size" />
-                                <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mt-4" style="width: 60px; display: inline-block;" />
-                                <button type="submit" class="btn  btn-hover">
-                                    <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+
+                                <!-- Quantity Input -->
+                                <input type="number"
+                                       name="quantity"
+                                       value="1"
+                                       min="1"
+                                       max="5"
+                                       class="form-control text-center"
+                                       style="width: 60px; height: 38px;" />
+
+                                <!-- Sepete Ekle Button -->
+                                <button type="submit" class="btn btn-dark d-flex align-items-center gap-2">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    <span>Sepete Ekle</span>
                                 </button>
                             </form>
+
 
                             <form asp-controller="Favourites" asp-action="AddToFavourites" method="post" class="fav-btn" id="fav-form-@Model.Product.ProductId">
                                 <input type="hidden" name="productId" value="@Model.Product.ProductId" />
