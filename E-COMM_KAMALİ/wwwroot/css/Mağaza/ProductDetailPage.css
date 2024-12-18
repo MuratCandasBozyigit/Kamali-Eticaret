@@ -400,11 +400,13 @@ body {
     }
 }
 
-@media (max-width:548px){
+@media (max-width:548px) {
+    
+
     .btn.btn-dark {
         padding: 5px 10px; /* Kenar boşluklarını küçült */
         font-size: 10px; /* Yazı boyutunu küçült */
-        height:43px !important;
+        height: 43px !important;
         height: auto; /* Yüksekliği içeriğe göre ayarla */
     }
 
@@ -415,6 +417,7 @@ body {
         .btn.btn-dark span {
             font-size: 16px; /* Yazı boyutunu küçült */
         }
+}
 
 @media (max-width: 480px) {
     .card {
@@ -468,6 +471,7 @@ body {
         text-align: center;
         height: 100%; /* Sayfa yüksekliği kadar */
         margin-top: 0px;
+        margin-left:0px;
     }
 
         .purchase-info .btn {
@@ -475,6 +479,7 @@ body {
             padding: 8px 20px;
             font-size: 0.9rem;
             margin: 10px 0;
+            margin-left: 0px;
         }
 
         .purchase-info .form-control {
@@ -482,6 +487,26 @@ body {
             font-size: 14px;
             margin: 10px 0;
         }
+
+    .btn.btn-dark {
+      
+        padding: 5px 10px; /* Kenar boşluklarını küçült */
+        font-size: 10px; /* Yazı boyutunu küçült */
+        height: 43px !important;
+        height: auto; /* Yüksekliği içeriğe göre ayarla */
+    }
+
+        .btn.btn-dark i {
+            font-size: 12px; /* İkonun boyutunu küçült */
+        }
+
+        .btn.btn-dark span {
+            font-size: 14px; /* Yazı boyutunu küçült */
+        }
+
+    .purchase-info input[name="quantity"] {
+        margin-left: -50px; /* Quantity input ile Sepete Ekle butonu arasına 20px boşluk ekler */
+    }
 }
 
 @media (max-width: 322px) {
