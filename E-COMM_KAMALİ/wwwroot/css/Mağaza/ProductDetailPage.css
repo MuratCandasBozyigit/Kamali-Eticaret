@@ -1,4 +1,5 @@
-﻿/*#region ÜRÜNDETAYI */
+﻿/*#region İşimKALMADIBİLE */
+/*#region ÜRÜNDETAYI */
 
 /* Genel Stiller */
 body {
@@ -207,10 +208,6 @@ body {
 /* #endregion */
 
 /*#endregion */
-
-
-
-
 /*#region Responsive */
 
 @media (max-width: 980px) {
@@ -689,16 +686,68 @@ body {
     }
 
 
-    .product-image {
-        width: 100%; /* Kartın genişliğine uyum sağlar */
-        height: 150px; /* Sabit resim yüksekliği */
-        object-fit: cover; /* Resmi kutuya sığacak şekilde kırpar veya genişletir */
-        object-position: center; /* Resmin ortalanmasını sağlar */
+    .card {
+        border: unset black solid;
+        display: flex;
+        flex-direction: row;
+        width: calc(100% + 50px); /* 50px daha geniş */
+        justify-content: center;
+        padding: 15px;
+        background-color: rgb(240, 247, 247);
+        border-radius: 0px; /* Köşeler düz */
+        padding-top: 40px;
+        padding-bottom: 40px;
+        padding-right: 40px;
+        padding-left: 40px;
+        box-shadow: none; /* Gölge kaldırıldı */
+        margin-left: -25px; /* Genişlemeden dolayı içerik ortalansın */
+    }
+
+
+}
+
+@media (max-width:257px)
+{
+    .card {
+        border: unset black solid;
+        display: flex;
+        flex-direction: row;
+        width: calc(100% + 120px); /* 120px daha geniş */
+        justify-content: center;
+        padding: 15px;
+        background-color: rgb(240, 247, 247);
+        border-radius: 0px; /* Köşeler düz */
+        padding-top: 40px;
+        padding-bottom: 40px;
+        padding-right: 40px;
+        padding-left: 40px;
+        box-shadow: none; /* Gölge kaldırıldı */
+        margin-left: -40px; /* Margin değerini -40px yaparak sola kaydır */
+        margin-right: -40px; /* Sağ margin ile dengeyi sağla */
+        max-width: 100vw; /* Genişlik ekranın tamamını geçmesin */
     }
 
 }
 
 @media (max-width: 240px) {
+    .card {
+        border: unset black solid;
+        display: flex;
+        flex-direction: row;
+        width: calc(100% + 120px); /* 120px daha geniş */
+        justify-content: center;
+        padding: 15px;
+        background-color: rgb(240, 247, 247);
+        border-radius: 0px; /* Köşeler düz */
+        padding-top: 40px;
+        padding-bottom: 40px;
+        padding-right: 40px;
+        padding-left: 40px;
+        box-shadow: none; /* Gölge kaldırıldı */
+        margin-left: -40px; /* Margin değerini -40px yaparak sola kaydır */
+        margin-right: -40px; /* Sağ margin ile dengeyi sağla */
+        max-width: 100vw; /* Genişlik ekranın tamamını geçmesin */
+    }
     .card-title {
         font-size: 13px;
         font-weight: bolder;
@@ -750,9 +799,6 @@ body {
     }
 }
 /*#endregion */
-
-
-/*#region İşimKALMADIBİLE */
 /*#region SizeButtons */
 .size-option {
     margin: 2px; /* Butonlar arasındaki boşluk */
