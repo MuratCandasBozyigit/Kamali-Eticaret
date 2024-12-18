@@ -10,7 +10,6 @@ body {
 
 /* Container */
 .container {
-    margin-top: 30px;
     max-width: 1400px;
     width: 100%;
     padding: 20px;
@@ -507,6 +506,34 @@ body {
 }
 
 @media (max-width:368px){
+    .product-detail{
+        margin:0px 0px 0px 0px !important;
+        font-size:15px !important;
+    }
+    .product-title {
+        font-size: 20px;
+        margin: 0px 0px 0px 0px !important;
+    }
+    .product-price {
+        margin: 0px 0px 0px 0px !important;
+    }
+    .product-router li {
+        margin: 0px 0px 0px 0px !important;
+        font-weight: 800;
+    }
+    .product-router li span {
+        margin: 0px 0px 0px 0px !important;
+        font-weight: 700;
+        font-size:13px;
+    }
+    .purchase-info {
+        margin: 0px 0px 0px 0px !important;
+    }
+
+
+
+
+
     .size-selection .size-option {
         padding: 2px 4px; /* Buton içindeki boşlukları küçült */
         font-size: 10px; /* Yazı boyutunu küçült */
@@ -557,6 +584,39 @@ body {
 }
 
 @media (max-width:338px){
+    .product-detail {
+        margin: 0px 0px 0px 0px !important;
+        font-size: 15px !important;
+    }
+
+    .product-title {
+        font-size: 20px;
+        margin: 0px 0px 0px 0px !important;
+    }
+
+    .product-price {
+        margin: 0px 0px 0px 0px !important;
+    }
+
+    .product-router li {
+        margin: 0px 0px 0px 0px !important;
+        font-weight: 800;
+    }
+
+        .product-router li span {
+            margin: 0px 0px 0px 0px !important;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+    .purchase-info {
+        margin: 0px 0px 0px 0px !important;
+    }
+
+
+
+
+
     .size-selection .size-option {
         padding: 2px 4px; /* Buton içindeki boşlukları küçült */
         font-size: 10px; /* Yazı boyutunu küçült */
@@ -584,6 +644,42 @@ body {
 }
 
 @media (max-width: 322px) {
+    .product-detail {
+        margin: 0px 0px 0px 0px !important;
+        font-size: 15px !important;
+    }
+
+    .product-title {
+        font-size: 16px;
+        margin: 0px 0px 0px 0px !important;
+    }
+
+    .product-price {
+        margin: 0px 0px 0px 0px !important;
+    }
+
+    .product-router li {
+        margin: 0px 0px 0px 0px !important;
+        font-weight: 800;
+    }
+
+        .product-router li span {
+            margin: 0px 0px 0px 0px !important;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+    .purchase-info {
+        margin: 0px 0px 0px 0px !important;
+    }
+    .col-lg-12 {
+        margin: 0px 0px 0px 0px !important;
+    }
+
+
+
+
+
 
     .product-card {
         width: 100%;
@@ -669,6 +765,47 @@ body {
 }
 
 @media(max-width:300px) {
+    .product-detail {
+        margin: 0px 0px 0px 0px !important;
+        font-size: 15px !important;
+    }
+
+    .product-title {
+        font-size: 16px;
+        margin: 0px 0px 0px 0px !important;
+    }
+
+    .product-price {
+        margin: 0px 0px 0px 0px !important;
+    }
+
+    .product-router li {
+        margin: 0px 0px 0px 0px !important;
+        font-weight: 800;
+    }
+
+        .product-router li span {
+            margin: 0px 0px 0px 0px !important;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+    .purchase-info {
+        margin: 0px 0px 0px 0px !important;
+    }
+
+    .col-lg-12 {
+        margin: 0px 0px 0px 0px !important;
+    }
+
+
+
+
+
+
+
+
+
     .product-card {
         margin-top: 5px;
         width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
@@ -700,13 +837,12 @@ body {
         padding-right: 40px;
         padding-left: 40px;
         box-shadow: none; /* Gölge kaldırıldı */
-        margin-left: -25px; /* Genişlemeden dolayı içerik ortalansın */
     }
 
 
 }
 
-@media (max-width:257px)
+@media (max-width:281px)
 {
     .card {
         border: unset black solid;
