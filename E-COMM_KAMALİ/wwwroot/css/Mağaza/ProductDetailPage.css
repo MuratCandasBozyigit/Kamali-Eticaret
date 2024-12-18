@@ -522,6 +522,68 @@ body {
     .fav-btn{
         margin-left:13px;
     }
+
+    .purchase-info input[name="quantity"] {
+        all: unset; /* Varsayılan tarayıcı stillerini sıfırla */
+        box-sizing: border-box;
+        display: inline-block;
+        width: 40px; /* Dar genişlik */
+        height: 20px; /* Daha kısa yükseklik */
+        font-size: 12px; /* Küçük yazı boyutu */
+        padding: 2px;
+        border: 1px solid #ccc; /* Kenarlık */
+        text-align: center; /* Ortala */
+    }
+
+    /* Sepete Ekle Button */
+    .purchase-info .btn {
+        padding: 4px 8px; /* Butonun içindeki boşlukları küçült */
+        font-size: 12px; /* Yazı boyutunu küçült */
+        height: 30px; /* Daha kısa */
+        line-height: 1; /* Satır yüksekliğini ayarla */
+    }
+
+        /* İkon Boyutu */
+        .purchase-info .btn i {
+            font-size: 12px; /* İkonun boyutunu küçült */
+        }
+
+    /* Favoriler Button */
+    .fav-btn .btn {
+        padding: 4px 8px; /* İç boşluğu azalt */
+        font-size: 12px; /* Yazı boyutunu küçült */
+        height: 30px; /* Buton yüksekliği */
+        line-height: 1; /* Satır yüksekliği */
+    }
+
+   
+}
+
+@media (max-width:338px){
+    .size-selection .size-option {
+        padding: 2px 4px; /* Buton içindeki boşlukları küçült */
+        font-size: 10px; /* Yazı boyutunu küçült */
+        width: 20px; /* Butonun genişliğini sabitle */
+        height: 20px; /* Butonun yüksekliğini küçült */
+        min-width: 20px; /* Genişlik için minimum değer */
+        text-align: center; /* Yazıyı ortala */
+    }
+   
+
+    .btn.btn-dark {
+        padding: 5px 10px; /* Kenar boşluklarını küçült */
+        font-size: 10px; /* Yazı boyutunu küçült */
+        height: 35px !important;
+        height: auto; /* Yüksekliği içeriğe göre ayarla */
+    }
+
+        .btn.btn-dark i {
+            font-size: 10px; /* İkonun boyutunu küçült */
+        }
+
+        .btn.btn-dark span {
+            font-size: 12px; /* Yazı boyutunu küçült */
+        }
 }
 
 @media (max-width: 322px) {
