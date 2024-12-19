@@ -33,15 +33,6 @@
                             <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-details ">Detaylar</a>
                         </div>
                         <div class="card-footer">
-                          @*   <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
-                                <input type="hidden" name="productId" value="@product.ProductId" />
-                                <input type="hidden" name="quantity" value="1" /> <!-- Miktar her zaman 1 olarak gönderilecek -->
-                                <button type="submit" class="btn btn-light btn-add-to-cart">
-                                    <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
-                                </button>
-                            </form> *@
-
-
                           
                             <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
@@ -53,14 +44,10 @@
                     </div>
                 </div>
 
-                counter++; // Counter'ı artır
+                counter++; 
             }
 
-            // Eğer ürün sayısı 5'in katı değilse, kalan ürünleri yeni bir satırda göster
-           @*  if (counter % 5 != 0)
-            {
-                <div class="row"></div>
-            } *@
+       
         }
         else
         {
