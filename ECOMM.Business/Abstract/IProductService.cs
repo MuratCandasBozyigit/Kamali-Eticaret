@@ -17,6 +17,6 @@ namespace ECOMM.Business.Abstract
         Task<IEnumerable<Product>> GetBySubCategoryIdAsync(int subCategoryId);
         Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId);
         Task<List<ProductViewModel>> GetProductsByCategoryIdAsync(int categoryId);
-
+        Task<List<ProductViewModel>> GetProductsSortedAsync(string sortOrder);
     }
 }

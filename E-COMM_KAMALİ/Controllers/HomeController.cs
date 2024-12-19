@@ -316,6 +316,17 @@ namespace E_COMM_KAMALİ.Controllers
         }
 
         #endregion
+        #region Sorting
+        [HttpGet]
+        public async Task<IActionResult> List(string sortOrder)
+        {
+            var products = await _productService.GetProductsSortedAsync(sortOrder); // Sıralama servisten alınır
+            ViewBag.SortOrder = sortOrder; // View'da seçimin hatırlanması için
+            return View(products);
+        }
+
+
+        #endregion
         #region s
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

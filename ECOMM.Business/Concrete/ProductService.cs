@@ -39,6 +39,11 @@ namespace ECOMM.Business.Concrete
             return await _productRepository.GetAllAsync();
         }
 
+        public IQueryable<Product> GetAllAsyncQuery()
+        {
+            return _productRepository.Query(); // Bu metot IQueryable döner.
+        }
+
         public async Task<Product> AddAsync(Product product)
         {
             return await _productRepository.AddAsync(product);
@@ -88,8 +93,6 @@ namespace ECOMM.Business.Concrete
             return filteredProducts; // Filtrelenmiş ürünleri döndürüyoruz
         }
 
-
-
         public async Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId)
         {
             var products = await _productRepository.GetAllAsync();
@@ -128,11 +131,41 @@ namespace ECOMM.Business.Concrete
                 }).ToListAsync();
         }
 
-        //public async Task<Product> GetByIdAsync(int id)
-        //{
-        //    return await _productRepository.GetByIdAsync(id).Include(p => p.Category)
-        //                .FirstOrDefaultAsync(p => p.Id == id);
-        //}
+        public async Task<List<ProductViewModel>> GetProductsSortedAsync(string sortOrder)
+        {
+            var products = _productRepository.Query()
+                                              .Include(p => p.Category)
+                                              .Include(p => p.SubCategory); // Veriler dahil edilir.
+
+            // Sıralama kriterine göre sıralama yapılır
+            IQueryable<Product> sortedProducts = sortOrder switch
+            {
+                "price_asc" => products.OrderBy(p => p.ProductPrice),
+                "price_desc" => products.OrderByDescending(p => p.ProductPrice),
+                "name_asc" => products.OrderBy(p => p.ProductName),
+                "name_desc" => products.OrderByDescending(p => p.ProductName),
+                _ => products // Varsayılan sıralama
+            };
+
+            // ViewModel'e dönüştürülür
+            return await sortedProducts.Select(p => new ProductViewModel
+            {
+                ProductId = p.Id,
+                ImageUrl = p.ImagePath,
+                ProductName = p.ProductName,
+                Price = p.ProductPrice,
+                Category = new CategoryViewModel
+                {
+                    ParentCategoryName = p.Category.ParentCategoryName
+                },
+                SubCategory = new SubCategoryViewModel
+                {
+                    SubCategoryName = p.SubCategory.SubCategoryName
+                }
+            }).ToListAsync();
+        }
+
+
 
     }
 }

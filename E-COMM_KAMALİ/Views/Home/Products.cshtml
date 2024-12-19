@@ -8,6 +8,20 @@
     Tüm Ürünler
 </h1>
 
+
+<form method="get" id="sortForm">
+    <label for="sortOrder">Sırala:</label>
+    <select name="sortOrder" id="sortOrder" onchange="document.getElementById('sortForm').submit();">
+        <option value="" selected="@(ViewBag.SortOrder == null ? "selected" : "")">Varsayılan</option>
+        <option value="price_asc" selected="@(ViewBag.SortOrder == "price_asc" ? "selected" : "")">En Az Fiyat</option>
+        <option value="price_desc" selected="@(ViewBag.SortOrder == "price_desc" ? "selected" : "")">En Çok Fiyat</option>
+        <option value="name_asc" selected="@(ViewBag.SortOrder == "name_asc" ? "selected" : "")">A -> Z</option>
+        <option value="name_desc" selected="@(ViewBag.SortOrder == "name_desc" ? "selected" : "")">Z -> A</option>
+    </select>
+</form>
+
+
+
 <div class="container">
     <div class="row">
         @if (Model != null && Model.Any())
