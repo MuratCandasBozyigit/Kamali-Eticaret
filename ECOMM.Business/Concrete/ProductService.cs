@@ -134,26 +134,24 @@ namespace ECOMM.Business.Concrete
         public async Task<List<ProductViewModel>> GetProductsSortedAsync(string sortOrder)
         {
             var products = _productRepository.Query()
-                                              .Include(p => p.Category)
-                                              .Include(p => p.SubCategory); // Veriler dahil edilir.
+                                             .Include(p => p.Category)
+                                             .Include(p => p.SubCategory);
 
-            // Sıralama kriterine göre sıralama yapılır
             IQueryable<Product> sortedProducts = sortOrder switch
             {
                 "price_asc" => products.OrderBy(p => p.ProductPrice),
                 "price_desc" => products.OrderByDescending(p => p.ProductPrice),
                 "name_asc" => products.OrderBy(p => p.ProductName),
                 "name_desc" => products.OrderByDescending(p => p.ProductName),
-                _ => products // Varsayılan sıralama
+                _ => products.OrderBy(p => p.ProductName)  // Varsayılan sıralama
             };
 
-            // ViewModel'e dönüştürülür
             return await sortedProducts.Select(p => new ProductViewModel
             {
                 ProductId = p.Id,
-                ImageUrl = p.ImagePath,
                 ProductName = p.ProductName,
                 Price = p.ProductPrice,
+                ImageUrl = p.ImagePath,
                 Category = new CategoryViewModel
                 {
                     ParentCategoryName = p.Category.ParentCategoryName
@@ -164,6 +162,7 @@ namespace ECOMM.Business.Concrete
                 }
             }).ToListAsync();
         }
+
 
 
 

@@ -12,16 +12,19 @@
 <form method="get" id="sortForm">
     <label for="sortOrder">Sırala:</label>
     <select name="sortOrder" id="sortOrder" onchange="document.getElementById('sortForm').submit();">
-        <option value="" selected="@(ViewBag.SortOrder == null ? "selected" : "")">Varsayılan</option>
-        <option value="price_asc" selected="@(ViewBag.SortOrder == "price_asc" ? "selected" : "")">En Az Fiyat</option>
-        <option value="price_desc" selected="@(ViewBag.SortOrder == "price_desc" ? "selected" : "")">En Çok Fiyat</option>
-        <option value="name_asc" selected="@(ViewBag.SortOrder == "name_asc" ? "selected" : "")">A -> Z</option>
-        <option value="name_desc" selected="@(ViewBag.SortOrder == "name_desc" ? "selected" : "")">Z -> A</option>
+        @foreach (var option in new[]
+        {
+            new { Value = "", Text = "Varsayılan" },
+            new { Value = "price_asc", Text = "En Az Fiyat" },
+            new { Value = "price_desc", Text = "En Çok Fiyat" },
+            new { Value = "name_asc", Text = "A -> Z" },
+            new { Value = "name_desc", Text = "Z -> A" }
+        })
+        {
+            <option value="@option.Value" @(ViewBag.SortOrder == option.Value ? "selected" : "")>@option.Text</option>
+        }
     </select>
 </form>
-
-
-
 <div class="container">
     <div class="row">
         @if (Model != null && Model.Any())
@@ -47,16 +50,7 @@
                             <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-details ">Detaylar</a>
                         </div>
                         <div class="card-footer">
-                          @*   <form asp-controller="ShopCart" asp-action="AddToCart" method="post">
-                                <input type="hidden" name="productId" value="@product.ProductId" />
-                                <input type="hidden" name="quantity" value="1" /> <!-- Miktar her zaman 1 olarak gönderilecek -->
-                                <button type="submit" class="btn btn-light btn-add-to-cart">
-                                    <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
-                                </button>
-                            </form> *@
-
-
-                          
+                     
                             <form asp-controller="Favourites" asp-action="AddToFavourites" class="fav-btn" method="post">
                                 <input type="hidden" name="productId" value="@product.ProductId" />
                                 <button type="submit" class="btn btn-favourite btn-light">
@@ -67,14 +61,9 @@
                     </div>
                 </div>
 
-                counter++; // Counter'ı artır
+                counter++; 
             }
 
-            // Eğer ürün sayısı 5'in katı değilse, kalan ürünleri yeni bir satırda göster
-           @*  if (counter % 5 != 0)
-            {
-                <div class="row"></div>
-            } *@
         }
         else
         {
