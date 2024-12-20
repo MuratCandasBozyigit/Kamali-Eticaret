@@ -152,7 +152,6 @@ namespace E_COMM_KAMALİ.Controllers
             }
         }
 
-
         public async Task<IActionResult> Products(int productId, int categoryId)
         {
             try
@@ -313,6 +312,13 @@ namespace E_COMM_KAMALİ.Controllers
                 categoryName = categoryName,
                 subCategoryName = subCategoryName
             });
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetProductsRandom(int page, int pageSize)
+        {
+            var products = await _productService.GetProductsRandom(page, pageSize);
+            return Json(new { success = true, data = products });
         }
 
         #endregion
