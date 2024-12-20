@@ -203,35 +203,6 @@ namespace E_COMM_KAMALİ.Controllers
 
         public async Task<IActionResult> ProductDetails(int productId, int categoryId, int page = 1)
         {
-            int pageSize = 4;
-
-            // Tüm ürünleri al ve toplam ürün sayısını hesapla
-            var products = await _productService.GetAllAsync();
-            int totalProducts = products.Count(); // Toplam ürün sayısını al
-            int totalPages = (int)Math.Ceiling(totalProducts / (double)pageSize); // Toplam sayfa sayısını hesapla
-
-            // Sayfalı ürünleri al
-            var paginatedProducts = await _productService.GetPaginatedProductsAsync(page, pageSize);
-
-            // `Product` modelinden `ProductViewModel` modeline dönüşüm yap
-            var paginatedProductViewModels = paginatedProducts.Select(p => new ProductViewModel
-            {
-                ProductId = p.Id,
-                ProductName = p.ProductName,
-                ProductSize = string.Join("", p.ProductSizes),
-                ProductTitle = p.ProductTitle,
-                Price = p.ProductPrice,
-                ImageUrl = p.ImagePath,
-                ImageUrl1 = p.ImagePath1,
-                ImageUrl2 = p.ImagePath2,
-                ImageUrl3 = p.ImagePath3,
-                CategoryName = p.Category != null ? p.Category.ParentCategoryName : "Kategori Yok",
-                ProductDescription = p.ProductDescription,
-                DiscountRate = p.DiscountRate
-            }).ToList();
-
-
-
             // Seçilen ürünü al
             var product = await _productService.GetByIdAsync(productId);
             if (product == null)
@@ -239,18 +210,9 @@ namespace E_COMM_KAMALİ.Controllers
                 return NotFound("İlgili ürün bulunamadı");
             }
 
-            // İlgili ürünleri al
-            var relatedProducts = await _productService.GetProductsByCategoryIdAsync(categoryId);
-            // İlgili ürünleri ProductViewModel'e dönüştür
-            var relatedProductViewModels = relatedProducts.Select(p => new ProductViewModel
-            {
-                ProductId = p.ProductId,
-                ProductName = p.ProductName,
-                ProductTitle = p.ProductTitle,
-                Price = p.Price,
-                ImageUrl = p.ImageUrl,
-                DiscountRate = p.DiscountRate
-            }).ToList();
+            // İlgili ürünleri aynı kategoriye göre al
+            var relatedProducts = await _productService.GetProductsByCategoryIdAsync(product.CategoryId); // Kategori ID'sini kullanarak ürünleri al
+
             // Yorumları al
             var comments = await _commentService.GetAllAsync();
             var commentsWithAuthors = comments.Select(c => new CommentViewModel
@@ -274,22 +236,26 @@ namespace E_COMM_KAMALİ.Controllers
                 ImageUrl3 = product.ImagePath3,
                 CategoryName = product.Category != null ? product.Category.ParentCategoryName : "Kategori Yok",
                 ProductDescription = product.ProductDescription,
-
-                DiscountRate = product.DiscountRate,  // DiscountRate'ı atıyoruz
-                SubCategoryName = product.SubCategory != null ? product.SubCategory.SubCategoryName : "Alt Kategori Yok" // Handle subcategory similarly
+                DiscountRate = product.DiscountRate,
+                SubCategoryName = product.SubCategory != null ? product.SubCategory.SubCategoryName : "Alt Kategori Yok"
             };
-
 
             var viewModel = new ProductDetailPageViewModel
             {
                 Product = productViewModel,
-                RelatedProducts = relatedProducts,
+                RelatedProducts = relatedProducts.Select(p => new ProductViewModel
+                {
+                    ProductId = p.ProductId,
+                    ProductName = p.ProductName,
+                    ProductTitle = p.ProductTitle,
+                    Price = p.Price,
+                    ImageUrl = p.ImageUrl,
+                    DiscountRate = p.DiscountRate
+                }).ToList(),
                 Comments = commentsWithAuthors
             };
 
-            // Normal sayfa döndürme (JSON yerine)
             return View(viewModel);
-
         }
 
         public async Task<IActionResult> GetProductCategories(int productId)
