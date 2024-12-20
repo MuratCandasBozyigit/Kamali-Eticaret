@@ -144,7 +144,7 @@
     </div>
 </div>
 
-<div class="container mt-4">
+@* <div class="container mt-4">
     <div class="row justify-content-center align-items-center">
         <!-- Previous Button -->
       @*   <div class="col-auto">
@@ -154,7 +154,7 @@
             @(ViewBag.CurrentPage == 1 ? "disabled" : "")>
                 <span aria-hidden="true">&laquo;</span>
             </button>
-        </div> *@
+        </div> 
 
         <div class="col-10">
             <h1 class="text-center">Ürünler</h1>
@@ -206,7 +206,7 @@
             </div>
         </div>
 
-      @*   <!-- Next Button -->
+      <!-- Next Button -->
         <div class="col-auto">
             <button id="nextBtn" class="btn btn-light"
                     onclick="loadProducts(ViewBag.CurrentPage + 1)"
@@ -214,9 +214,9 @@
             @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")>
                 <span aria-hidden="true">&raquo;</span>
             </button>
-        </div> *@
+        </div>
     </div>
-</div>
+</div> *@
 
 <div class="container mt-4">
     <h2>Aynı Kategorideki Ürünler</h2>
