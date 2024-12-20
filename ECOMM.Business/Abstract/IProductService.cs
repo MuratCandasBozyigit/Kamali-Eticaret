@@ -1,10 +1,5 @@
 ﻿using ECOMM.Core.Models;
 using ECOMM.Core.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ECOMM.Business.Abstract
 {
@@ -17,6 +12,7 @@ namespace ECOMM.Business.Abstract
         Task<IEnumerable<Product>> GetBySubCategoryIdAsync(int subCategoryId);
         Task<IEnumerable<Product>> GetByCategoryIdAsync(int categoryId);
         Task<List<ProductViewModel>> GetProductsByCategoryIdAsync(int categoryId);
+        Task<IEnumerable<Product>> GetProductsRandom(int page, int pageSize);
 
     }
 }

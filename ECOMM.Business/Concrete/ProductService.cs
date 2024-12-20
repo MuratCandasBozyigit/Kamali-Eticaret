@@ -128,11 +128,16 @@ namespace ECOMM.Business.Concrete
                 }).ToListAsync();
         }
 
-        //public async Task<Product> GetByIdAsync(int id)
-        //{
-        //    return await _productRepository.GetByIdAsync(id).Include(p => p.Category)
-        //                .FirstOrDefaultAsync(p => p.Id == id);
-        //}
+        public async Task<IEnumerable<Product>> GetProductsRandom(int page, int pageSize)
+        {
+            var allProducts = await _productRepository.GetAllAsync(); // Tüm ürünleri getir
+            return allProducts
+                .OrderBy(x => Guid.NewGuid()) // Rastgele sıralama
+                .Skip((page - 1) * pageSize) // Sayfanın başlangıç noktasını ayarla
+                .Take(pageSize); // Sadece belirtilen sayıda ürün al
+        }
+
+
 
     }
 }
