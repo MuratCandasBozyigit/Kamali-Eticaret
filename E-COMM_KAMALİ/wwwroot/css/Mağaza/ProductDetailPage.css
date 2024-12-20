@@ -1164,6 +1164,124 @@ textarea::placeholder {
 /*#endregion */
 /*#endregion */
 
+/*#region ProducDetailListProduct */
+
+/*#region ListProducts */
+
+.related-products {
+    max-width: 1200px; /* Maximum width for the product container */
+    margin: 0 auto; /* Center the container */
+    padding: 20px; /* Padding for the container */
+}
+
+    .related-products .row {
+        display: flex; /* Use flexbox for layout */
+        flex-wrap: wrap; /* Allow wrapping of columns */
+        margin: -10px; /* Negative margin to account for column padding */
+    }
+
+.custom-col {
+    display: flex; /* Flexbox for centering */
+    justify-content: center; /* Center the cards */
+    align-items: flex-start; /* Align cards to the top */
+    padding: 10px; /* Space between cards */
+    flex: 0 0 50%; /* Default to 50% width for mobile */
+    max-width: 50%; /* Default max width for mobile */
+}
+
+@media (min-width: 576px) {
+    .custom-col {
+        flex: 0 0 50%; /* 2 columns on small devices */
+        max-width: 50%;
+    }
+}
+
+@media (min-width: 768px) {
+    .custom-col {
+        flex: 0 0 33.33%; /* 3 columns on medium devices */
+        max-width: 33.33%;
+    }
+}
+
+@media (min-width: 992px) {
+    .custom-col {
+        flex: 0 0 25%; /* 4 columns on large devices */
+        max-width: 25%;
+    }
+}
+
+.product-card {
+    width: 100%; /* Full width to occupy the column */
+    max-width: 300px; /* Set a maximum width for the card */
+    height: 550px; /* Fixed height for consistency */
+    margin: 0 auto; /* Center the card */
+    border: 1px solid #ddd; /* Light border for the card */
+    border-radius: 4px; /* Rounded corners */
+    overflow: hidden; /* Hide overflow for rounded corners */
+    transition: box-shadow 0.3s ease; /* Smooth shadow transition */
+}
+
+    .product-card:hover {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); /* Shadow effect on hover */
+    }
+
+.product-image {
+    width: 100%; /* Full width for image */
+    height: 200px; /* Fixed height for images */
+    object-fit: cover; /* Cover the area without distortion */
+}
+
+.card-title {
+    margin-bottom: 5px; /* Space between title and text */
+    font-size: 1.2em; /* Title font size */
+}
+
+.card-text {
+    font-size: 1em; /* Description font size */
+    color: #777; /* Lighter color for description */
+}
+
+.btn-hover {
+    position: relative; /* Positioning for hover effects */
+    display: inline-flex; /* Align icon and text */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    width: auto; /* Automatic width */
+    height: 50px; /* Fixed height */
+    font-size: 15px; /* Font size */
+    background-color: rgb(237, 233, 221); /* Default background color */
+    color: black; /* Default text color */
+    border: none; /* No border */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+}
+
+    .btn-hover:hover {
+        font-weight: 500; /* Make text bold on hover */
+        font-size: 20px; /* Increase font size on hover */
+        background-color: rgb(224, 219, 202); /* Change background color on hover */
+        color: black; /* Keep text color black on hover */
+    }
+
+.fa-cart-shopping {
+    width: 20px; /* Icon width */
+    transition: transform 0.3s ease-in-out; /* Smooth icon transition */
+}
+
+.btn-hover:hover .fa-cart-shopping {
+    transform: scale(1.1); /* Slightly enlarge icon on hover */
+}
+
+.no-products {
+    text-align: center; /* Center the no products message */
+    font-size: 1.2em; /* Font size for the no products message */
+    color: #777; /* Color for the no products message */
+}
+
+/*#endregion */
+
+/*#endregion */
+
+
 /*#region ListProducts */
 
 
