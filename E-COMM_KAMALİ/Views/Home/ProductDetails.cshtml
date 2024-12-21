@@ -147,18 +147,18 @@
 <div class="container mt-4">
     <div class="row justify-content-center align-items-center">
         <!-- Previous Button -->
-         <div class="col-auto">
-            <button id="previousBtn" class="btn btn-light"
+        <div class="col-auto">
+            <button id="relatedProductsPreviousBtn" class="btn btn-light"
                     onclick="loadProducts(ViewBag.CurrentPage - 1)"
                     aria-label="Previous"
             @(ViewBag.CurrentPage == 1 ? "disabled" : "")>
                 <span aria-hidden="true">&laquo;</span>
             </button>
-        </div> 
+        </div>
 
         <div class="col-10">
-            <h1 class="text-center">Aynı Kategoride bulunan Ürünler</h1>
-            <div id="productList" class="row g-3 justify-content-center">
+            <h1 class="text-center">Aynı Kategoride Bulunan Ürünler</h1>
+            <div id="relatedProductsList" class="row g-3 justify-content-center">
                 @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
                 {
                     foreach (var product in Model.RelatedProducts)
@@ -176,15 +176,6 @@
                                     <p class="card-text">@product.Price.ToString("C")</p>
                                     <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
 
-                                    <!-- Add to Cart Form -->
-                                    <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
-                                        <input type="hidden" name="productId" value="@product.ProductId" />
-                                        <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
-                                        <button type="submit" class="btn btn-primary btn-hover mb-3">
-                                            <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
-                                        </button>
-                                    </form>
-
                                     <!-- Add to Favourites Form -->
                                     <form asp-controller="Favourites" asp-action="AddToFavourites" method="post">
                                         <input type="hidden" name="productId" value="@product.ProductId" />
@@ -200,15 +191,15 @@
                 else
                 {
                     <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
-                        <p style="font-weight: 900;font-size:25px;">İlgili ürün bulunamadı.</p>
+                        <p style="font-weight: 900; font-size: 25px;">İlgili ürün bulunamadı.</p>
                     </div>
                 }
             </div>
         </div>
 
-      <!-- Next Button -->
+        <!-- Next Button -->
         <div class="col-auto">
-            <button id="nextBtn" class="btn btn-light"
+            <button id="relatedProductsNextBtn" class="btn btn-light"
                     onclick="loadProducts(ViewBag.CurrentPage + 1)"
                     aria-label="Next"
             @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")>
@@ -216,44 +207,7 @@
             </button>
         </div>
     </div>
-</div> 
-
-<div class="related-products container mt-4">
-    <h2>Aynı Kategorideki Ürünler</h2>
-    <div class="row">
-        @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
-        {
-            foreach (var product in Model.RelatedProducts)
-            {
-                <div class="col-6 col-lg-3 custom-col">
-                    <div class="card mb-3 product-card">
-                        <img src="@product.ImageUrl" class="card-img-top product-image" alt="Product Image" />
-                        <div class="card-body text-center">
-                            <h5 class="card-title" title="@product.ProductName">
-                                @product.ProductName
-                            </h5>
-                            <p class="card-text">@product.Price.ToString("C")</p>
-                            <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
-                        </div>
-                    </div>
-                </div>
-            }
-        }
-        else
-        {
-            <div class="col-12">
-                <p>İlgili ürün bulunamadı.</p>
-            </div>
-        }
-    </div>
 </div>
-
-
-@section Css{
-   <style>
-
-   </style>
-}
 
 
 @section Scripts {
