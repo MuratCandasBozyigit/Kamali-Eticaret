@@ -219,7 +219,7 @@ body {
         width: 100%; /* Ürün başlığını tüm genişlikte kullan */
         margin-bottom: 20px; /* Alt boşluk */
     }
-
+     
     /*.all_products {
         text-align: center;
         font-size: 14px;
@@ -230,7 +230,7 @@ body {
 
     .product-card {
         font-size: 25px;
-        max-width: 370px;
+        max-width: 250px;
         width: 100%;
         border-radius: 8px; /* Kart köşeleri yuvarla */
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
@@ -1164,89 +1164,85 @@ textarea::placeholder {
 /*#endregion */
 /*#endregion */
 
+
 /*#region ListProducts */
-
-
-.custom-col {
-    display: flex; /* Flexbox ile düzenleme */
-    justify-content: center; /* Kartları ortalar */
-    align-items: flex-start; /* Kartların üstte başlamasını sağlar */
-    padding: 10px; /* Kartlar arası boşluk */
-}
-
+/* Kart genel düzeni */
 .product-card {
-    width: 100%; /* Kartın genişliği, esnek olması için %100 yapıldı */
-    max-width: 300px; /* Maksimum genişlik ayarı, istediğiniz boyuta göre ayarlayın */
-    height: 550px; /* Kartın yüksekliği */
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 0; /* Kartın içindeki gereksiz boşlukları kaldır */
 }
 
-
-.card-title {
-    margin-bottom: 5px; /* Başlık ve açıklama arasındaki boşluk */
+/* Resim alanı */
+.product-image {
+    width: 100%; /* Kart genişliğine tam oturur */
+    height: 165px; /* Sabit bir yükseklik */
+    object-fit: cover; /* Görüntüyü kart içine orantılı şekilde sığdırır */
+    object-position: center; /* Görüntünün ortalanmasını sağlar */
+    margin: 0; /* Resim çevresindeki boşlukları kaldır */
+    padding: 0; /* Resim çevresindeki boşlukları kaldır */
+    border: none; /* Görüntü çevresindeki varsayılan kenarlıkları kaldır */
+    background-color: #f8f8f8; /* Resim yüklü değilse varsayılan bir arka plan */
 }
-/*#region Kaldırbunu */
 
-.fa-cart-shopping {
-    width: 20px; /* Sabit ikon genişliği */
-    /* Sabit ikon yüksekliği */
-    transition: transform 0.3s ease-in-out; /* Geçiş süresini kontrol et */
-    padding: 0; /* Yanlış padding hatasını düzelttim */
-    display: inline-block; /* İkonun çevresindeki alanı düzenle */
-    align-items: center; /* Dikey olarak ortala */
-    justify-content: center;
-    vertical-align: middle; /* Dikey hizalamayı ortalar */
+/* Kart başlıkları ve metinler */
+.product-card .card-title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 10px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.product-card h6 {
+    font-size: 0.9rem;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    margin-bottom: 10px;
+}
+
+.product-card .card-text {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+/* Düğme düzeni */
+.product-card a,
+.product-card button {
+    width: 90%; /* Kart genişliğinin çoğunu kaplar */
+    margin: 5px 0;
+    font-size: 0.9rem;
 }
 
 .btn-hover {
-    position: relative; /* İkonun sabit durması için */
-    display: inline-flex; /* İkonun ve metnin aynı hizada kalmasını sağla */
-    align-items: center; /* Dikey olarak ortala */
-    justify-content: center; /* Yatay olarak ortala */
-    width: auto; /* Sabit genişlik ayarı isteğe bağlı */
-    height: 50px; /* Sabit yükseklik */
-    font-size: 15px;
-    background-color: rgb(237, 233, 221); /* Normal durumdaki arka plan */
-    color: black; /* Normal durumdaki yazı rengi */
-    border: none; /* Kenar çizgisini kaldır */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Yumuşak geçiş efekti */
+    transition: all 0.3s ease-in-out;
 }
 
     .btn-hover:hover {
-        margin-top: 0; /* Hover durumunda margin-top kullanılmamalı */
-        font-weight: 500;
-        font-size: 20px;
-        background-color: rgb(224, 219, 202); /* Hover durumunda arka plan rengi */
-        color: black; /* Hover durumunda yazı rengi */
+        background-color: #0056b3;
+        color: white;
+        transform: scale(1.05);
     }
 
-        .btn-hover:hover .fa-cart-shopping {
-            transform: scale(1.1); /* Çok küçük bir büyüme sağla */
-        }
-
-.all_products {
-    position: relative; /* Sabitleme yapar */
-    top: 0; /* Üst kısmına hizalar */
-    right: 0; /* Sağ kısmına hizalar */
-    color: black;
-    font-weight: bold;
-    font-size: 20px;
-    text-decoration: underline;
-    margin: 0;
-    transition: transform 0.3s ease; /* Yumuşak geçiş ekler */
-}
-
-    .all_products:hover {
-        color: black;
-        font-weight: bolder;
-        text-decoration: none;
+/* Mobil ve dar ekran uyumluluğu */
+@media (max-width: 768px) {
+    .product-card {
+        margin-bottom: 20px;
     }
-
-.row {
-    position: relative; /* .all_products öğesinin doğru konumlanabilmesi için row elementine relative ekleriz */
 }
-
-
-/*#endregion */
 
 /*#endregion */

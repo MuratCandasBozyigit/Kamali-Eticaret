@@ -134,8 +134,6 @@
     </div>
 </div>
 
-
-
 <div style="padding: 20px; border: 1px solid #ddd; max-width: 800px; margin: 50px auto;">
     <div class="comment">
         <form asp-action="AddComment" method="post">
@@ -150,7 +148,7 @@
     <div class="row justify-content-center align-items-center">
         <!-- Previous Button -->
         <div class="col-auto">
-            <button id="previousBtn" class="btn btn-light"
+            <button id="relatedProductsPreviousBtn" class="btn btn-light"
                     onclick="loadProducts(ViewBag.CurrentPage - 1)"
                     aria-label="Previous"
             @(ViewBag.CurrentPage == 1 ? "disabled" : "")>
@@ -159,8 +157,8 @@
         </div>
 
         <div class="col-10">
-            <h1 class="text-center">Ürünler</h1>
-            <div id="productList" class="row g-3 justify-content-center">
+            <h1 class="text-center">Aynı Kategoride Bulunan Ürünler</h1>
+            <div id="relatedProductsList" class="row g-3 justify-content-center">
                 @if (Model.RelatedProducts != null && Model.RelatedProducts.Any())
                 {
                     foreach (var product in Model.RelatedProducts)
@@ -178,15 +176,6 @@
                                     <p class="card-text">@product.Price.ToString("C")</p>
                                     <a asp-controller="Home" asp-action="ProductDetails" asp-route-productId="@product.ProductId" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
 
-                                    <!-- Add to Cart Form -->
-                                    <form asp-controller="ShopCart" asp-action="AddToCart" method="post" class="d-flex flex-column align-items-center">
-                                        <input type="hidden" name="productId" value="@product.ProductId" />
-                                        <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
-                                        <button type="submit" class="btn btn-primary btn-hover mb-3">
-                                            <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
-                                        </button>
-                                    </form>
-
                                     <!-- Add to Favourites Form -->
                                     <form asp-controller="Favourites" asp-action="AddToFavourites" method="post">
                                         <input type="hidden" name="productId" value="@product.ProductId" />
@@ -202,7 +191,7 @@
                 else
                 {
                     <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
-                        <p style="font-weight: 900;font-size:25px;">İlgili ürün bulunamadı.</p>
+                        <p style="font-weight: 900; font-size: 25px;">İlgili ürün bulunamadı.</p>
                     </div>
                 }
             </div>
@@ -210,7 +199,7 @@
 
         <!-- Next Button -->
         <div class="col-auto">
-            <button id="nextBtn" class="btn btn-light"
+            <button id="relatedProductsNextBtn" class="btn btn-light"
                     onclick="loadProducts(ViewBag.CurrentPage + 1)"
                     aria-label="Next"
             @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")>
@@ -220,7 +209,81 @@
     </div>
 </div>
 
+
 @section Scripts {
+
+    <script>
+        async function loadProducts(page) {
+            const pageSize = 8; // Sayfa başına gösterilecek ürün sayısı
+            const response = await fetch(`/Home/GetProductsRandom?page=${page}&pageSize=${pageSize}`, {
+                method: 'GET'
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                if (result.success) {
+                    const productList = document.getElementById("productList");
+                    productList.innerHTML = ""; // Mevcut ürünleri temizle
+
+                    if (result.data && result.data.length > 0) {
+                        result.data.forEach(product => {
+                            const productHtml = `
+                                <div class="col-6 col-lg-3 custom-col">
+                                    <div class="card mb-3 product-card">
+                                        <img src="${product.imageUrl}" class="card-img-top product-image" alt="Product Image" />
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title" style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${product.productName}">
+                                                ${product.productName}
+                                            </h5>
+                                            <h6 style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${product.productTitle}">
+                                                ${product.productTitle}
+                                            </h6>
+                                            <p class="card-text">${product.price.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' })}</p>
+                                            <a href="/Home/ProductDetails?productId=${product.productId}" class="btn btn-primary btn-hover mb-2 mt-1">Detaylar</a>
+
+                                            <form action="/ShopCart/AddToCart" method="post" class="d-flex flex-column align-items-center">
+                                                <input type="hidden" name="productId" value="${product.productId}" />
+                                                <input type="number" name="quantity" value="1" min="1" max="5" class="form-control mb-2" style="width: 60px; display: inline-block;" />
+                                                <button type="submit" class="btn btn-primary btn-hover mb-3">
+                                                    <i class="fa-solid fa-cart-shopping"></i> Sepete Ekle
+                                                </button>
+                                            </form>
+
+                                            <form action="/Favourites/AddToFavourites" method="post">
+                                                <input type="hidden" name="productId" value="${product.productId}" />
+                                                <button type="submit" class="btn btn-primary btn-hover mb-2">
+                                                    <i class="fa-regular fa-heart"></i> Favoriler
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            productList.insertAdjacentHTML("beforeend", productHtml);
+                        });
+                    } else {
+                        productList.innerHTML = `
+                            <div class="d-flex justify-content-center align-items-center" style="height: 100px;">
+                                <p style="font-weight: 900;font-size:25px;">İlgili ürün bulunamadı.</p>
+                            </div>`;
+                    }
+                } else {
+                    console.error("Ürünler yüklenemedi.");
+                }
+            } else {
+                console.error("Sunucuya bağlanılamadı.");
+            }
+        }
+
+        // Sayfa yüklendiğinde ilk ürünleri yükle
+        document.addEventListener("DOMContentLoaded", () => {
+            loadProducts(1);
+        });
+    </script>
+
+
+
+
+
     <script>
               (function () {
             var formId = "fav-form-@Model.Product.ProductId"; // Form ID
@@ -250,15 +313,6 @@
         })();
 
     </script>
-
-
-
-
-
-
-
-
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
