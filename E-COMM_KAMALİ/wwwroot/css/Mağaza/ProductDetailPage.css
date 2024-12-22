@@ -230,7 +230,7 @@ body {
 
     .product-card {
         font-size: 25px;
-        max-width: 370px;
+        max-width: 250px;
         width: 100%;
         border-radius: 8px; /* Kart köşeleri yuvarla */
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Hafif gölge */
@@ -1166,7 +1166,6 @@ textarea::placeholder {
 
 
 /*#region ListProducts */
-
 /* Kart genel düzeni */
 .product-card {
     display: flex;
@@ -1178,16 +1177,19 @@ textarea::placeholder {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 0; /* Kartın içindeki gereksiz boşlukları kaldır */
 }
 
 /* Resim alanı */
 .product-image {
-    width: 100%; /* Kartın genişliği kadar */
-    height: 200px; /* Sabit yükseklik */
-    object-fit: cover; /* Resmi orantılı şekilde kırpmak */
-    object-position: center; /* Resmi ortalamak */
-    background-color: #f8f8f8; /* Varsayılan arka plan rengi */
-    border-bottom: 1px solid #ddd; /* Resim altına çizgi */
+    width: 100%; /* Kart genişliğine tam oturur */
+    height: 165px; /* Sabit bir yükseklik */
+    object-fit: cover; /* Görüntüyü kart içine orantılı şekilde sığdırır */
+    object-position: center; /* Görüntünün ortalanmasını sağlar */
+    margin: 0; /* Resim çevresindeki boşlukları kaldır */
+    padding: 0; /* Resim çevresindeki boşlukları kaldır */
+    border: none; /* Görüntü çevresindeki varsayılan kenarlıkları kaldır */
+    background-color: #f8f8f8; /* Resim yüklü değilse varsayılan bir arka plan */
 }
 
 /* Kart başlıkları ve metinler */
@@ -1242,6 +1244,5 @@ textarea::placeholder {
         margin-bottom: 20px;
     }
 }
-
 
 /*#endregion */
